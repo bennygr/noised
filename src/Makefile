@@ -16,8 +16,23 @@ COMPILER=$(COMP) $(OPTIONS)
 
 #---------------------------
 #Everything
-all: NoisedLogging NoisedNetwork
+all: makeDirectories NoisedLogging NoisedNetwork
 
+#---------------------------
+#Create output directories
+makeDirectories: 
+	@if [ ! -d ./bin ]; \
+	then \
+		mkdir ./bin/;\
+	fi
+	@if [ ! -d ./bin/release ]; \
+	then \
+		mkdir ./bin/release;\
+	fi
+	@if [ ! -d ./bin/debug ]; \
+	then \
+		mkdir ./bin/debug;\
+	fi
 #---------------------------
 #NoisedLogging
 LOGGING=$(shell find ./NoisedLogging/ -name "*.cs")
