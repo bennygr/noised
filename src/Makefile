@@ -16,8 +16,11 @@ COMPILER=$(COMP) $(OPTIONS)
 
 #---------------------------
 #Everything
-all: makeDirectories NoisedLogging NoisedNetwork
-
+all: makeDirectories \
+	 NoisedLogging \
+	 NoisedNetwork \
+	 NoisedCore \
+	 NoisedServer
 #---------------------------
 #Create output directories
 makeDirectories: 
@@ -29,9 +32,17 @@ makeDirectories:
 	then \
 		mkdir ./bin/release;\
 	fi
+	@if [ ! -d ./bin/release/plugins ]; \
+	then \
+		mkdir ./bin/release/plugins;\
+	fi
 	@if [ ! -d ./bin/debug ]; \
 	then \
 		mkdir ./bin/debug;\
+	fi
+	@if [ ! -d ./bin/debug/plugins ]; \
+	then \
+		mkdir ./bin/debug/plugins;\
 	fi
 #---------------------------
 #NoisedLogging
@@ -50,3 +61,18 @@ NoisedNetwork: $(NETWORK_OUT)
 $(NETWORK_OUT): $(LOGGING) $(NETWORK)
 	$(COMPILER) $(NETWORK) /t:library /r:$(LOGGING_OUT) /out:$(NETWORK_OUT)
 
+#---------------------------
+#NoisedCore
+CORE=$(shell find NoisedCore/ -name "*.cs")
+CORE_OUT=$(OUTPATH)NoisedCore.dll
+NoisedCore: $(CORE_OUT)
+$(CORE_OUT): $(LOGGING) $(NETWORK) $(CORE)
+	$(COMPILER) $(CORE) /t:library /r:$(LOGGING_OUT),${NETWORK_OUT} /out:$(CORE_OUT)
+
+#---------------------------
+#NoisedServer
+SERVER=$(shell find NoisedServer/ -name "*.cs")
+SERVER_OUT=$(OUTPATH)NoisedServer.exe
+NoisedServer: $(SERVER_OUT)
+$(SERVER_OUT): $(SERVER) $(CORE)
+	$(COMPILER) $(SERVER) /r:$(CORE_OUT),$(OUTPATH)GStreamerAudioPlugin.dll /out:$(SERVER_OUT)
