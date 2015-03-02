@@ -1,21 +1,26 @@
 using System;
 using System.Threading;
-
+using System.Collections.Generic;
+using Noised.Logging;
+using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 //TODO: remove
-using Noised.Plugins.Audio.GStreamer;
+//using Noised.Plugins.Audio.GStreamer;
 namespace Noised.Server
 {
 	public class Start
 	{
 		public static int Main(String[] args)
 		{
-			Console.WriteLine("Hello Noised");
-			//Just a temporary instantiating a concrete plugin
-			//for testing purpose
-			//TODO: change
+			Logger.AddLogger(new ConsoleLogger());
+
+			Logger.Debug("Hello Noised");
+			IPluginLoader pluginLoader = new PluginLoader();
+			int pluginCount = pluginLoader.LoadPlugins("./plugins");
+			Logger.Debug(pluginCount + " plugins loaded ");
+			
 			IAudioPlugin audioPlugin = 
-				new GStreamerAudioPlugin();
+				pluginLoader.GetPlugin<IAudioPlugin>();
 			audioPlugin.Play("file:///home/bgr/Musik/test.mp3");
 			Console.WriteLine("Playing");
 			Thread.Sleep(3000);

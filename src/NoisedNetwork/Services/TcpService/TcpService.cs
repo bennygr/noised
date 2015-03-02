@@ -75,7 +75,7 @@ namespace Noised.Network.Services.TcpService
                    clients.Count >= maxConnections)
                 {
                     client.Client.Close();
-                    LoggingFaccade.Debug("Client tried to connect but MaxConnections has been reached");
+                    Logger.Debug("Client tried to connect but MaxConnections has been reached");
                     continue;
                 }
 
@@ -108,7 +108,7 @@ namespace Noised.Network.Services.TcpService
             lock (clients)
             {                
                 clients.Add(connection.Client);
-                LoggingFaccade.Debug("Client " + 
+                Logger.Debug("Client " + 
 									 connection.Id + 
 									 " connected " + 
 									 ((IPEndPoint)connection.Client.Client.RemoteEndPoint).Address);
@@ -124,7 +124,7 @@ namespace Noised.Network.Services.TcpService
             lock (clients)
             {
                 clients.Remove(connection.Client);
-                LoggingFaccade.Debug("Client " + connection.Id + " disconnected");
+                Logger.Debug("Client " + connection.Id + " disconnected");
             }
         }
 

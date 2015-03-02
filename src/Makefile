@@ -44,6 +44,10 @@ makeDirectories:
 	then \
 		mkdir ./bin/debug/plugins;\
 	fi
+
+#---------------------------
+#Install nuget dependencies
+
 #---------------------------
 #NoisedLogging
 LOGGING=$(shell find ./NoisedLogging/ -name "*.cs")
@@ -65,9 +69,14 @@ $(NETWORK_OUT): $(LOGGING) $(NETWORK)
 #NoisedCore
 CORE=$(shell find NoisedCore/ -name "*.cs")
 CORE_OUT=$(OUTPATH)NoisedCore.dll
-NoisedCore: $(CORE_OUT)
+NoisedCore: $(CORE_OUT) nugetCore
 $(CORE_OUT): $(LOGGING) $(NETWORK) $(CORE)
 	$(COMPILER) $(CORE) /t:library /r:$(LOGGING_OUT),${NETWORK_OUT} /out:$(CORE_OUT)
+nugetCore:
+	@if [ ! -d ./NoisedCore/packages ]; \
+	then \
+		echo "Installing packages..." && nuget install -o ./NoisedCore/packages ./NoisedCore/packages.config;\
+	fi
 
 #---------------------------
 #NoisedServer
@@ -75,4 +84,4 @@ SERVER=$(shell find NoisedServer/ -name "*.cs")
 SERVER_OUT=$(OUTPATH)NoisedServer.exe
 NoisedServer: $(SERVER_OUT)
 $(SERVER_OUT): $(SERVER) $(CORE)
-	$(COMPILER) $(SERVER) /r:$(CORE_OUT),$(OUTPATH)GStreamerAudioPlugin.dll /out:$(SERVER_OUT)
+	$(COMPILER) $(SERVER) /r:$(LOGGING_OUT),$(CORE_OUT), /out:$(SERVER_OUT)

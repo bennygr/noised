@@ -16,7 +16,7 @@ namespace Noised.Logging
     /// <summary>
     ///		A faccade for writing messages to a set of loggers
     /// </summary>
-    public static class LoggingFaccade
+    public static class Logger
     {
         private static LogLevel logLevel;
         private static readonly Object SyncObject = new object();
