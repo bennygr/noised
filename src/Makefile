@@ -75,7 +75,7 @@ $(CORE_OUT): $(LOGGING) $(NETWORK) $(CORE)
 nugetCore:
 	@if [ ! -d ./NoisedCore/packages ]; \
 	then \
-		echo "Installing packages..." && nuget install -o ./NoisedCore/packages ./NoisedCore/packages.config;\
+		echo "Installing nuget packages..." && nuget install -o ./NoisedCore/packages ./NoisedCore/packages.config;\
 	fi
 
 #---------------------------
