@@ -4,13 +4,15 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
 using Noised.Logging;
+using Noised.Core.Plugins;
+using Noised.Core.Plugins.Service;
 
-namespace Noised.Network.Services.TcpService
+namespace Noised.Plugins.Service.TcpService
 {
     /// <summary>
 	///		Service handling incoming connections over TCP/IP
     /// </summary>
-    public class TcpService : INetworkService
+    public class TcpServicePlugin : IService
     {
         #region Fields
 
@@ -35,11 +37,11 @@ namespace Noised.Network.Services.TcpService
 		/// <param name="maxConnections">
 		///		Maxium of connection the server should handle
 		/// </param>
-		public TcpService(ILogging logging, int port, int maxConnections)
+		public TcpServicePlugin(PluginInitializer initalizer)
 		{
-			this.logging = logging;
-		    this.port = port;
-		    this.maxConnections = maxConnections;                     
+			this.logging = initalizer.Logging;
+		    this.port = 1337;
+		    this.maxConnections = 100;                     
 		    isRunning = false;            
 		}
 		
@@ -50,18 +52,18 @@ namespace Noised.Network.Services.TcpService
 		/// <summary>
 		///		Inkoves the ClientConnected event
 		/// </summary>
-        private void InvokeOnClientConnected(NetworkEventArgs eventargs)
+        private void InvokeOnClientConnected(ServiceEventArgs eventargs)
         {
-            NetworkEventHandler handler = ClientConnected;
+            ServiceEventHandler handler = ClientConnected;
             if (handler != null) handler(this, eventargs);
         }
 
 		/// <summary>
 		///		Invokes the ClientDisconnected event
 		/// </summary>
-        private void InvokeOnClientDisconnected(NetworkEventArgs eventargs)
+        private void InvokeOnClientDisconnected(ServiceEventArgs eventargs)
         {
-            NetworkEventHandler handler = ClientDisconnected;
+            ServiceEventHandler handler = ClientDisconnected;
             if (handler != null) handler(this, eventargs);
         }
 		
@@ -84,7 +86,7 @@ namespace Noised.Network.Services.TcpService
                 }
 
                 TcpConnection connection = new TcpConnection(client);
-                InvokeOnClientConnected(new NetworkEventArgs(connection,data: null));
+                InvokeOnClientConnected(new ServiceEventArgs(connection,data: null));
                 connection.Closed += OnConnectionClosed;
                 AddConnection(connection);
                 connection.Start();
@@ -96,11 +98,11 @@ namespace Noised.Network.Services.TcpService
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="args">parameters</param>
-		private void OnConnectionClosed(object sender, NetworkEventArgs eventArgs)
+		private void OnConnectionClosed(object sender, ServiceEventArgs eventArgs)
         {
-            INetworkConnection connection = (INetworkConnection)sender;
+            IServiceConnection connection = (IServiceConnection)sender;
             RemoveClient((TcpConnection)connection);
-            InvokeOnClientDisconnected(new NetworkEventArgs(connection,data: null));
+            InvokeOnClientDisconnected(new ServiceEventArgs(connection,data: null));
         }
 		
         /// <summary>
@@ -134,10 +136,70 @@ namespace Noised.Network.Services.TcpService
 
 		#endregion
 
-        #region INetworkService
 
-		public event NetworkEventHandler ClientConnected;
-		public event NetworkEventHandler ClientDisconnected;
+		#region IDisposable
+
+		public void Dispose(){}
+
+		#endregion
+		
+		#region IPlugin
+		
+		public String Name
+		{
+			get
+			{
+				return  "TcpServicePlugin";
+			}
+		}
+
+		public String Description
+		{
+			get
+			{
+				return  "The plugin provides a TCP/IP service for noised";
+			}
+		}
+		
+		public String AuthorName
+		{
+			get
+			{
+				return "Benjamin Grüdelbach";
+			}
+		}
+
+		public String AuthorContact
+		{
+			get
+			{
+				return "nocontact@availlable.de";
+			}
+		}
+
+		public Version Version
+		{
+			get
+			{
+				return new Version(1,0);
+			}
+		}
+
+		public DateTime CreationDate
+		{
+			get
+			{
+				return DateTime.Parse("01.03.2015");
+			}
+		}
+		
+		
+		#endregion
+
+        #region IService
+
+		public event ServiceEventHandler ClientConnected;
+		public event ServiceEventHandler ClientDisconnected;
 
         public bool IsRunning
         {

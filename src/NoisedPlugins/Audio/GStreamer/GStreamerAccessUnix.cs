@@ -27,9 +27,11 @@ namespace Noised.Plugins.Audio.GStreamer
 		internal static extern void Resume();
 
 		[DllImport ("libNoisedGstreamerAudio.so")]
+		[return: MarshalAsAttribute(UnmanagedType.Bool)]
 		internal static extern bool IsPlaying();
 
 		[DllImport ("libNoisedGstreamerAudio.so")]
+		[return: MarshalAsAttribute(UnmanagedType.Bool)]
 		internal static extern bool IsPaused();
 	};
 }

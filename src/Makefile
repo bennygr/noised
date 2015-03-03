@@ -18,7 +18,6 @@ COMPILER=$(COMP) $(OPTIONS)
 #Everything
 all: makeDirectories \
 	 NoisedLogging \
-	 NoisedNetwork \
 	 NoisedCore \
 	 NoisedServer
 #---------------------------
@@ -56,14 +55,6 @@ NoisedLogging: $(LOGGING_OUT)
 
 $(LOGGING_OUT): $(LOGGING)
 	$(COMPILER) $(LOGGING) /t:library /out:$(LOGGING_OUT)
-
-#---------------------------
-#NoisedNetwork
-NETWORK=$(shell find NoisedNetwork/ -name "*.cs")
-NETWORK_OUT=$(OUTPATH)NoisedNetwork.dll
-NoisedNetwork: $(NETWORK_OUT)
-$(NETWORK_OUT): $(LOGGING) $(NETWORK)
-	$(COMPILER) $(NETWORK) /t:library /r:$(LOGGING_OUT) /out:$(NETWORK_OUT)
 
 #---------------------------
 #NoisedCore

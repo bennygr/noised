@@ -24,7 +24,7 @@ namespace Noised.Core.Plugins.Service
 		///		The connection related to the service event	
 		/// </param>
 		/// <param name="data">Data read/sent</param>
-        internal ServiceEventArgs(IServiceConnection connection, byte[] data)
+        public ServiceEventArgs(IServiceConnection connection, byte[] data)
         {
             Connection = connection;
 			Data = data;

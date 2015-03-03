@@ -29,7 +29,7 @@ namespace Noised.Core.Plugins
 				IEnumerable<Type> pluginTypes = null;
 				try
 				{
-		
+					//Getting IPlugin types from the plugin assembly 
 					Assembly assembly = Assembly.LoadFrom(file);
 					String strPluginType = "Noised.Core.Plugins.IPlugin";
 					Type pluginBaseType = Type.GetType(strPluginType);
@@ -43,8 +43,15 @@ namespace Noised.Core.Plugins
 		
 				if(pluginTypes != null && pluginTypes.Any())
 				{	
+					//Plugin init data
+					PluginInitializer pluginInitializer = 
+						new PluginInitializer()
+						{
+							Logging =  IocContainer.Get<ILogging>()
+						};
+					//Instantiate the first IPlugin type found
 					Type concreteType = pluginTypes.First();
-					IPlugin plugin = (IPlugin)Activator.CreateInstance(concreteType);
+					IPlugin plugin = (IPlugin)Activator.CreateInstance(concreteType,pluginInitializer);
 					plugins.Add(plugin);
 					IocContainer.Get<ILogging>().Debug(
 							String.Format("Loaded Plugin {0} - {1}",

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 
-namespace Noised.Network.Services.TcpService
+namespace Noised.Plugins.Service.TcpService
 {
 	/// <summary>
 	///		A helper class for reading from a TCP socket

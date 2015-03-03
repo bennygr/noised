@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using System.Collections.Generic;
 
-namespace Noised.Network.Services.TcpService
+namespace Noised.Plugins.Service.TcpService
 {
 	/// <summary>
 	///		A helper class for writing to a TCP socket

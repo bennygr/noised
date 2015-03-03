@@ -1,4 +1,5 @@
 using System;
+using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 using System.Threading.Tasks;
 namespace Noised.Plugins.Audio.GStreamer
@@ -8,7 +9,7 @@ namespace Noised.Plugins.Audio.GStreamer
 		/// <summary>
 		///		Constructor
 		/// </summary>
-		public GStreamerAudioPlugin()
+		public GStreamerAudioPlugin(PluginInitializer initalizer)
 		{
 			GStreamerAccessUnix.Initialize();
 		}

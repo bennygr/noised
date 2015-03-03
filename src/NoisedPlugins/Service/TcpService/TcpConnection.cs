@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
+using Noised.Core.Plugins.Service;
 
-namespace Noised.Network.Services.TcpService
+namespace Noised.Plugins.Service.TcpService
 {
     /// <summary>
     ///		A TCP connection to a client
     /// </summary>
-    public class TcpConnection : INetworkConnection
+    public class TcpConnection : IServiceConnection
     {
         #region Statics 
 
@@ -121,8 +122,8 @@ namespace Noised.Network.Services.TcpService
 		/// </summary>
         private void InvokeOnDataReceived(byte[] bytesRed)
         {
-            NetworkEventHandler handler = DataReceived;
-            if (handler != null) handler(this, new NetworkEventArgs(this,bytesRed));
+            ServiceEventHandler handler = DataReceived;
+            if (handler != null) handler(this, new ServiceEventArgs(this,bytesRed));
         }
 
 		/// <summary>
@@ -130,8 +131,8 @@ namespace Noised.Network.Services.TcpService
 		/// </summary>
         private void InvokeOnClose()
         {
-            NetworkEventHandler handler = Closed;
-            if (handler != null) handler(this, new NetworkEventArgs(this, data: null));
+            ServiceEventHandler handler = Closed;
+            if (handler != null) handler(this, new ServiceEventArgs(this, data: null));
         }
         
         /// <summary>
@@ -148,8 +149,8 @@ namespace Noised.Network.Services.TcpService
 
         #region INetworkConnection
 
-        public event NetworkEventHandler DataReceived;
-        public event NetworkEventHandler Closed;
+        public event ServiceEventHandler DataReceived;
+        public event ServiceEventHandler Closed;
 
         public void Send(byte[] bytes)
         {

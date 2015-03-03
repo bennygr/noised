@@ -1,4 +1,5 @@
 using System;
+using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 namespace Noised.Plugins.Audio.Dummy
 {
@@ -10,7 +11,21 @@ namespace Noised.Plugins.Audio.Dummy
 	{
 		private bool isPlaying;
 
+		#region Constructor
+		
+		/// <summary>
+		///		Constructor
+		/// </summary>
+		/// <param name="pluginInitializer">initalizer</param>
+		public DummyAudioPlugin(PluginInitializer pluginInitializer) { }
+		
+		#endregion
+
+		#region IDisposable
+		
 		public void Dispose() { }
+		
+		#endregion
 
 		#region IPlugin
 		
