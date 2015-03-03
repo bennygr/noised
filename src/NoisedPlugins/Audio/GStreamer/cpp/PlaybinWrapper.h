@@ -21,6 +21,7 @@ class PlaybinWrapper
 		{
 			this->name = name;
 			this->isPlaying = false;
+			this->isPaused = false;
 
 			int x=0;
 			gst_init(&x, 0);
