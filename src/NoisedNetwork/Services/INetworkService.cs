@@ -1,3 +1,4 @@
+using Noised.Logging;
 namespace Noised.Network.Services
 {
 	/// <summary>

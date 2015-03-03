@@ -18,9 +18,7 @@ namespace Noised.Network.Services
 		/// <summary>
 		///		Connects to a noised service
 		/// </summary>
-		/// <param name="hostIp">The IP of the host to connect to</param>
-		/// <param name="port"> The port to connect to</param>
-		void Connect(string hostIp, int port);
+		void Connect();
 
 		/// <summary>
 		///		Disconnects from a noised service

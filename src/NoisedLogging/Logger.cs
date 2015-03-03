@@ -16,16 +16,16 @@ namespace Noised.Logging
     /// <summary>
     ///		A faccade for writing messages to a set of loggers
     /// </summary>
-    public static class Logger
+    public class Logger : ILogging
     {
-        private static LogLevel logLevel;
-        private static readonly Object SyncObject = new object();
-        private static readonly List<ILogging> Loggers = new List<ILogging>();
+        private LogLevel logLevel;
+        private readonly Object SyncObject = new object();
+        private readonly List<ILogger> Loggers = new List<ILogger>();
 
         /// <summary>
         ///		The current Loglevel
         /// </summary>
-        private static LogLevel LogLevel
+        private LogLevel LogLevel
         {
             get
             {
@@ -48,13 +48,13 @@ namespace Noised.Logging
         /// </summary>
         /// <param name="level">The message's loglevel</param>
         /// <param name="message">The message to log</param>
-        private static void LogInternal(LogLevel level, string message)
+        private void LogInternal(LogLevel level, string message)
         {
             lock (SyncObject)
             {
                 if (level >= logLevel)
                 {
-                    foreach (ILogging logging in Loggers)
+                    foreach (ILogger logging in Loggers)
                     {
                         logging.LogMessage(level, message);
                     }
@@ -66,7 +66,7 @@ namespace Noised.Logging
         ///		Adds a logger to the logging system
         /// </summary>
         /// <param name="logger">the logger to add</param>
-        public static void AddLogger(ILogging logger)
+        public void AddLogger(ILogger logger)
         {
             Loggers.Add(logger);
         }
@@ -75,7 +75,7 @@ namespace Noised.Logging
         ///		Writes a debug message to all registered loggers
         /// </summary>
         /// <param name="message">The message</param>
-        public static void Debug(string message)
+        public void Debug(string message)
         {
             LogInternal(LogLevel.Debug, message);
         }
@@ -84,7 +84,7 @@ namespace Noised.Logging
         ///		Writes a warning message to all registered logger
         /// </summary>
         /// <param name="message">The message</param>
-        public static void Warning (string message)
+        public void Warning (string message)
         {
             LogInternal(LogLevel.Warning, message);
         }
@@ -93,7 +93,7 @@ namespace Noised.Logging
         ///		Writes an error message to all registered logger
         /// </summary>
         /// <param name="message">The message</param>        
-        public static void Error(string message)
+        public void Error(string message)
         {
             LogInternal(LogLevel.Error, message);
         }

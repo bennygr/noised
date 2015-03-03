@@ -1,6 +1,9 @@
 using System;
 namespace Noised.Core.Plugins.Audio
 {
+	/// <summary>
+	///		A plugin for audio output
+	/// </summary>
 	public interface IAudioPlugin : IPlugin
 	{
 		/// <summary>

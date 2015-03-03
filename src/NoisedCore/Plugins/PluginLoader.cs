@@ -38,7 +38,7 @@ namespace Noised.Core.Plugins
 				}
 				catch(Exception e)
 				{
-					Logger.Error(e.Message);
+					IocContainer.Get<ILogging>().Error(e.Message);
 				}
 		
 				if(pluginTypes != null && pluginTypes.Any())
@@ -46,12 +46,15 @@ namespace Noised.Core.Plugins
 					Type concreteType = pluginTypes.First();
 					IPlugin plugin = (IPlugin)Activator.CreateInstance(concreteType);
 					plugins.Add(plugin);
-					Logger.Debug(String.Format("Loaded Plugin {0} - {1}",plugin.Name, 
-																		 plugin.Description));
+					IocContainer.Get<ILogging>().Debug(
+							String.Format("Loaded Plugin {0} - {1}",
+										  plugin.Name, 
+									      plugin.Description));
 				}
 				else
 				{
-					Logger.Error(String.Format("No IPlugin implementation found in assembly {0}",file));
+					IocContainer.Get<ILogging>().Error(
+							String.Format("No IPlugin implementation found in assembly {0}",file));
 				}
 			}
 		

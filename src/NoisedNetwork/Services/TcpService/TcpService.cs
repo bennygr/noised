@@ -21,6 +21,7 @@ namespace Noised.Network.Services.TcpService
         private readonly List<TcpClient> clients = new List<TcpClient>();
         private readonly int maxConnections;
         private IPAddress listeningAddress = IPAddress.Any;
+		private ILogging logging;
 
         #endregion
 
@@ -29,12 +30,14 @@ namespace Noised.Network.Services.TcpService
 		/// <summary>
 		///		Constructor
 		/// </summary>
+		/// <param name="logging">logging service</param>        
 		/// <param name="port"> The Server's listening port </param>        
 		/// <param name="maxConnections">
 		///		Maxium of connection the server should handle
 		/// </param>
-		public TcpService(int port, int maxConnections)
+		public TcpService(ILogging logging, int port, int maxConnections)
 		{
+			this.logging = logging;
 		    this.port = port;
 		    this.maxConnections = maxConnections;                     
 		    isRunning = false;            
@@ -67,6 +70,7 @@ namespace Noised.Network.Services.TcpService
 		/// </summary>
         private void Run()
         {
+			logging.Debug("Listening for incoming connections");
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
@@ -75,7 +79,7 @@ namespace Noised.Network.Services.TcpService
                    clients.Count >= maxConnections)
                 {
                     client.Client.Close();
-                    Logger.Debug("Client tried to connect but MaxConnections has been reached");
+                    logging.Debug("Client tried to connect but MaxConnections has been reached");
                     continue;
                 }
 
@@ -108,7 +112,7 @@ namespace Noised.Network.Services.TcpService
             lock (clients)
             {                
                 clients.Add(connection.Client);
-                Logger.Debug("Client " + 
+                logging.Debug("Client " + 
 									 connection.Id + 
 									 " connected " + 
 									 ((IPEndPoint)connection.Client.Client.RemoteEndPoint).Address);
@@ -124,7 +128,7 @@ namespace Noised.Network.Services.TcpService
             lock (clients)
             {
                 clients.Remove(connection.Client);
-                Logger.Debug("Client " + connection.Id + " disconnected");
+                logging.Debug("Client " + connection.Id + " disconnected");
             }
         }
 
@@ -139,6 +143,7 @@ namespace Noised.Network.Services.TcpService
         {
             get { return isRunning; }
         }
+
 
         public void Start()
         {

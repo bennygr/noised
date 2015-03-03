@@ -5,7 +5,7 @@ namespace Noised.Logging
     /// <summary>
     ///		A simple Logger to write messages to stdout
     /// </summary>
-    public class ConsoleLogger : ILogging
+    public class ConsoleLogger : ILogger
     {
         private readonly string header = string.Empty;
 

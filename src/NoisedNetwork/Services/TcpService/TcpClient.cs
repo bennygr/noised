@@ -10,10 +10,19 @@ namespace Noised.Network.Services.TcpService
     {
 		#region Fields
 		
+		private readonly string hostIp;
+		private readonly int port;
 		private System.Net.Sockets.TcpClient client;
 		private TcpConnection connection;
 		
 		#endregion
+		/// <param name="hostIp">The IP of the host to connect to</param>
+		/// <param name="port"> The port to connect to</param>
+		TcpNetworkClient(string hostIp, int port)
+		{
+			this.hostIp = hostIp;
+			this.port = port;
+		}
 
         #region Methods
 
@@ -33,7 +42,7 @@ namespace Noised.Network.Services.TcpService
         public event NetworkEventHandler Connected;
         public event NetworkEventHandler Disconnected;
 
-        public void Connect(string hostIp, int port)
+        public void Connect()
         {
             client = new System.Net.Sockets.TcpClient(hostIp, port);
             connection = new TcpConnection(client);

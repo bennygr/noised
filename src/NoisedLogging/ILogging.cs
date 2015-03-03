@@ -1,21 +1,32 @@
-﻿namespace Noised.Logging
+namespace Noised.Logging
 {
-    /// <summary>
-    ///		A simple interface for logging messages
-    /// </summary>
-    /// <remarks>
-    ///		WARNING: If implementing this interface to build your own logger
-    /// 	your implementation of LogMessage() must not do any operations
-    /// 	which takes a long time, because the LoggerFaccade 
-    /// 	is locked during a log-operation due the multithreading support      
-    /// </remarks>
-    public interface ILogging
-    {
-        /// <summary>
-        /// Logging 
-        /// </summary>
-        /// <param name="level">the message's level</param>
-        /// <param name="message">the message to log</param>
-        void LogMessage(LogLevel level,string message);
-    }
+	/// <summary>
+	///		Interface providing access to all logging functions
+	/// </summary>
+	public interface ILogging
+	{
+		/// <summary>
+		///		Adds a logger to the logging system
+		/// </summary>
+		/// <param name="logger">the logger to add</param>
+		void AddLogger(ILogger logger);
+
+		/// <summary>
+		///		Writes a debug message to all registered loggers
+		/// </summary>
+		/// <param name="message">The message</param>
+		void Debug(string message);
+
+		/// <summary>
+		///		Writes a warning message to all registered logger
+		/// </summary>
+		/// <param name="message">The message</param>
+		void Warning (string message);
+
+		/// <summary>
+		///		Writes an error message to all registered logger
+		/// </summary>
+		/// <param name="message">The message</param>        
+		void Error(string message);
+	};
 }
