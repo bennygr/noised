@@ -3,10 +3,13 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using Noised.Logging;
+using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
-//TODO: remove
-//using Noised.Plugins.Audio.GStreamer;
+using Noised.Core;
+using Noised.Core.Commands;
+
+
 namespace Noised.Server
 {
 	public class Start
@@ -22,6 +25,13 @@ namespace Noised.Server
 			IPluginLoader pluginLoader = IocContainer.Get<IPluginLoader>();
 			int pluginCount = pluginLoader.LoadPlugins("./plugins");
 			logger.Debug(pluginCount + " plugins loaded ");
+
+
+			User user = new User("Benny");
+			//Add a factory and create a ping command
+			Noised.Core.Core core = new Noised.Core.Core();
+			core.Start();
+			//core.AddCommand(new PingCommand(user));
 			
 			IAudioPlugin audioPlugin = 
 				pluginLoader.GetPlugin<IAudioPlugin>();

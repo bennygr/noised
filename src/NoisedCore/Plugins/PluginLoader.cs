@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Noised.Logging;
+using Noised.Core.IOC;
 
 namespace Noised.Core.Plugins
 {
