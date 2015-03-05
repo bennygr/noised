@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Noised.Logging;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Service;
+using Noised.Core.Service;
 
 namespace Noised.Plugins.Service.TcpService
 {
@@ -85,7 +86,7 @@ namespace Noised.Plugins.Service.TcpService
                     continue;
                 }
 
-                TcpConnection connection = new TcpConnection(client);
+                TcpConnection connection = new TcpConnection(client,this);
                 InvokeOnClientConnected(new ServiceEventArgs(connection,data: null));
                 connection.Closed += OnConnectionClosed;
                 AddConnection(connection);
@@ -205,7 +206,6 @@ namespace Noised.Plugins.Service.TcpService
         {
             get { return isRunning; }
         }
-
 
         public void Start()
         {

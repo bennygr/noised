@@ -1,6 +1,6 @@
 using System;
 
-namespace Noised.Core.Plugins.Service
+namespace Noised.Core.Service
 {
 	/// <summary>
 	///		Eventargs used for IService events

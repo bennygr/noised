@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
+using Noised.Core.Service;
 using Noised.Core.Plugins.Service;
 
 namespace Noised.Plugins.Service.TcpService
@@ -25,6 +26,7 @@ namespace Noised.Plugins.Service.TcpService
         private readonly Thread readerThread;
         private readonly Thread writerThread;
         private readonly TcpClient client;
+		private readonly TcpServicePlugin service;
         private bool running;
                 
         #endregion
@@ -61,13 +63,15 @@ namespace Noised.Plugins.Service.TcpService
         ///		Constructor
         /// </summary>
         /// <param name="client">TCP endpoint of the connected client</param>
-        internal TcpConnection(TcpClient client)
+		/// <param name="service">The service related to this connection</param>
+        internal TcpConnection(TcpClient client,TcpServicePlugin service)
         {
             lock(IdLock)
             {
                 id = idCounter++;
             }
             this.client = client;
+			this.service = service;
             socketReader = new TcpSocketReader(client.Client);
             socketWriter = new TcpSocketWriter(client.Client);
             readerThread = new Thread(Read);
@@ -147,10 +151,18 @@ namespace Noised.Plugins.Service.TcpService
 
         #endregion
 
-        #region INetworkConnection
+        #region IServiceConnection
 
         public event ServiceEventHandler DataReceived;
         public event ServiceEventHandler Closed;
+
+		public IService Service
+		{
+			get
+			{
+				return this.service;
+			}
+		}
 
         public void Send(byte[] bytes)
         {

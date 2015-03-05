@@ -1,5 +1,5 @@
-
 using System;
+using Noised.Core.Service;
 namespace Noised.Core.Plugins.Service
 {
 	/// <summary>
@@ -25,6 +25,13 @@ namespace Noised.Core.Plugins.Service
 		///		Whether the Service is running or not
 		/// </summary>
 		bool IsRunning{get;}
+		
+		#endregion
+
+		#region events
+		
+		event ServiceEventHandler ClientConnected;
+		event ServiceEventHandler ClientDisconnected;
 		
 		#endregion
 

@@ -1,4 +1,6 @@
-namespace Noised.Core.Plugins.Service
+using Noised.Core.Plugins.Service;
+
+namespace Noised.Core.Service
 {
 	/// <summary>
 	///		A connection established to a network service INetworkService
@@ -16,6 +18,15 @@ namespace Noised.Core.Plugins.Service
 		///		Fired if the connection has been closed
 		/// </summary>
 		event ServiceEventHandler Closed;
+
+		#endregion
+		
+		#region Properties
+		
+		/// <summary>
+		///		The service related to the connection
+		/// </summary>
+		IService Service{get;}
 		
 		#endregion
 

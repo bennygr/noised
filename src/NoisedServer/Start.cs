@@ -8,6 +8,7 @@ using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 using Noised.Core;
 using Noised.Core.Commands;
+using Noised.Core.Service;
 
 
 namespace Noised.Server
@@ -32,6 +33,9 @@ namespace Noised.Server
 			Noised.Core.Core core = new Noised.Core.Core();
 			core.Start();
 			//core.AddCommand(new PingCommand(user));
+
+			ServiceHandler serviceHandler = new ServiceHandler();
+			serviceHandler.StartServices();
 			
 			IAudioPlugin audioPlugin = 
 				pluginLoader.GetPlugin<IAudioPlugin>();
