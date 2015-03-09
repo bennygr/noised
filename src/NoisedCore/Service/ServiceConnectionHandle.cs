@@ -1,5 +1,8 @@
 using System;
+using Noised.Logging;
+using Noised.Core.Commands;
 using Noised.Core.IOC;
+using Noised.Core.Service.Protocols;
 
 namespace Noised.Core.Service
 {
@@ -11,6 +14,8 @@ namespace Noised.Core.Service
 		#region Fields
 		
 		private CommandDataBuffer commandBuffer;
+		private IProtocol protocol;
+		private ILogging logging; 
 		
 		#endregion
 
@@ -29,11 +34,14 @@ namespace Noised.Core.Service
 		///		Constructor
 		/// </summary>
 		/// <param name="connection">The service connection to handle</param>
-		internal ServiceConnectionHandle(IServiceConnection connection)
+		/// <param name="protocol">noised protocol definition</param>
+		internal ServiceConnectionHandle(IServiceConnection connection,IProtocol protocol)
 		{
 			connection.DataReceived += DataReceived;
 			this.Connection = connection;
 			this.commandBuffer = new CommandDataBuffer();
+			this.protocol = protocol;
+			this.logging = IocContainer.Get<ILogging>();
 		}
 
 		#endregion
@@ -47,9 +55,22 @@ namespace Noised.Core.Service
 		{
 			if(commandBuffer.Add(eventArgs.Data))
 			{
-				string command = String.Empty;
-				while((command = commandBuffer.PopCommand()) != string.Empty)
-					Console.WriteLine(command);
+				string commandText = String.Empty;
+				while((commandText = commandBuffer.PopCommand()) != string.Empty)
+				{
+					try
+					{
+					AbstractCommand command =  protocol.Parse(commandText);
+						if(command != null)
+							Console.WriteLine(command);
+						else 
+							Console.WriteLine("ERROR NULL command");
+					}
+					catch(Exception e)
+					{
+						logging.Error(e.Message);
+					}
+				}
 			}
 		}
 		

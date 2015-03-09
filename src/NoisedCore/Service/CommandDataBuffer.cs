@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using Noised.Logging;
 using Noised.Core.IOC;
+using Noised.Core.Service.Protocols;
 
 namespace Noised.Core.Service
 {

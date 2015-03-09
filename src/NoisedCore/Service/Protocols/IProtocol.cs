@@ -1,10 +1,10 @@
 using Noised.Core.Commands;
-namespace Noised.Core.Service
+namespace Noised.Core.Service.Protocols
 {
 	/// <summary>
 	///		Defines which protocol to use for sending commands
 	/// </summary>
-	interface IProtocol
+	public interface IProtocol
 	{
 		/// <summary>
 		///		Defines an end tag for a command in a 

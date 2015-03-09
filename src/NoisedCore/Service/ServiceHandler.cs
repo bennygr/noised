@@ -5,6 +5,7 @@ using Noised.Logging;
 using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Service;
+using Noised.Core.Service.Protocols;
 
 namespace Noised.Core.Service
 {
@@ -40,7 +41,9 @@ namespace Noised.Core.Service
 		/// </summary>
 		private void ClientConnected(object sender,ServiceEventArgs eventArgs)
 		{
-			this.connections.Add(new ServiceConnectionHandle(eventArgs.Connection));
+			this.connections.Add(
+				new ServiceConnectionHandle(eventArgs.Connection,
+											IocContainer.Get<IProtocol>()));
 			logging.Debug("YEAH CONNECTED" + this.connections.Count());
 		}
 

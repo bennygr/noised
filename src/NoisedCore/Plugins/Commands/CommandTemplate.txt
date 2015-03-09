@@ -1,0 +1,44 @@
+{
+  "noised": {
+    "ProtocolVersion": "1.0",
+    "commands": {
+      "command": { "name": "PingCommand" }
+    }
+  }
+}
+-----
+{
+    "noised": {
+        "protocolVersion": "1.0",
+        "commands": {
+            "command": {
+                "name": "SongsInPlaylistResponse",
+                "parameter": [
+                    {
+                        "name": "PlaylistName",
+                        "type": "string",
+                        "value": "playlist nummer 5"
+                    },
+                    {
+                        "name": "Items",
+                        "type": "System.Collections.List",
+                        "value": [
+                            {
+                                "type": "System.Int32",
+                                "value": "1"
+                            },
+                            {
+                                "type": "System.Int32",
+                                "value": "2"
+                            },
+                            {
+                                "-type": "int32",
+                                "#text": "1234"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

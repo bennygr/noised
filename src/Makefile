@@ -45,9 +45,6 @@ makeDirectories:
 	fi
 
 #---------------------------
-#Install nuget dependencies
-
-#---------------------------
 #NoisedLogging
 LOGGING=$(shell find ./NoisedLogging/ -name "*.cs")
 LOGGING_OUT=$(OUTPATH)NoisedLogging.dll
@@ -62,16 +59,18 @@ CORE=$(shell find NoisedCore/ -name "*.cs")
 CORE_OUT=$(OUTPATH)NoisedCore.dll
 LIGHTCORE_DLLS=$(shell find ./NoisedCore/packages/LightCore.1.5.1/lib/net4.0/ -bane "*.dll")
 LIGHTCORE='./NoisedCore/packages/LightCore.1.5.1/lib/net40/LightCore.dll'
-NoisedCore: $(CORE_OUT) lightCoreOutput nugetCore
+NEWTONJSON_DLLS='./NoisedCore/packages/Newtonsoft.Json.6.0.8/lib/net40/Newtonsoft.Json.dll'
+NoisedCore: nugetCore $(CORE_OUT) copyNugets
 $(CORE_OUT): $(LOGGING) $(NETWORK) $(CORE)
-	$(COMPILER) $(CORE) /t:library /r:$(LOGGING_OUT),${NETWORK_OUT},${LIGHTCORE} /out:$(CORE_OUT)
+	$(COMPILER) $(CORE) /t:library /r:$(LOGGING_OUT),${NETWORK_OUT},${LIGHTCORE},${NEWTONJSON_DLLS} /out:$(CORE_OUT)
 nugetCore:
 	@if [ ! -d ./NoisedCore/packages ]; \
 	then \
 		echo "Installing nuget packages..." && nuget install -o ./NoisedCore/packages ./NoisedCore/packages.config;\
 	fi
-lightCoreOutput:
-	@cp ./NoisedCore/packages/LightCore.1.5.1/lib/net40/*.dll $(OUTPATH)
+copyNugets:
+	@cp ./NoisedCore/packages/LightCore*/lib/net40/*.dll $(OUTPATH)
+	@cp ./NoisedCore/packages/Newtonsoft.Json*/lib/net40/* $(OUTPATH)
 
 
 #---------------------------

@@ -2,7 +2,10 @@ using LightCore;
 using LightCore.Lifecycle;
 using Noised.Logging;
 using Noised.Core.Plugins;
+using Noised.Core.Commands;
 using Noised.Core.Service;
+using Noised.Core.Service.Protocols;
+using Noised.Core.Service.Protocols.JSON;
 
 namespace Noised.Core.IOC
 {
@@ -34,6 +37,8 @@ namespace Noised.Core.IOC
 				ControlledBy<SingletonLifecycle>();
 			//Protocol
 			builder.Register<IProtocol,JSONProtocol>();
+			builder.Register<ICommandFactory,CommandFactory>().
+				ControlledBy<SingletonLifecycle>();
 	
 			container = builder.Build();
 		}
