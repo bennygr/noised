@@ -25,8 +25,10 @@ namespace Noised.Core.Plugins
 		{
 			var files = Directory.GetFiles(localPluginPath).Where(
 							file => file.EndsWith(".dll") );
+			string currentFileName;
 			foreach(var file in files)
 			{
+				currentFileName = file.ToString();
 				IEnumerable<Type> pluginTypes = null;
 				try
 				{
@@ -36,34 +38,37 @@ namespace Noised.Core.Plugins
 					Type pluginBaseType = Type.GetType(strPluginType);
 					pluginTypes = assembly.GetTypes().Where(type => 
 														    pluginBaseType.IsAssignableFrom(type));
+
+					if(pluginTypes != null && pluginTypes.Any())
+					{	
+						//Plugin init data
+						PluginInitializer pluginInitializer = 
+							new PluginInitializer()
+							{
+								Logging =  IocContainer.Get<ILogging>()
+							};
+						//Instantiate the first IPlugin type found
+						Type concreteType = pluginTypes.First();
+						IPlugin plugin = (IPlugin)Activator.CreateInstance(concreteType,pluginInitializer);
+						plugins.Add(plugin);
+						IocContainer.Get<ILogging>().Debug(
+								String.Format("Loaded Plugin {0} - {1}",
+									plugin.Name, 
+									plugin.Description));
+					}
+					else
+					{
+						IocContainer.Get<ILogging>().Error(
+								String.Format("No IPlugin implementation found in assembly {0}",file));
+					}
 				}
 				catch(Exception e)
 				{
+					IocContainer.Get<ILogging>().Error(
+							"Could not load plugin " + currentFileName.ToString());
 					IocContainer.Get<ILogging>().Error(e.Message);
 				}
 		
-				if(pluginTypes != null && pluginTypes.Any())
-				{	
-					//Plugin init data
-					PluginInitializer pluginInitializer = 
-						new PluginInitializer()
-						{
-							Logging =  IocContainer.Get<ILogging>()
-						};
-					//Instantiate the first IPlugin type found
-					Type concreteType = pluginTypes.First();
-					IPlugin plugin = (IPlugin)Activator.CreateInstance(concreteType,pluginInitializer);
-					plugins.Add(plugin);
-					IocContainer.Get<ILogging>().Debug(
-							String.Format("Loaded Plugin {0} - {1}",
-										  plugin.Name, 
-									      plugin.Description));
-				}
-				else
-				{
-					IocContainer.Get<ILogging>().Error(
-							String.Format("No IPlugin implementation found in assembly {0}",file));
-				}
 			}
 		
 			return plugins.Count;

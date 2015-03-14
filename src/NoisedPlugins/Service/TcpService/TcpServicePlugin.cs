@@ -33,11 +33,7 @@ namespace Noised.Plugins.Service.TcpService
 		/// <summary>
 		///		Constructor
 		/// </summary>
-		/// <param name="logging">logging service</param>        
-		/// <param name="port"> The Server's listening port </param>        
-		/// <param name="maxConnections">
-		///		Maxium of connection the server should handle
-		/// </param>
+		/// <param name="initalizer">initalizting data</param>        
 		public TcpServicePlugin(PluginInitializer initalizer)
 		{
 			this.logging = initalizer.Logging;
