@@ -34,31 +34,8 @@ namespace Noised.Core.Service.Protocols.JSON
 		{
 			commandData = commandData.Replace(endTag,string.Empty);
 			logging.Debug("Parsing " + commandData);
-			CommandMetaDataContainer test = new CommandMetaDataContainer{
-				ProtocolVersion = 2.0f,
-				Commands = new List<CommandMetaData>()
-				{
-					new CommandMetaData
-					{
-						Name = "Test",
-						Parameters = new List<Object>{"test"}
-					},
-					new CommandMetaData
-					{
-						Name = "Ping",
-						Parameters = new List<Object>{"test",
-													new List<int>{1,2,3}}
-					}
-				}
-			};
-
-			string json = JsonConvert.SerializeObject(test,Formatting.Indented);
-			Console.WriteLine(json);
-
-			var t = JsonConvert.DeserializeObject<CommandMetaDataContainer>(json);
+			var t = JsonConvert.DeserializeObject<CommandMetaDataContainer>(commandData);
 			IEnumerable<AbstractCommand> cs = commandFactory.CreateCommands(t);
-
-
 			Console.WriteLine(cs.Count());
 			//foreach(var commandItem in t.Commands)
 			//{
