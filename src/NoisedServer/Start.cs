@@ -27,12 +27,9 @@ namespace Noised.Server
 			int pluginCount = pluginLoader.LoadPlugins("./plugins");
 			logger.Debug(pluginCount + " plugins loaded ");
 
-
-			User user = new User("Benny");
 			//Add a factory and create a ping command
-			Noised.Core.Core core = new Noised.Core.Core();
+			ICore core = IocContainer.Get<ICore>();
 			core.Start();
-			//core.AddCommand(new PingCommand(user));
 
 			ServiceHandler serviceHandler = new ServiceHandler();
 			serviceHandler.StartServices();
@@ -42,17 +39,6 @@ namespace Noised.Server
 			if(audioPlugin != null)
 			{
 				audioPlugin.Play("file:///home/bgr/Musik/test.mp3");
-				Console.WriteLine("Playing");
-				Thread.Sleep(3000);
-				audioPlugin.Pause();
-				Console.WriteLine("Pause");
-				Thread.Sleep(3000);
-				audioPlugin.Resume();
-				Console.WriteLine("Playing");
-				Thread.Sleep(3000);
-				audioPlugin.Stop();
-				Console.WriteLine("Disposing Plugin");
-				audioPlugin.Dispose();
 			}
 			else
 			{

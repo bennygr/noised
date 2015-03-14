@@ -27,14 +27,12 @@ namespace Noised.Core.Commands
 			this.logging = logging;
 		}
 
-		public IEnumerable<AbstractCommand> CreateCommands(
-				CommandMetaDataContainer commandMetaDataContainer)
+		public AbstractCommand CreateCommand(CommandMetaData commandMetaData)
 		{
-			foreach(var commandMetaData in commandMetaDataContainer.Commands)
-				yield return CreateCommand(commandMetaData.Name,
-											commandMetaData.Parameters == null ? 
-											null : 
-											commandMetaData.Parameters.ToArray());
+			return CreateCommand(commandMetaData.Name,
+								 commandMetaData.Parameters == null ? 
+								 null : 
+								 commandMetaData.Parameters.ToArray());
 		}
 
 		/// <summary>
@@ -44,9 +42,11 @@ namespace Noised.Core.Commands
 		/// <param name="parameters">The parameters required for the command creation</param>
 		public AbstractCommand CreateCommand(string name, params object[] parameters)
 		{
-			AbstractCommand command = null;
+			if(name == null)
+				throw new ArgumentNullException("Name");
 			IEnumerable<ICommandBundle> commandBundles = 
 				pluginLoader.GetPlugins<ICommandBundle>();
+			AbstractCommand command = null;
 			if(commandBundles.Count() > 0)
 			{
 				foreach(var commandBundle in commandBundles)
@@ -80,6 +80,7 @@ namespace Noised.Core.Commands
 						String.Format("Could not create command {0}, because no command plugin was loaded",
 									  name));
 			}
+			logging.Debug("CommandFactory created command: " + command);
 			return command;
 		}
 	};

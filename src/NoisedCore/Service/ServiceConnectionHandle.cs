@@ -16,6 +16,7 @@ namespace Noised.Core.Service
 		private CommandDataBuffer commandBuffer;
 		private IProtocol protocol;
 		private ILogging logging; 
+		private ICore core;
 		
 		#endregion
 
@@ -33,11 +34,15 @@ namespace Noised.Core.Service
 		/// <summary>
 		///		Constructor
 		/// </summary>
+		/// <param name="core">The core</param>
 		/// <param name="connection">The service connection to handle</param>
 		/// <param name="protocol">noised protocol definition</param>
-		internal ServiceConnectionHandle(IServiceConnection connection,IProtocol protocol)
+		internal ServiceConnectionHandle(ICore core, 
+										 IServiceConnection connection,
+										 IProtocol protocol)
 		{
 			connection.DataReceived += DataReceived;
+			this.core = core;
 			this.Connection = connection;
 			this.commandBuffer = new CommandDataBuffer();
 			this.protocol = protocol;
@@ -60,12 +65,12 @@ namespace Noised.Core.Service
 				{
 					try
 					{
-						logging.Debug("NO creating command for:");
+						logging.Debug("Now creating command for:");
 						logging.Debug(commandText);
 						AbstractCommand command = protocol.Parse(commandText);
 						if(command != null)
 						{
-							Console.WriteLine(command);
+							core.AddCommand(command);
 						}
 						else 
 						{
@@ -77,6 +82,7 @@ namespace Noised.Core.Service
 					catch(Exception e)
 					{
 						logging.Error(e.Message);
+						logging.Error(e.StackTrace);
 					}
 				}
 			}

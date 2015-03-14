@@ -35,14 +35,10 @@ namespace Noised.Core.Service.Protocols.JSON
 		{
 			commandData = commandData.Replace(endTag,string.Empty);
 			logging.Debug("Parsing command: " + commandData);
-			string json = JsonConvert.SerializeObject(test,Formatting.Indented);
-			Console.WriteLine(json);
-			var t = JsonConvert.DeserializeObject<CommandMetaDataContainer>(json);
-			IEnumerable<AbstractCommand> cs = commandFactory.CreateCommands(t);
-			foreach(AbstractCommand c in cs)
-				c.ExecuteCommand();
 
-			return null;
+			CommandMetaData commandMetaData = 
+				JsonConvert.DeserializeObject<CommandMetaData>(commandData);
+			return commandFactory.CreateCommand(commandMetaData);
 		}
 		
 		#endregion

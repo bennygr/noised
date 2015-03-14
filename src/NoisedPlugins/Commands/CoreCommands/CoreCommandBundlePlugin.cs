@@ -1,6 +1,7 @@
 using System;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Commands;
+
 public class CoreCommandBundlePlugin : ICommandBundle
 {
 		#region Constructor

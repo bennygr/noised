@@ -3,6 +3,6 @@ namespace Noised.Core.Commands
 {
 	interface ICommandFactory
 	{
-		IEnumerable<AbstractCommand> CreateCommands(CommandMetaDataContainer commandMetaDataContainer);
+		AbstractCommand CreateCommand(CommandMetaData commandMetaData);
 	};
 }

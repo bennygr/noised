@@ -9,7 +9,7 @@ namespace Noised.Core
 	/// <summary>
 	///		The noised core processing all incoming commands
 	/// </summary>
-	public class Core
+	internal class Core : ICore
 	{
 		#region Fields
 		
@@ -29,27 +29,9 @@ namespace Noised.Core
 			commandQueue = new Queue<AbstractCommand>();
 			logging = IocContainer.Get<ILogging>();
 		}
-		
-		#endregion
-	
-		#region Properties
-		
-		/// <summary>
-		///		Whether the core is running or not
-		/// </summary>
-		private bool IsRunning
-		{
-			get
-			{
-				lock(this)
-				{
-					return isRunning;
-				}
-			}
-		}
-		
-		#endregion
 
+		#endregion
+		
 		#region Methods
 		
 		/// <summary>
@@ -79,9 +61,21 @@ namespace Noised.Core
 			logging.Debug("noised core stopped");
 		}
 
-		/// <summary>
-		///		Starts the noised core
-		/// </summary>
+		#endregion
+
+		#region ICore
+		
+		public bool IsRunning
+		{
+			get
+			{
+				lock(this)
+				{
+					return isRunning;
+				}
+			}
+		}
+
 		public void Start()
 		{
 			lock(this)
@@ -96,10 +90,6 @@ namespace Noised.Core
 			}
 		}
 
-		
-		/// <summary>
-		///		Stops the core
-		/// </summary>
 		public void Stop()
 		{
 			lock(this)
@@ -109,9 +99,6 @@ namespace Noised.Core
 			}
 		}
 
-		/// <summary>
-		///		Enqueues a command to be executed
-		/// </summary>
 		public void AddCommand(AbstractCommand command)
 		{
 			lock(commandQueue)	

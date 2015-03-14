@@ -1,6 +1,7 @@
 using LightCore;
 using LightCore.Lifecycle;
 using Noised.Logging;
+using Noised.Core;
 using Noised.Core.Plugins;
 using Noised.Core.Commands;
 using Noised.Core.Service;
@@ -31,6 +32,9 @@ namespace Noised.Core.IOC
 	
 			//Logging
 			builder.Register<ILogging,Logger>().
+				ControlledBy<SingletonLifecycle>();
+			//The core
+			builder.Register<ICore,Core>().
 				ControlledBy<SingletonLifecycle>();
 			//Plugins
 			builder.Register<IPluginLoader,PluginLoader>().
