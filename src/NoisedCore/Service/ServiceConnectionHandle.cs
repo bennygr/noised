@@ -60,9 +60,11 @@ namespace Noised.Core.Service
 				{
 					try
 					{
-					AbstractCommand command =  protocol.Parse(commandText);
+						AbstractCommand command = protocol.Parse(commandText);
 						if(command != null)
-							Console.WriteLine(command);
+						{
+							command.ExecuteCommand();
+						}
 						else 
 							Console.WriteLine("ERROR NULL command");
 					}

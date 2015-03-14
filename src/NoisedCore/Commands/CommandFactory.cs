@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using Noised.Logging;
@@ -26,12 +27,14 @@ namespace Noised.Core.Commands
 			this.logging = logging;
 		}
 
-		public IEnumerable<AbstractCommand> CreateCommands(CommandMetaDataContainer commandMetaDataContainer)
+		public IEnumerable<AbstractCommand> CreateCommands(
+				CommandMetaDataContainer commandMetaDataContainer)
 		{
-			Console.WriteLine("creating commands: " + commandMetaDataContainer.Commands.Count);
 			foreach(var commandMetaData in commandMetaDataContainer.Commands)
 				yield return CreateCommand(commandMetaData.Name,
-										   commandMetaData.Parameters.ToArray());
+											commandMetaData.Parameters == null ? 
+											null : 
+											commandMetaData.Parameters.ToArray());
 		}
 
 		/// <summary>
@@ -41,19 +44,43 @@ namespace Noised.Core.Commands
 		/// <param name="parameters">The parameters required for the command creation</param>
 		public AbstractCommand CreateCommand(string name, params object[] parameters)
 		{
+			AbstractCommand command = null;
 			IEnumerable<ICommandBundle> commandBundles = 
 				pluginLoader.GetPlugins<ICommandBundle>();
-			foreach(var commandBundle in commandBundles)
+			if(commandBundles.Count() > 0)
 			{
-				Assembly assembly = Assembly.GetAssembly(commandBundle.GetType());
-				if(assembly != null)
+				foreach(var commandBundle in commandBundles)
 				{
-					Type commandType = assembly.GetType(name);
-					if(commandType != null)
-						Console.WriteLine(assembly.ToString());
+					Assembly assembly = Assembly.GetAssembly(commandBundle.GetType());
+					if(assembly != null)
+					{
+						Type commandType = assembly.GetType(name);
+						if(commandType != null)
+						{
+							if(parameters == null || parameters.Length == 0)
+							{
+								command = (AbstractCommand)Activator.CreateInstance(commandType);
+							}
+							else
+							{
+								command = (AbstractCommand)Activator.CreateInstance(commandType,parameters);
+							}
+						}
+						else
+						{
+							logging.Error(String.Format("Could not find type for command {0}",
+														name));
+						}
+					}
 				}
 			}
-			return null;
+			else
+			{
+				logging.Error(
+						String.Format("Could not create command {0}, because no command plugin was loaded",
+									  name));
+			}
+			return command;
 		}
 	};
 }

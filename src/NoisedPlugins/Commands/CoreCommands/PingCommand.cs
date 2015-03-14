@@ -6,8 +6,8 @@ public class PingCommand : AbstractCommand
 {
 	#region Constructor
 	
-	public PingCommand(User user)
-		: base(user) { }
+	public PingCommand()
+		: base(null) { }
 	
 	#endregion
 
@@ -15,7 +15,7 @@ public class PingCommand : AbstractCommand
 	
 	protected override void Execute()
 	{
-		Console.WriteLine("PING PING PING");	
+		Console.WriteLine("PING!!!!");	
 	}
 	
 	#endregion

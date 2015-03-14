@@ -17,7 +17,8 @@ namespace Noised.Core.Service.Protocols.JSON
 		///		Constrcutor
 		/// </summary>
 		/// <param name="logging">Logging object</param>
-		public JSONProtocol(ILogging logging,ICommandFactory commandFactory) 
+		public JSONProtocol(ILogging logging,
+							ICommandFactory commandFactory) 
 		{
 			this.logging = logging;
 			this.commandFactory = commandFactory;
@@ -40,14 +41,7 @@ namespace Noised.Core.Service.Protocols.JSON
 				{
 					new CommandMetaData
 					{
-						Name = "Test",
-						Parameters = new List<Object>{"test"}
-					},
-					new CommandMetaData
-					{
-						Name = "Ping",
-						Parameters = new List<Object>{"test",
-													new List<int>{1,2,3}}
+						Name = "PingCommand"
 					}
 				}
 			};
@@ -57,6 +51,8 @@ namespace Noised.Core.Service.Protocols.JSON
 
 			var t = JsonConvert.DeserializeObject<CommandMetaDataContainer>(json);
 			IEnumerable<AbstractCommand> cs = commandFactory.CreateCommands(t);
+			foreach(AbstractCommand c in cs)
+				c.ExecuteCommand();
 
 
 			Console.WriteLine(cs.Count());
