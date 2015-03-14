@@ -60,13 +60,19 @@ namespace Noised.Core.Service
 				{
 					try
 					{
+						logging.Debug("NO creating command for:");
+						logging.Debug(commandText);
 						AbstractCommand command = protocol.Parse(commandText);
 						if(command != null)
 						{
-							command.ExecuteCommand();
+							Console.WriteLine(command);
 						}
 						else 
-							Console.WriteLine("ERROR NULL command");
+						{
+							logging.Error("Error: Could not create command for text " + 
+										  Environment.NewLine +
+									      commandText);
+						}
 					}
 					catch(Exception e)
 					{
