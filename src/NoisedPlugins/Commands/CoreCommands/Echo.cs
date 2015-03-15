@@ -2,11 +2,10 @@ using System;
 using Noised.Core.Commands;
 using Noised.Core;
 
-public class EchoCommand : AbstractCommand
+public class Echo : AbstractCommand
 {
 	private string text; 
-	public EchoCommand (string text)
-		: base(null) 
+	public Echo (string text) : base(null) 
 	{ 
 		this.text = text;
 	}

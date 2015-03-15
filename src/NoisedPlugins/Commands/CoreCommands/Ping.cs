@@ -2,11 +2,11 @@ using System;
 using Noised.Core.Commands;
 using Noised.Core;
 
-public class PingCommand : AbstractCommand
+public class Ping : AbstractCommand
 {
 	#region Constructor
 	
-	public PingCommand()
+	public Ping()
 		: base(null) { }
 	
 	#endregion
