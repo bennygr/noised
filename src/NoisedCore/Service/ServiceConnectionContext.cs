@@ -25,7 +25,7 @@ namespace Noised.Core.Service
 		/// <summary>
 		///		The service connection to handle
 		/// </summary>
-		internal IServiceConnection Connection{get; private set;}
+		public IServiceConnection Connection{get; private set;}
 
 		#endregion
 
