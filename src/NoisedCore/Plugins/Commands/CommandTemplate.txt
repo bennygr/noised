@@ -1,11 +1,11 @@
 {
 	'ProtocolVersion': '1.1',
-	'Name': 'PingCommand',
+	'Name': 'Ping',
 }
 
 {
 	'ProtocolVersion': '1.1',
-	'Name': 'EchoCommand',
+	'Name': 'Echo',
 	'Parameters': [ 
 					'Hello Noised :-)',
 				  ]

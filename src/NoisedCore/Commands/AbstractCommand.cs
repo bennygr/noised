@@ -1,6 +1,7 @@
 using System;
 using Noised.Logging;
 using Noised.Core.IOC;
+using Noised.Core.Service;
 namespace Noised.Core.Commands
 {
 	/// <summary>
@@ -19,10 +20,7 @@ namespace Noised.Core.Commands
 
 		#region Properties
 		
-		/// <summary>
-		///		The user which invokes the command
-		/// </summary>
-		public User User {get; private set;}
+		public ServiceConnectionContext Context{get; private set;}
 
 		#endregion
 
@@ -31,11 +29,11 @@ namespace Noised.Core.Commands
 		/// <summary>
 		///		Constructor
 		/// </summary>
-		/// <param name="user">The user which invokes the command</param>
-		protected AbstractCommand (User user)
+		/// <param name="context">The command's context</param>
+		protected AbstractCommand (ServiceConnectionContext context)
 		{
-			this.User = user;
 			logging = IocContainer.Get<ILogging>();
+			this.Context = context;
 		}
 	
 		#endregion

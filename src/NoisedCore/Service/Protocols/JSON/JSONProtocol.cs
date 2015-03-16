@@ -31,13 +31,21 @@ namespace Noised.Core.Service.Protocols.JSON
 			get{return endTag;}
 		}
 
-		public AbstractCommand Parse(string commandData)
+		public AbstractCommand Parse(ServiceConnectionContext context, string commandData)
 		{
 			commandData = commandData.Replace(endTag,string.Empty);
 			logging.Debug("Parsing command: " + commandData);
 
 			CommandMetaData commandMetaData = 
 				JsonConvert.DeserializeObject<CommandMetaData>(commandData);
+
+			//Injection the context as first argument
+			List<object> parameters = new List<object>();
+			parameters.Add(context);
+			if(commandMetaData.Parameters != null)
+				parameters.AddRange(commandMetaData.Parameters);
+			commandMetaData.Parameters = parameters;
+
 			return commandFactory.CreateCommand(commandMetaData);
 		}
 		

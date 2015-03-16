@@ -12,13 +12,13 @@ namespace Noised.Core.Service
 	/// <summary>
 	///		Handles incoming service connections
 	/// </summary>
-	public class ServiceHandler
+	public class ServiceConnectionManager
 	{
 		#region Fields
 		
 		private ILogging logging;
 		private ICore core;
-		private List<ServiceConnectionHandle> connections;
+		private List<ServiceConnectionContext> connections;
 		
 		#endregion
 
@@ -27,11 +27,11 @@ namespace Noised.Core.Service
 		/// <summary>
 		///		Constructor
 		/// </summary>
-		public ServiceHandler()
+		public ServiceConnectionManager()
 		{
 			this.logging = IocContainer.Get<ILogging>();
 			this.core = IocContainer.Get<ICore>();
-			this.connections = new List<ServiceConnectionHandle>();
+			this.connections = new List<ServiceConnectionContext>();
 		}
 		
 		#endregion
@@ -44,7 +44,7 @@ namespace Noised.Core.Service
 		private void ClientConnected(object sender,ServiceEventArgs eventArgs)
 		{
 			this.connections.Add(
-				new ServiceConnectionHandle(core,
+				new ServiceConnectionContext(core,
 											eventArgs.Connection,
 											IocContainer.Get<IProtocol>()));
 			logging.Debug("A new client connected.");

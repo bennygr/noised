@@ -9,7 +9,7 @@ namespace Noised.Core.Service
 	/// <summary>
 	///		A handle which wrapps a IServiceConnection at a higher level
 	/// </summary>
-	internal class ServiceConnectionHandle
+	public class ServiceConnectionContext
 	{
 		#region Fields
 		
@@ -37,9 +37,9 @@ namespace Noised.Core.Service
 		/// <param name="core">The core</param>
 		/// <param name="connection">The service connection to handle</param>
 		/// <param name="protocol">noised protocol definition</param>
-		internal ServiceConnectionHandle(ICore core, 
-										 IServiceConnection connection,
-										 IProtocol protocol)
+		internal ServiceConnectionContext(ICore core, 
+										  IServiceConnection connection,
+										  IProtocol protocol)
 		{
 			connection.DataReceived += DataReceived;
 			this.core = core;
@@ -67,7 +67,7 @@ namespace Noised.Core.Service
 					{
 						logging.Debug("Now creating command for:");
 						logging.Debug(commandText);
-						AbstractCommand command = protocol.Parse(commandText);
+						AbstractCommand command = protocol.Parse(this,commandText);
 						if(command != null)
 						{
 							core.AddCommand(command);

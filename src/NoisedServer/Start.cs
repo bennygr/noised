@@ -31,8 +31,8 @@ namespace Noised.Server
 			ICore core = IocContainer.Get<ICore>();
 			core.Start();
 
-			ServiceHandler serviceHandler = new ServiceHandler();
-			serviceHandler.StartServices();
+			ServiceConnectionManager serviceConnectionManager = new ServiceConnectionManager();
+			serviceConnectionManager.StartServices();
 			
 			IAudioPlugin audioPlugin = 
 				pluginLoader.GetPlugin<IAudioPlugin>();

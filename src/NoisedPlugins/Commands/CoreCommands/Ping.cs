@@ -1,13 +1,14 @@
 using System;
-using Noised.Core.Commands;
 using Noised.Core;
+using Noised.Core.Commands;
+using Noised.Core.Service;
 
 public class Ping : AbstractCommand
 {
 	#region Constructor
 	
-	public Ping()
-		: base(null) { }
+	public Ping(ServiceConnectionContext context)
+		: base(context) { }
 	
 	#endregion
 
