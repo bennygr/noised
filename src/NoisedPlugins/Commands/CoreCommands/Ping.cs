@@ -3,21 +3,30 @@ using Noised.Core;
 using Noised.Core.Commands;
 using Noised.Core.Service;
 
-public class Ping : AbstractCommand
+namespace Noised.Commands.Core
 {
-	#region Constructor
-	
-	public Ping(ServiceConnectionContext context)
-		: base(context) { }
-	
-	#endregion
-
-	#region AbstractCommand
-	
-	protected override void Execute()
+	/// <summary>
+	///		A simple ping command
+	/// </summary>
+	public class Ping : AbstractCommand
 	{
-		Console.WriteLine("PING!!!!");	
-	}
+		#region Constructor
 	
-	#endregion
-};
+		/// <summary>
+		///		Constructor
+		/// </summary>
+		public Ping(ServiceConnectionContext context)
+			: base(context) { }
+	
+		#endregion
+	
+		#region AbstractCommand
+	
+		protected override void Execute()
+		{
+			Console.WriteLine("PING!!!!");	
+		}
+	
+		#endregion
+	};
+}

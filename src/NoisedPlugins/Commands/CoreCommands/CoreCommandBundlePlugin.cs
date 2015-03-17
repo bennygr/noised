@@ -2,73 +2,76 @@ using System;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Commands;
 
-public class CoreCommandBundlePlugin : ICommandBundle
+namespace Noised.Commands.Core
 {
-		#region Constructor
-
-		/// <summary>
-		///		Constructor
-		/// </summary>
-		/// <param name="pluginInitializer">initalizer</param>
-		public CoreCommandBundlePlugin(PluginInitializer pluginInitializer) { }
-
-		#endregion
-
-		#region IDisposable
-
-		public void Dispose(){}
-
-		#endregion
-
-		#region IPlugin
-		
-		public String Name
-		{
-			get
+	public class CoreCommandBundlePlugin : ICommandBundle
+	{
+			#region Constructor
+	
+			/// <summary>
+			///		Constructor
+			/// </summary>
+			/// <param name="pluginInitializer">initalizer</param>
+			public CoreCommandBundlePlugin(PluginInitializer pluginInitializer) { }
+	
+			#endregion
+	
+			#region IDisposable
+	
+			public void Dispose(){}
+	
+			#endregion
+	
+			#region IPlugin
+	
+			public String Name
 			{
-				return  "CoreCommandBundle";
+				get
+				{
+					return  "CoreCommandBundle";
+				}
 			}
-		}
-
-		public String Description
-		{
-			get
+	
+			public String Description
 			{
-				return  "The noised core commands";
+				get
+				{
+					return  "The noised core commands";
+				}
 			}
-		}
-		
-		public String AuthorName
-		{
-			get
+	
+			public String AuthorName
 			{
-				return "Benjamin Grüdelbach";
+				get
+				{
+					return "Benjamin Grüdelbach";
+				}
 			}
-		}
-
-		public String AuthorContact
-		{
-			get
+	
+			public String AuthorContact
 			{
-				return "nocontact@availlable.de";
+				get
+				{
+					return "nocontact@availlable.de";
+				}
 			}
-		}
-
-		public Version Version
-		{
-			get
+	
+			public Version Version
 			{
-				return new Version(1,0);
+				get
+				{
+					return new Version(1,0);
+				}
 			}
-		}
-
-		public DateTime CreationDate
-		{
-			get
+	
+			public DateTime CreationDate
 			{
-				return DateTime.Parse("04.03.2015");
+				get
+				{
+					return DateTime.Parse("04.03.2015");
+				}
 			}
-		}
-		
-		#endregion
-};
+	
+			#endregion
+	};
+}

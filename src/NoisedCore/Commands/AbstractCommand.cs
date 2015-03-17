@@ -20,7 +20,15 @@ namespace Noised.Core.Commands
 
 		#region Properties
 		
+		/// <summary>
+		///		The contect in which the command is executed
+		/// </summary>
 		public ServiceConnectionContext Context{get; private set;}
+
+		/// <summary>
+		///		Whether the command requires authentication or not
+		/// </summary>
+		public bool RequiresAuthentication{get;protected set;}
 
 		#endregion
 
@@ -30,10 +38,13 @@ namespace Noised.Core.Commands
 		///		Constructor
 		/// </summary>
 		/// <param name="context">The command's context</param>
-		protected AbstractCommand (ServiceConnectionContext context)
+		/// <param name="requiresAuthentication">Whether the command requires authentication or not</param>
+		protected AbstractCommand (ServiceConnectionContext context,
+								   bool requiresAuthentication = true)
 		{
 			logging = IocContainer.Get<ILogging>();
 			this.Context = context;
+			this.RequiresAuthentication = requiresAuthentication;
 		}
 	
 		#endregion

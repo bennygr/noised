@@ -27,6 +27,16 @@ namespace Noised.Core.Service
 		/// </summary>
 		public IServiceConnection Connection{get; private set;}
 
+		/// <summary>
+		///		Whether the context has been authenticated or not
+		/// </summary>
+		public bool IsAuthenticated{get;set;}
+
+		/// <summary>
+		///		The user related to the context
+		/// </summary>
+		public User User{get; set;}
+
 		#endregion
 
 		#region Constructor
@@ -70,22 +80,42 @@ namespace Noised.Core.Service
 						AbstractCommand command = protocol.Parse(this,commandText);
 						if(command != null)
 						{
-							core.AddCommand(command);
+							//Checking authentication if required for the command
+							if(this.IsAuthenticated || 
+							   !command.RequiresAuthentication)
+							{
+								core.AddCommand(command);
+							}
+							else
+							{
+								//Access denied
+								logging.Error(
+									"Access denied for executing command: " + 
+									command.ToString());	
+								//TODO: send Acess denied error
+							}
 						}
 						else 
 						{
 							logging.Error("Error: Could not create command for text " + 
 										  Environment.NewLine +
 									      commandText);
+							//TODO: Send error
 						}
 					}
 					catch(Exception e)
 					{
+						//TODO: Try to send the error
 						logging.Error(e.Message);
 						logging.Error(e.StackTrace);
 					}
 				}
 			}
+		}
+
+		public void SendResponse(AbstractResponse response)
+		{
+
 		}
 		
 		#endregion

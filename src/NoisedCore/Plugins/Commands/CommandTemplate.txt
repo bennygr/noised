@@ -1,13 +1,22 @@
 {
 	'ProtocolVersion': '1.1',
-	'Name': 'Ping',
+	'Name': 'Noised.Commands.Core.Ping',
 }
 
 {
 	'ProtocolVersion': '1.1',
-	'Name': 'Echo',
+	'Name': 'Noised.Commands.Core.Echo',
 	'Parameters': [ 
 					'Hello Noised :-)',
+				  ]
+}
+
+{
+	'ProtocolVersion': '1.1',
+	'Name': 'Noised.Commands.Core.Login',
+	'Parameters': [ 
+					'benny',
+					'test',
 				  ]
 }
 

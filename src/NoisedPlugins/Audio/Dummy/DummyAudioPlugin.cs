@@ -1,6 +1,7 @@
 using System;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
+
 namespace Noised.Plugins.Audio.Dummy
 {
 	/// <summary>
