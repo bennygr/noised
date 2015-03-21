@@ -24,7 +24,14 @@ namespace Noised.Commands.Core
 	
 		protected override void Execute()
 		{
+			ResponseMetaData response = 
+				new ResponseMetaData()
+				{
+					ProtocolVersion  = 1.0f,
+					Name = "Noised.Commands.Core.Pong",
+				};
 			Console.WriteLine("PING!!!!");	
+			Context.SendResponse(response);
 		}
 	
 		#endregion

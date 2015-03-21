@@ -77,7 +77,8 @@ namespace Noised.Core.Service
 					{
 						logging.Debug("Now creating command for:");
 						logging.Debug(commandText);
-						AbstractCommand command = protocol.Parse(this,commandText);
+						AbstractCommand command = 
+							protocol.ParseCommand(this,commandText);
 						if(command != null)
 						{
 							//Checking authentication if required for the command
@@ -113,9 +114,10 @@ namespace Noised.Core.Service
 			}
 		}
 
-		public void SendResponse(AbstractResponse response)
+		public void SendResponse(ResponseMetaData response)
 		{
-
+			byte[] responseBytes = protocol.CreateResponse(response);
+			Connection.Send(responseBytes);
 		}
 		
 		#endregion

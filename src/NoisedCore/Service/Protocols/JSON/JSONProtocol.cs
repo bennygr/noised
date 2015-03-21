@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace Noised.Core.Service.Protocols.JSON
 			get{return endTag;}
 		}
 
-		public AbstractCommand Parse(ServiceConnectionContext context, string commandData)
+		public AbstractCommand ParseCommand(ServiceConnectionContext context, string commandData)
 		{
 			commandData = commandData.Replace(endTag,string.Empty);
 			logging.Debug("Parsing command: " + commandData);
@@ -49,6 +50,12 @@ namespace Noised.Core.Service.Protocols.JSON
 			return commandFactory.CreateCommand(commandMetaData);
 		}
 		
+		public byte[] CreateResponse(ResponseMetaData responseData)
+		{
+			string json = 
+				JsonConvert.SerializeObject(responseData, Formatting.Indented);
+			return Encoding.UTF8.GetBytes(json);
+		}
 		#endregion
 	};
 }

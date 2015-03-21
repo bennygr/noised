@@ -17,6 +17,12 @@ namespace Noised.Core.Service.Protocols
 		/// </summary>
 		/// <param name="context">The command's context</param>
 		/// <param name="commandData">The data to parse as command</param>
-		AbstractCommand Parse(ServiceConnectionContext context, string commandData);
+		AbstractCommand ParseCommand(ServiceConnectionContext context, string commandData);
+
+		/// <summary>
+		///		Creates a response string based on a response object
+		/// </summary>
+		/// <param name="responseData">The data to create the reponse for</param>
+		byte[] CreateResponse(ResponseMetaData responseData);
 	};
 }

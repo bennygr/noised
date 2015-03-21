@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Noised.Core.Service;
 using Noised.Core.Plugins.Service;
@@ -65,7 +66,8 @@ namespace Noised.Plugins.Service.WebSocketService
 
         public void Send(byte[] bytes)
         {
-			this.connection.Send(bytes);
+			string message = Encoding.UTF8.GetString(bytes);
+			this.connection.Send(message);
         }
 
         public void Close() 

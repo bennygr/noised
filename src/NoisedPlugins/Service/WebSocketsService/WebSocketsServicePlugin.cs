@@ -153,7 +153,6 @@ namespace Noised.Plugins.Service.WebSocketService
 				{
 					socket.OnOpen = () =>
 						{
-							Console.WriteLine(".dkljfld");
 							WebSocketConnection connection = 
 								new WebSocketConnection(this,socket);
 							connections.Add(connection);
