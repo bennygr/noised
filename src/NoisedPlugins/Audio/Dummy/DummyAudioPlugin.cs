@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 using Noised.Core.Media;
@@ -83,6 +84,14 @@ namespace Noised.Plugins.Audio.Dummy
 		#endregion
 
 		#region IAudioPlugin
+
+		public IEnumerable<string> SupportedProtocols
+		{
+			get
+			{
+				return new List<string>(){"file://"};
+			}
+		}
 		
 		public void Play(MediaItem item)
 		{

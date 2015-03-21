@@ -7,6 +7,7 @@ using Noised.Logging;
 using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
+using Noised.Core.Plugins.Media;
 using Noised.Core.Commands;
 using Noised.Core.Service;
 using Noised.Core.Media;
@@ -33,20 +34,27 @@ namespace Noised.Server
 
 			ServiceConnectionManager serviceConnectionManager = new ServiceConnectionManager();
 			serviceConnectionManager.StartServices();
-			
-			IAudioPlugin audioPlugin = 
-				pluginLoader.GetPlugin<IAudioPlugin>();
-			if(audioPlugin != null)
+
+			IMediaSource mediaSource = pluginLoader.GetPlugin<IMediaSource>();
+			if(mediaSource != null)
 			{
-				MediaItem test = new MediaItem()
+				IAudioPlugin audioPlugin = 
+					pluginLoader.GetPlugin<IAudioPlugin>();
+				if(audioPlugin != null)
 				{
-					Uri= new Uri("file:///home/bgr/Musik/test.mp3")
-				};
-				audioPlugin.Play(test);
+					var resultList = mediaSource.Search("test");
+					MediaItem test = resultList.First();
+					Console.WriteLine(test.Protocol);
+					audioPlugin.Play(test);
+				}
+				else
+				{
+					logger.Error("No audio plugin found");
+				}
 			}
 			else
 			{
-				logger.Error("No audio plugin found");
+					logger.Error("No media source plugin found");
 			}
 			return 0;
 		}

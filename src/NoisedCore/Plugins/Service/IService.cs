@@ -48,5 +48,6 @@ namespace Noised.Core.Plugins.Service
 		void Stop();
 		
 		#endregion
+
 	}
 }

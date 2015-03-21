@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Noised.Core.Media;
 
 namespace Noised.Core.Plugins.Audio
@@ -8,6 +9,14 @@ namespace Noised.Core.Plugins.Audio
 	/// </summary>
 	public interface IAudioPlugin : IPlugin
 	{
+		/// <summary>
+		///		A list of supported protocols to play
+		/// </summary>
+		/// <remarks>
+		///		For example file://, spotify://, etc
+		/// </remarks>
+		IEnumerable<string> SupportedProtocols{get;}
+
 		/// <summary>
 		///		Plays the specified item 
 		/// </summary>

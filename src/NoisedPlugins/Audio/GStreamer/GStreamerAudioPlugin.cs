@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
@@ -115,6 +116,14 @@ namespace Noised.Plugins.Audio.GStreamer
 		
 		#region IAudioPlugin
 		
+		public IEnumerable<string> SupportedProtocols
+		{
+			get
+			{
+				return new List<string>(){"file://"};
+			}
+		}
+
 		public void Play(MediaItem item)
 		{
 			Console.WriteLine("Playing a song...");
