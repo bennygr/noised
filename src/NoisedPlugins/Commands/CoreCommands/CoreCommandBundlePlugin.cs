@@ -61,6 +61,7 @@ namespace Noised.Commands.Core
 				get
 				{
 					return new Version(1,0);
+					
 				}
 			}
 	

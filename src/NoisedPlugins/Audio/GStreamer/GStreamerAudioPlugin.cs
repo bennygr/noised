@@ -1,7 +1,9 @@
 using System;
+using System.Threading.Tasks;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
-using System.Threading.Tasks;
+using Noised.Core.Media;
+
 namespace Noised.Plugins.Audio.GStreamer
 {
 	public class GStreamerAudioPlugin : IAudioPlugin 
@@ -113,7 +115,7 @@ namespace Noised.Plugins.Audio.GStreamer
 		
 		#region IAudioPlugin
 		
-		public void Play(String fileName)
+		public void Play(MediaItem item)
 		{
 			Console.WriteLine("Playing a song...");
 			if(GStreamerAccessUnix.IsPlaying() || 
@@ -122,11 +124,11 @@ namespace Noised.Plugins.Audio.GStreamer
 				GStreamerAccessUnix.Stop();
 			}
 
-			Task task = new Task( () => GStreamerAccessUnix.Play(fileName) );
+			Task task = new Task( () => GStreamerAccessUnix.Play(item.Uri.ToString()) );
 			task.Start();
 		}
 
-		public void Play(String fileName, int pos)
+		public void Play(MediaItem item, int pos)
 		{
 			throw new NotImplementedException();
 		}

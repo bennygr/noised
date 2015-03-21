@@ -1,6 +1,7 @@
 using System;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
+using Noised.Core.Media;
 
 namespace Noised.Plugins.Audio.Dummy
 {
@@ -83,16 +84,16 @@ namespace Noised.Plugins.Audio.Dummy
 
 		#region IAudioPlugin
 		
-		public void Play(String fileName)
+		public void Play(MediaItem item)
 		{
-			Play(fileName,0);
+			Play(item,0);
 		}
 
-		public void Play(String fileName, int pos)
+		public void Play(MediaItem item, int pos)
 		{
 			isPlaying = true;
 			Console.WriteLine( String.Format( "Playing song {0} from position {1}",
-											  fileName, 
+											  item.Uri.ToString(), 
 											  pos));
 		}
 

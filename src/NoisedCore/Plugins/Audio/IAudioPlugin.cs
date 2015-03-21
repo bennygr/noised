@@ -1,4 +1,6 @@
 using System;
+using Noised.Core.Media;
+
 namespace Noised.Core.Plugins.Audio
 {
 	/// <summary>
@@ -7,17 +9,17 @@ namespace Noised.Core.Plugins.Audio
 	public interface IAudioPlugin : IPlugin
 	{
 		/// <summary>
-		///		Plays the specified file 
+		///		Plays the specified item 
 		/// </summary>
-		/// <param name="fileName">The name of the file to play</param>
-		void Play(String fileName);
+		/// <param name="item">The item to play</param>
+		void Play(MediaItem item);
 
 		/// <summary>
-		///		Play the specified file from a certain position
+		///		Play the specified item from a certain position
 		/// </summary>
-		/// <param name="fileName">The name of the file to play</param>
+		/// <param name="item">The item to play</param>
 		/// <param name="pos">The position from which to play playback in milliseconds</param>
-		void Play(String fileName, int pos);
+		void Play(MediaItem item, int pos);
 
 		/// <summary>
 		///		Stops the playback

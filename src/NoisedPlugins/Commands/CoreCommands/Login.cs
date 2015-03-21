@@ -34,7 +34,7 @@ namespace Noised.Commands.Core
 		protected override void Execute()
 		{
 			//Just a test impl.
-			//TODO: query against an auth. service injected  into the plugin
+			//TODO: query against an auth. service injected into the plugin
 			//-->PluginInitializer
 			if(userName == "benny" && 
 			   password == "test")

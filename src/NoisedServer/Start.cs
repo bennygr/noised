@@ -2,14 +2,14 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using Noised.Core;
 using Noised.Logging;
 using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
-using Noised.Core;
 using Noised.Core.Commands;
 using Noised.Core.Service;
-
+using Noised.Core.Media;
 
 namespace Noised.Server
 {
@@ -38,7 +38,11 @@ namespace Noised.Server
 				pluginLoader.GetPlugin<IAudioPlugin>();
 			if(audioPlugin != null)
 			{
-				audioPlugin.Play("file:///home/bgr/Musik/test.mp3");
+				MediaItem test = new MediaItem()
+				{
+					Uri= new Uri("file:///home/bgr/Musik/test.mp3")
+				};
+				audioPlugin.Play(test);
 			}
 			else
 			{
