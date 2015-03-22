@@ -4,11 +4,26 @@ using Noised.Core.Media;
 
 namespace Noised.Core.Plugins.Audio
 {
+	public delegate void AudioEventHandler(Object sender, AudioEventArgs args);
+	public class AudioEventArgs : EventArgs
+	{
+		public MediaItem MediaItem {get;set;}
+	};
+
 	/// <summary>
 	///		A plugin for audio output
 	/// </summary>
 	public interface IAudioPlugin : IPlugin
 	{
+		/// <summary>
+		///		Invoked if a playback finished 
+		/// </summary>
+		/// <remarks>
+		///		Finished because the playback reached the end, 
+		///		not stopped by an action
+		///	</remarks>
+		event AudioEventHandler SongFinished;
+
 		/// <summary>
 		///		A list of supported protocols to play
 		/// </summary>

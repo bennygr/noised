@@ -6,8 +6,10 @@ namespace Noised.Plugins.Audio.GStreamer
 	/// <summary>
 	///		Provides Interop access to native gstreamer code
 	/// </summary>
-	internal static class GStreamerAccessUnix
+	public static class GStreamerAccessUnix
 	{
+		public delegate void SongFinishedCallback();
+
 		[DllImport ("libNoisedGstreamerAudio.so")]
 		internal static extern void Initialize();
 
@@ -33,5 +35,9 @@ namespace Noised.Plugins.Audio.GStreamer
 		[DllImport ("libNoisedGstreamerAudio.so")]
 		[return: MarshalAsAttribute(UnmanagedType.Bool)]
 		internal static extern bool IsPaused();
+
+		[DllImport ("libNoisedGstreamerAudio.so")]
+		internal static extern void SetSongFinishedCallback(
+				[MarshalAs(UnmanagedType.FunctionPtr)]SongFinishedCallback songFinishedCallback);
 	};
 }

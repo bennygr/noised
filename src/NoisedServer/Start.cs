@@ -40,6 +40,11 @@ namespace Noised.Server
 			{
 				IAudioPlugin audioPlugin = 
 					pluginLoader.GetPlugin<IAudioPlugin>();
+				audioPlugin.SongFinished += 
+					(sender,mediaItem) => 
+					{ 
+						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)"); 
+					};
 				if(audioPlugin != null)
 				{
 					var resultList = mediaSource.Search("test");

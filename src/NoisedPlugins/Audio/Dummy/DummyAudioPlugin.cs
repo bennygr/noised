@@ -85,6 +85,8 @@ namespace Noised.Plugins.Audio.Dummy
 
 		#region IAudioPlugin
 
+		public event AudioEventHandler SongFinished;
+
 		public IEnumerable<string> SupportedProtocols
 		{
 			get

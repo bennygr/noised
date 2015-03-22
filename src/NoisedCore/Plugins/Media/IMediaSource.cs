@@ -6,7 +6,7 @@ namespace Noised.Core.Plugins.Media
 	/// <summary>
 	///		A source to retrieve media items from 
 	/// </summary>
-	public interface IMediaSource
+	public interface IMediaSource : IPlugin
 	{
 		/// <summary>
 		///		Retrieves media items by a search pattern

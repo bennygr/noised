@@ -43,3 +43,10 @@ extern "C" void Resume()
 {
 	playbinWrapper->Resume();
 }
+
+extern "C" void SetSongFinishedCallback(SongFinishedCallback songFinishedCallback)
+{
+	playbinWrapper->songFinishedCallback = songFinishedCallback;
+	playbinWrapper->callbackRegistered= true;
+	std::cout << "CALLBACK REGISTERED" << std::endl;
+}

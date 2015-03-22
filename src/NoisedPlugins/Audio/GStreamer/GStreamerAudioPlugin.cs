@@ -7,14 +7,20 @@ using Noised.Core.Media;
 
 namespace Noised.Plugins.Audio.GStreamer
 {
+
 	public class GStreamerAudioPlugin : IAudioPlugin 
 	{
+		private MediaItem currentItem = null; 
+		private static GStreamerAudioPlugin plugin;
+
 		/// <summary>
 		///		Constructor
 		/// </summary>
 		public GStreamerAudioPlugin(PluginInitializer initalizer)
 		{
 			GStreamerAccessUnix.Initialize();
+			GStreamerAccessUnix.SetSongFinishedCallback(Callback);
+			plugin = this;
 		}
 
 		/// <summary>
@@ -24,6 +30,43 @@ namespace Noised.Plugins.Audio.GStreamer
 		{
 			Dispose(false);
 		}
+
+		#region Methods
+
+		private void Callback()
+		{
+			try
+			{
+				//For some strange reason the this reference is NULL when get called from the
+				//native code. Workaround saving this as static 
+				plugin.OnSongFinished(plugin.currentItem);
+			}
+			catch(Exception e)
+			{
+				Console.WriteLine(e);
+				Console.WriteLine(e.Message);
+				Console.WriteLine(e.StackTrace);
+			}
+		}
+		
+		/// <summary>
+		///		Internal method to invoke the SongFinished event
+		/// </summary>
+		/// <param name="mediaItem">The item which has been finished</param>
+		private void OnSongFinished(MediaItem mediaItem)
+		{
+			AudioEventHandler handler = SongFinished;
+			if(handler != null)
+			{
+				handler(this,
+						new AudioEventArgs()
+						{
+							MediaItem = mediaItem
+						});
+			}
+		}
+		
+		#endregion
 
 		#region IDisposable
 		
@@ -115,6 +158,8 @@ namespace Noised.Plugins.Audio.GStreamer
 		#endregion
 		
 		#region IAudioPlugin
+
+		public event AudioEventHandler SongFinished;
 		
 		public IEnumerable<string> SupportedProtocols
 		{
@@ -126,7 +171,7 @@ namespace Noised.Plugins.Audio.GStreamer
 
 		public void Play(MediaItem item)
 		{
-			Console.WriteLine("Playing a song...");
+			Console.WriteLine("Playing a song..." + item.Uri.ToString());
 			if(GStreamerAccessUnix.IsPlaying() || 
 			   GStreamerAccessUnix.IsPaused())
 			{
@@ -134,6 +179,7 @@ namespace Noised.Plugins.Audio.GStreamer
 			}
 
 			Task task = new Task( () => GStreamerAccessUnix.Play(item.Uri.ToString()) );
+			currentItem = item;
 			task.Start();
 		}
 

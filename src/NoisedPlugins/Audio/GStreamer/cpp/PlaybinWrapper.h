@@ -8,6 +8,8 @@
 #include <gst/gst.h>
 //------------------------------------------------------------------------------
 
+typedef void (*SongFinishedCallback)(); 
+
 class PlaybinWrapper
 {
 	public:
@@ -16,13 +18,15 @@ class PlaybinWrapper
 		bool isPaused;
 		std::string name;
 		GstElement *pipeline;
+		SongFinishedCallback songFinishedCallback;
+		bool callbackRegistered;
 
 		PlaybinWrapper(std::string name)
 		{
 			this->name = name;
 			this->isPlaying = false;
 			this->isPaused = false;
-
+			this->callbackRegistered = false;
 			int x=0;
 			gst_init(&x, 0);
 		}

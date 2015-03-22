@@ -8,6 +8,10 @@ gboolean bus_call(GstBus *bus, GstMessage *msg, void *user_data)
 		case GST_MESSAGE_EOS: 
 		{
 			g_main_loop_quit(wrapper->loop); 
+			if(wrapper->callbackRegistered)
+			{
+				wrapper->songFinishedCallback();
+			}
 			break;
 		}
 		case GST_MESSAGE_ERROR: 
@@ -29,9 +33,10 @@ gboolean bus_call(GstBus *bus, GstMessage *msg, void *user_data)
 								&new_state, 
 								&pending_state);
 
-				g_print ("\nPipeline state changed from %s to %s:\n",
-					gst_element_state_get_name (old_state),
-					gst_element_state_get_name (new_state));
+				//test output of the current state
+				//g_print ("\nPipeline state changed from %s to %s:\n",
+				//	gst_element_state_get_name (old_state),
+				//	gst_element_state_get_name (new_state));
 			
 				if( wrapper->isPlaying == false && 
 				   wrapper->isPaused == false)
