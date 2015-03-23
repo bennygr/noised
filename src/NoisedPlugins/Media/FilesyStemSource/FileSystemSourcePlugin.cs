@@ -79,6 +79,15 @@ public class FileSystemSourcePlugin : IPlugin, IMediaSource
 		#endregion
 
 		#region IMediaSource
+
+		public MediaItem GetItem(Uri uri) 
+		{
+			//TODO: implement: Get the item from DB 
+			return new MediaItem()
+			{
+				Uri = uri
+			};
+		}
 		
 		public IEnumerable<MediaItem> Search(string search)
 		{

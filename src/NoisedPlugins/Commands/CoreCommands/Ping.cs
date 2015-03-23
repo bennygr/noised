@@ -15,6 +15,7 @@ namespace Noised.Commands.Core
 		/// <summary>
 		///		Constructor
 		/// </summary>
+		/// <param name="context">Connection context</param>
 		public Ping(ServiceConnectionContext context)
 			: base(context) { }
 	

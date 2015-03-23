@@ -7,6 +7,7 @@ using Noised.Core.Commands;
 using Noised.Core.Service;
 using Noised.Core.Service.Protocols;
 using Noised.Core.Service.Protocols.JSON;
+using Noised.Core.Media;
 
 namespace Noised.Core.IOC
 {
@@ -42,6 +43,11 @@ namespace Noised.Core.IOC
 			//Protocol
 			builder.Register<IProtocol,JSONProtocol>();
 			builder.Register<ICommandFactory,CommandFactory>().
+				ControlledBy<SingletonLifecycle>();
+			//Media
+			builder.Register<IMediaSourceAccumulator,MediaSourceAccumulator>().
+				ControlledBy<SingletonLifecycle>();
+			builder.Register<IMediaManager,MediaManager>().
 				ControlledBy<SingletonLifecycle>();
 	
 			container = builder.Build();

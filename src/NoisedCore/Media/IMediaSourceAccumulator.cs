@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Generic;
-using Noised.Core.Media;
 
-namespace Noised.Core.Plugins.Media
+namespace Noised.Core.Media
 {
 	/// <summary>
-	///		A source to retrieve media items from 
+	///		Provides access to all known IMedaSource 
 	/// </summary>
-	public interface IMediaSource : IPlugin
+	public interface IMediaSourceAccumulator
 	{
 		/// <summary>
-		///		Retrieves a media item by an Uri
+		///		Retrieves the first MediaItem found by a unique uri
 		/// </summary>
-		MediaItem GetItem(Uri uri); 
-
+		MediaItem GetItem(Uri uri);
+	
 		/// <summary>
-		///		Retrieves media items by a search pattern
+		///		Searches all known IMediaSource's for the given search pattern
 		/// </summary>
 		/// <returns>
 		///		An enumeration of media items matching the given pattern
