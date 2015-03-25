@@ -19,5 +19,20 @@ namespace Noised.Core.Media
 		///		Plays a media item 
 		/// </summary>
 		void Play(MediaItem item);
+
+		/// <summary>
+		///		Stops playback
+		/// </summary>
+		void Stop();
+
+		/// <summary>
+		///		Pauses playback
+		/// </summary>
+		void Pause();
+
+		/// <summary>
+		///		Resumes playback
+		/// </summary>
+		void Resume();
 	}
 }

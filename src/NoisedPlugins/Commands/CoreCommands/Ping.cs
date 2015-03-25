@@ -28,7 +28,6 @@ namespace Noised.Commands.Core
 			ResponseMetaData response = 
 				new ResponseMetaData()
 				{
-					ProtocolVersion  = 1.0f,
 					Name = "Noised.Commands.Core.Pong",
 				};
 			Console.WriteLine("PING!!!!");	

@@ -8,10 +8,15 @@ namespace Noised.Core.Commands
 	/// </summary>
 	public class ResponseMetaData
 	{
+		public ResponseMetaData()
+		{
+			ProtocolVersion = 1.0f;
+		}
+
 		/// <summary>
 		///		The version of the protocol
 		/// </summary>
-		public float ProtocolVersion{get;set;}
+		public float ProtocolVersion{get;private set;}
 
 		/// <summary>
 		///		The name of the response

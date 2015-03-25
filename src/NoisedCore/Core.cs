@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Noised.Core.Commands;
@@ -52,7 +53,26 @@ namespace Noised.Core
 
 				if(cmd != null)
 				{
-					cmd.ExecuteCommand();
+					try
+					{
+						cmd.ExecuteCommand();
+					}
+					catch(Exception e)
+					{	
+						logging.Error(String.Format("Error while executing command: {1}",
+									  e.Message));
+						try
+						{
+							cmd.Context.SendResponse(new ErrorResponse(e));
+						}
+						catch
+						{
+							logging.Error(String.Format("Error while sending error to sender: {1}",
+										e.Message));
+							logging.Error(String.Format("Error while sending error to sender: {1}",
+										e.StackTrace));
+						}
+					}
 					logging.Debug("Executed: " + cmd);
 				}
 
