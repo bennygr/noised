@@ -55,22 +55,21 @@ namespace Noised.Core
 				{
 					try
 					{
+						logging.Debug("Core is executing command " + cmd.ToString());
 						cmd.ExecuteCommand();
 					}
 					catch(Exception e)
 					{	
-						logging.Error(String.Format("Error while executing command: {1}",
-									  e.Message));
+						logging.Error(String.Format("Error while executing command: {0}",
+									                e.Message));
 						try
 						{
 							cmd.Context.SendResponse(new ErrorResponse(e));
 						}
 						catch
 						{
-							logging.Error(String.Format("Error while sending error to sender: {1}",
-										e.Message));
-							logging.Error(String.Format("Error while sending error to sender: {1}",
-										e.StackTrace));
+							logging.Error(String.Format("Error while sending error to sender: {0}",
+											            e.Message));
 						}
 					}
 					logging.Debug("Executed: " + cmd);

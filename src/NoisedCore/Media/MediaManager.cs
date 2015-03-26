@@ -1,19 +1,44 @@
+using System;
 using System.Linq;
+using Noised.Logging;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 namespace Noised.Core.Media
 {
 	public class MediaManager : IMediaManager
 	{
-		IPluginLoader pluginLoader;
+		private static object locker = new object();
+		private IPluginLoader pluginLoader;
+		private IAudioPlugin currentAudioOutput;
+		private ILogging logger;
 
 		/// <summary>
 		///		Constructor
 		/// </summary>
 		/// <param name="pluginLoader">Pluginloader</param>
-		public MediaManager (IPluginLoader pluginLoader)
+		/// <param name="logger">The logger</param>
+		public MediaManager (ILogging logger, IPluginLoader pluginLoader)
 		{
+			this.logger = logger;
 			this.pluginLoader = pluginLoader;
+		}
+
+		private IAudioPlugin GetAudioOutputForItem(MediaItem item)
+		{
+			foreach (IAudioPlugin audio in 
+					pluginLoader.GetPlugins<IAudioPlugin>())
+			{
+				foreach (string protocol in audio.SupportedProtocols)
+				{
+					if(item.Uri != null && 
+					   item.Uri.ToString().StartsWith(protocol))
+					{
+						return audio;
+					}
+				}
+			}
+
+			return null;
 		}
 
 		#region IMediaManager
@@ -24,26 +49,67 @@ namespace Noised.Core.Media
 		
 		public void Play(MediaItem item)
 		{
-			var audio = pluginLoader.GetPlugin<IAudioPlugin>();
-			audio.Play(item);
+			lock(locker)
+			{
+				//Getting an appropriated plugin for the 
+				IAudioPlugin audio = GetAudioOutputForItem(item);
+				if(audio == null)
+				{
+					throw new CoreException(
+						"Could not find an audio plugin supporting playback for " + 
+						item.Uri.ToString());
+				}
+
+				//Stopping if another plugin is already playing
+				if(currentAudioOutput != null)
+				{
+					logger.Debug(String.Format("Stopping current audio playback " + 
+								               "through plugin {0}",
+												currentAudioOutput.Name));
+					currentAudioOutput.Stop();
+				}
+
+				//Setting current audio plugin and play the song
+				logger.Debug(String.Format("Using audio plugin {0} to play item {1}",
+								            audio.Name,
+											item.Uri.ToString()));
+				currentAudioOutput = audio;
+			}
+			currentAudioOutput.Play(item);
 		}
 
 		public void Stop()
 		{
-			var audios = pluginLoader.GetPlugins<IAudioPlugin>();
-			audios.ToList().ForEach(audio => audio.Stop());
+			lock(locker)
+			{
+				if(currentAudioOutput != null)
+				{
+					currentAudioOutput.Stop();
+				}
+				currentAudioOutput = null;
+			}
 		}
 
 		public void Pause()
 		{
-			var audios = pluginLoader.GetPlugins<IAudioPlugin>();
-			audios.ToList().ForEach(audio => audio.Pause());
+			lock(locker)
+			{
+				if(currentAudioOutput != null)
+				{
+					currentAudioOutput.Pause();
+				}
+			}
 		}
 
 		public void Resume()
 		{
-			var audios = pluginLoader.GetPlugins<IAudioPlugin>();
-			audios.ToList().ForEach(audio => audio.Pause());
+			lock(locker)
+			{
+				if(currentAudioOutput != null)
+				{
+					currentAudioOutput.Resume();
+				}
+			}
 		}
 		
 		#endregion

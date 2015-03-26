@@ -6,21 +6,21 @@ namespace Noised.Core.Commands
 	public class ErrorResponse : ResponseMetaData
 	{
 		/// <summary>
-		///		Exception related to this error
+		///		Constructor
 		/// </summary>
-		public Exception Exception {get; private set;}
+		/// <param name="e">Exception related to this error</param>
+		public ErrorResponse (Exception e) : this(e.Message) { }
 
 		/// <summary>
 		///		Constructor
 		/// </summary>
-		/// <param name="e">Exception related to this error</param>
-		public ErrorResponse (Exception e)
+		/// <param name="e">Error message related to this error</param>
+		public ErrorResponse (string message)
 		{
-			this.Exception = e;
 			this.Name = "Noised.Core.Commmands.Error";
 			this.Parameters = new List<Object>
 							  {
-								 e.Message,
+								 message
 							  };
 		}
 	};

@@ -94,7 +94,7 @@ namespace Noised.Core.Plugins
 		
 		public T GetPlugin<T>()
 		{
-			IPlugin p = this.plugins.Find( plugin => typeof(T).IsAssignableFrom(plugin.GetType()) );
+			IPlugin p = this.plugins.Find(plugin => typeof(T).IsAssignableFrom(plugin.GetType()));
 			if(p != null)
 				return (T)p;
 			return default(T);

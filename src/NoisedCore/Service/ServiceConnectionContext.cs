@@ -89,26 +89,35 @@ namespace Noised.Core.Service
 							}
 							else
 							{
+								string m = "Access denied for executing command: " + 
+									       command.ToString();	
 								//Access denied
-								logging.Error(
-									"Access denied for executing command: " + 
-									command.ToString());	
-								//TODO: send Acess denied error
+								logging.Error(m);
+								SendResponse(new ErrorResponse(m));
 							}
 						}
 						else 
 						{
-							logging.Error("Error: Could not create command for text " + 
-										  Environment.NewLine +
-									      commandText);
-							//TODO: Send error
+							string m = "Error: Could not create command for text " + 
+									   Environment.NewLine +
+									   commandText;
+							logging.Error(m);
+							SendResponse(new ErrorResponse(m));
 						}
 					}
 					catch(Exception e)
 					{
-						//TODO: Try to send the error
-						logging.Error(e.Message);
-						logging.Error(e.StackTrace);
+						try
+						{
+							SendResponse(new ErrorResponse(e));
+							logging.Error(e.Message);
+						}
+						catch(Exception e2)
+						{
+							logging.Error("Error sending error response to client");
+							logging.Error(e2.Message);
+							logging.Error(e.StackTrace);
+						}
 					}
 				}
 			}

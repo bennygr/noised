@@ -1,5 +1,4 @@
 using System;
-using Noised.Logging;
 using Noised.Core.IOC;
 using Noised.Core.Service;
 namespace Noised.Core.Commands
@@ -12,12 +11,6 @@ namespace Noised.Core.Commands
 	/// </remarks>
 	public abstract class AbstractCommand
 	{
-		#region Fields
-		
-		private ILogging logging;
-		
-		#endregion
-
 		#region Properties
 		
 		/// <summary>
@@ -42,7 +35,6 @@ namespace Noised.Core.Commands
 		protected AbstractCommand (ServiceConnectionContext context,
 								   bool requiresAuthentication = true)
 		{
-			logging = IocContainer.Get<ILogging>();
 			this.Context = context;
 			this.RequiresAuthentication = requiresAuthentication;
 		}
@@ -61,22 +53,7 @@ namespace Noised.Core.Commands
 		/// </summary>
 		public void ExecuteCommand()
 		{
-			try
-			{
-				Execute();
-			}
-			catch(Exception e)
-			{
-				//TODO: Send error to the user
-				
-				string errorMessage = 
-					e + 
-					Environment.NewLine + 
-					e.Message +
-					Environment.NewLine + 
-					e.StackTrace;
-				logging.Error(errorMessage);
-			}
+			Execute();
 		}
 		
 		#endregion

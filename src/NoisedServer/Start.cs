@@ -38,24 +38,28 @@ namespace Noised.Server
 			IMediaSource mediaSource = pluginLoader.GetPlugin<IMediaSource>();
 			if(mediaSource != null)
 			{
-				IAudioPlugin audioPlugin = 
-					pluginLoader.GetPlugin<IAudioPlugin>();
-				audioPlugin.SongFinished += 
-					(sender,mediaItem) => 
-					{ 
-						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)"); 
-					};
-				if(audioPlugin != null)
+
+
+				try
 				{
 					var resultList = mediaSource.Search("test");
 					MediaItem test = resultList.First();
 					Console.WriteLine(test.Protocol);
-					audioPlugin.Play(test);
+					IocContainer.Get<IMediaManager>().Play(test);
 				}
-				else
+				catch(Exception e)
 				{
-					logger.Error("No audio plugin found");
+					logger.Error(e.Message);
 				}
+
+
+				//IAudioPlugin audioPlugin = 
+				//	pluginLoader.GetPlugin<IAudioPlugin>();
+				//audioPlugin.SongFinished += 
+				//	(sender,mediaItem) => 
+				//	{ 
+				//		Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)"); 
+				//	};
 			}
 			else
 			{
