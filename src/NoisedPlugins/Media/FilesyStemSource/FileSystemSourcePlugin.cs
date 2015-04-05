@@ -96,7 +96,7 @@ public class FileSystemSourcePlugin : IPlugin, IMediaSource
 			{
 				new MediaItem()
 				{
-					Uri= new Uri("xx:///home/bgr/Musik/test.mp3")
+					Uri= new Uri("file:///home/bgr/Musik/test.mp3")
 				}
 			};
 		}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Noised.Core.Service;
 using Noised.Core.Commands;
 
@@ -41,12 +42,21 @@ namespace Noised.Commands.Core
 			{
 				Context.IsAuthenticated = true;
 				Console.WriteLine("Access granted for user  " + userName);
-				//TODO send response
+				ResponseMetaData response = 
+					new ResponseMetaData()
+					{
+						Name = "Noised.Commands.Core.Welcome",
+						Parameters = new List<object>()
+						{
+							"Welcome to the noised server \\m/",
+						},
+					};
+				Context.SendResponse(response);
 			}
 			else
 			{
 				Console.WriteLine("Access denied for user  " + userName);
-				//TODO send response
+				Context.Connection.Close();
 			}
 		}
 	
