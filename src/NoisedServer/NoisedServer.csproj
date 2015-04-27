@@ -47,6 +47,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NoisedCore\NoisedCore.csproj">
+      <Project>{8785a9c8-505a-4069-8620-72f5228c6a51}</Project>
+      <Name>NoisedCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NoisedLogging\NoisedLogging.csproj">
+      <Project>{89e504e4-0ee9-4f62-8077-8c874836bf55}</Project>
+      <Name>NoisedLogging</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

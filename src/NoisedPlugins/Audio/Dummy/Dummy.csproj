@@ -42,6 +42,12 @@
     <Compile Include="DummyAudioPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
+      <Project>{8785a9c8-505a-4069-8620-72f5228c6a51}</Project>
+      <Name>NoisedCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
