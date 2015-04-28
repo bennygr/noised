@@ -17,7 +17,7 @@ namespace Noised.Core.Commands
 		/// <param name="e">Error message related to this error</param>
 		public ErrorResponse (string message)
 		{
-			this.Name = "Noised.Core.Commmands.Error";
+			this.Name = "Noised.Core.Commands.Error";
 			this.Parameters = new List<Object>
 							  {
 								 message

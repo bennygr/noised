@@ -1,4 +1,5 @@
 using System;
+using Noised.Logging;
 using System.Collections.Generic;
 using Noised.Core.Service;
 using Noised.Core.Commands;
@@ -9,6 +10,7 @@ namespace Noised.Commands.Core
 	{
 		private string userName;
 		private string password;
+		private ILogging logging;
 		
 		#region Constructor
 		
@@ -26,6 +28,7 @@ namespace Noised.Commands.Core
 		{
 			this.userName = userName;
 			this.password = password;
+			this.logging = context.Logging;
 		}
 		
 		#endregion
@@ -55,7 +58,9 @@ namespace Noised.Commands.Core
 			}
 			else
 			{
-				Console.WriteLine("Access denied for user  " + userName);
+				var errorResponse = new ErrorResponse("Invalid username or password");
+				Context.SendResponse(errorResponse);
+				logging.Warning("Invalid username or password. User: " + userName);
 				Context.Connection.Close();
 			}
 		}

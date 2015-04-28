@@ -37,6 +37,11 @@ namespace Noised.Core.Service
 		/// </summary>
 		public User User{get; set;}
 
+		/// <summary>
+		///		The logging object
+		/// </summary>
+		public ILogging Logging { get { return this.logging;} }
+
 		#endregion
 
 		#region Constructor
@@ -125,6 +130,7 @@ namespace Noised.Core.Service
 
 		public void SendResponse(ResponseMetaData response)
 		{
+			logging.Debug("Sending response to client: " + response.Name);
 			byte[] responseBytes = protocol.CreateResponse(response);
 			Connection.Send(responseBytes);
 		}
