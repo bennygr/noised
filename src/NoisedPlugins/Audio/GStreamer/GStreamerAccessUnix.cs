@@ -6,7 +6,7 @@ namespace Noised.Plugins.Audio.GStreamer
 	/// <summary>
 	///		Provides Interop access to native gstreamer code
 	/// </summary>
-	public static class GStreamerAccessUnix : AbstractGStreamerAccess
+	internal class GStreamerAccessUnix : AbstractGStreamerAccess
 	{
 		#region AbstractGStreamerAccess members
 
