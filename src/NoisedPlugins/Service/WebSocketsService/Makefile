@@ -27,7 +27,7 @@ COMPILER=$(COMP) $(OPTIONS)
 all: nugetCore Plugin copyNugets
 #---------------------------
 PLUGIN=$(shell find . -name "*.cs")
-PLUGIN_OUT=$(OUTPATH)$(PLUGIN_NAME).dll
+PLUGIN_OUT=$(OUTPATH)$(PLUGIN_NAME).nplugin
 Plugin: $(PLUGIN_OUT)
 FLECK='./packages/Fleck.0.12.0.40/lib/net40/Fleck.dll'
 $(PLUGIN_OUT): $(PLUGIN)
