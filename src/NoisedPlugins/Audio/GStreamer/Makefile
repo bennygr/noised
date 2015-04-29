@@ -24,7 +24,7 @@ COMPILER=$(COMP) $(OPTIONS)
 all: cpp Plugin 
 #---------------------------
 PLUGIN=$(shell find . -name "*.cs")
-PLUGIN_OUT=$(OUTPATH)$(PLUGIN_NAME).dll
+PLUGIN_OUT=$(OUTPATH)$(PLUGIN_NAME).nplugin
 Plugin: $(PLUGIN_OUT)
 $(PLUGIN_OUT): $(PLUGIN)
 	$(COMPILER) $(PLUGIN) /t:library /r:$(CORE_OUT_PATH) /out:$(PLUGIN_OUT)

@@ -24,7 +24,7 @@ namespace Noised.Core.Plugins
 		public int LoadPlugins(string localPluginPath)
 		{
 			var files = Directory.GetFiles(localPluginPath).Where(
-							file => file.EndsWith(".dll") );
+							file => file.EndsWith(".nplugin") );
 			string currentFileName;
 			foreach(var file in files)
 			{
