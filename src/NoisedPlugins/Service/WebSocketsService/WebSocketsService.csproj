@@ -7,7 +7,7 @@
     <ProjectGuid>{EA096F36-9B32-47DE-A22D-7B9DDB75F17D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebSocketsService</RootNamespace>
+    <RootNamespace>Noised.Plugins.Service.WebSocketsService</RootNamespace>
     <AssemblyName>WebSocketsService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -71,7 +71,7 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-    <Target Name="AfterBuild">
+  <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFiles="$(TargetDir)\$(TargetName).nplugin" SkipUnchangedFiles="true" />
   </Target>
 </Project>

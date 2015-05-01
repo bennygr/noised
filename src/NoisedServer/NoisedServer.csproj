@@ -7,7 +7,7 @@
     <ProjectGuid>{D1C50DC6-1678-44B8-ADB5-B15F4CA197DE}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NoisedServer</RootNamespace>
+    <RootNamespace>Noised.Server</RootNamespace>
     <AssemblyName>NoisedServer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

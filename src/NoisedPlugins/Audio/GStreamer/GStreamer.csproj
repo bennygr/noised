@@ -7,7 +7,7 @@
     <ProjectGuid>{F65517E0-5F4D-4D4F-80A8-B48938654FEC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GStreamer</RootNamespace>
+    <RootNamespace>Noised.Plugins.Audio.GStreamer</RootNamespace>
     <AssemblyName>GStreamer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -7,7 +7,7 @@
     <ProjectGuid>{155A04DA-1939-4B1E-A8C2-90E120591DBC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dummy</RootNamespace>
+    <RootNamespace>Noised.Plugins.Audio.Dummy</RootNamespace>
     <AssemblyName>Dummy</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -54,7 +54,7 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-    <Target Name="AfterBuild">
+  <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFiles="$(TargetDir)\$(TargetName).nplugin" SkipUnchangedFiles="true" />
   </Target>
 </Project>

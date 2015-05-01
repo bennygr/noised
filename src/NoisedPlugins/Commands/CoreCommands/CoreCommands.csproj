@@ -7,7 +7,7 @@
     <ProjectGuid>{BF963A63-6D57-4A12-A24A-C82D296C4E3A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CoreCommands</RootNamespace>
+    <RootNamespace>Noised.Plugins.Commands.CoreCommands</RootNamespace>
     <AssemblyName>CoreCommands</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -64,7 +64,7 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-    <Target Name="AfterBuild">
+  <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFiles="$(TargetDir)\$(TargetName).nplugin" SkipUnchangedFiles="true" />
   </Target>
 </Project>
