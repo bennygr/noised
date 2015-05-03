@@ -1,8 +1,8 @@
 
 ####Overview
-Plugin:       GStreamerAudioPlugin.nplugin
-Description:  Provides audio output using gstreamer
-Requirements: Requires gstreamer and appropriated gstreamer plugins for playback
+* Plugin:       GStreamerAudioPlugin.nplugin
+* Description:  Provides audio output using gstreamer
+* Requirements: Requires gstreamer and appropriated gstreamer plugins for playback
 
 ####Requirements installation: 
 
