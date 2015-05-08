@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Noised.Core.Commands;
-
 namespace Noised.Core.Plugins.Commands
 {
 	/// <summary>

@@ -2,12 +2,11 @@ using LightCore;
 using LightCore.Lifecycle;
 using Noised.Logging;
 using Noised.Core;
-using Noised.Core.Plugins;
 using Noised.Core.Commands;
-using Noised.Core.Service;
+using Noised.Core.Media;
+using Noised.Core.Plugins;
 using Noised.Core.Service.Protocols;
 using Noised.Core.Service.Protocols.JSON;
-using Noised.Core.Media;
 
 namespace Noised.Core.IOC
 {
@@ -29,7 +28,7 @@ namespace Noised.Core.IOC
 		/// </summary>
 		public static void Build()
 		{
-			ContainerBuilder builder = new ContainerBuilder();
+			var builder = new ContainerBuilder();
 	
 			//Logging
 			builder.Register<ILogging,Logger>().

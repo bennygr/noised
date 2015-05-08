@@ -13,7 +13,7 @@ namespace Noised.Server
 {
     public class Start
     {
-        public static int Main(String[] args)
+        public static int Main()
         {
             IocContainer.Build();
 
@@ -41,9 +41,7 @@ namespace Noised.Server
 						pluginLoader.GetPlugin<IAudioPlugin>();
 					audioPlugin.SongFinished += 
 						(sender,mediaItem) => 
-						{ 
-							Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)"); 
-						};
+						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
                     var resultList = mediaSource.Search("test");
                     MediaItem test = resultList.First();
                     Console.WriteLine(test.Protocol);

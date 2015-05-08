@@ -1,4 +1,3 @@
-using System;
 using Noised.Core.Service;
 namespace Noised.Core.Plugins.Service
 {

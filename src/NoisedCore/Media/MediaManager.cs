@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Noised.Logging;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
@@ -7,7 +6,7 @@ namespace Noised.Core.Media
 {
 	public class MediaManager : IMediaManager
 	{
-		private static object locker = new object();
+		private static readonly object locker = new object();
 		private IPluginLoader pluginLoader;
 		private IAudioPlugin currentAudioOutput;
 		private ILogging logger;
@@ -31,7 +30,7 @@ namespace Noised.Core.Media
 				foreach (string protocol in audio.SupportedProtocols)
 				{
 					if(item.Uri != null && 
-					   item.Uri.ToString().StartsWith(protocol))
+					   item.Uri.ToString().StartsWith(protocol, StringComparison.Ordinal))
 					{
 						return audio;
 					}

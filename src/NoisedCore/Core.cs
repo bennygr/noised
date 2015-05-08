@@ -10,13 +10,14 @@ namespace Noised.Core
 	/// <summary>
 	///		The noised core processing all incoming commands
 	/// </summary>
-	internal class Core : ICore
+	class Core : ICore
 	{
 		#region Fields
 		
 		private readonly Queue<AbstractCommand> commandQueue;
 		private bool isRunning;
 		private ILogging logging;
+        private object locker = new object();
 		
 		#endregion
 
@@ -55,7 +56,7 @@ namespace Noised.Core
 				{
 					try
 					{
-						logging.Debug("Core is executing command " + cmd.ToString());
+						logging.Debug("Core is executing command " + cmd);
 						cmd.ExecuteCommand();
 					}
 					catch(Exception e)
@@ -88,7 +89,7 @@ namespace Noised.Core
 		{
 			get
 			{
-				lock(this)
+				lock(locker)
 				{
 					return isRunning;
 				}
@@ -97,13 +98,13 @@ namespace Noised.Core
 
 		public void Start()
 		{
-			lock(this)
+			lock(locker)
 			{
 				if(isRunning)
 					throw new CoreException(
 						"Cannot start noised Core because it's still running");
 
-				Thread coreThread = new Thread(ProcessCommands);
+				var coreThread = new Thread(ProcessCommands);
 				coreThread.Start();
 				logging.Debug("Starting noised core...");
 			}
@@ -111,7 +112,7 @@ namespace Noised.Core
 
 		public void Stop()
 		{
-			lock(this)
+			lock(locker)
 			{
 				isRunning = false;
 				logging.Debug("Stopping noised core...");

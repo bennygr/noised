@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
@@ -95,7 +94,7 @@ namespace Noised.Plugins.Audio.Dummy
             if (handler != null)
             {
                 handler(this,
-                        new AudioEventArgs()
+                        new AudioEventArgs 
                         {
                             MediaItem = mediaItem
                         });
@@ -110,7 +109,7 @@ namespace Noised.Plugins.Audio.Dummy
 		{
 			get
 			{
-				return new List<string>(){"file://"};
+				return new List<string> {"file://"};
 			}
 		}
 		
@@ -123,7 +122,7 @@ namespace Noised.Plugins.Audio.Dummy
 		{
 			isPlaying = true;
 			Console.WriteLine( String.Format("Playing song {0} from position {1}",
-											 item.Uri.ToString(), 
+											 item.Uri, 
 											 pos));
 			Thread.Sleep(3000);
 			OnSongFinished(item);

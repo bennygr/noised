@@ -12,5 +12,5 @@ public class MetaData
 	public string Title {get;set;}
 	public DateTime Date {get;set;}
 	public string Comment {get;set;}
-	public string genrgenre {get;set;}
+	public string Genrgenre {get;set;}
 };

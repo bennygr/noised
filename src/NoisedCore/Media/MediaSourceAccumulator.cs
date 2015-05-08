@@ -11,7 +11,7 @@ namespace Noised.Core.Media
 	/// </summary>
 	public class MediaSourceAccumulator : IMediaSourceAccumulator
 	{
-		private IPluginLoader pluginLoader;
+		private readonly IPluginLoader pluginLoader;
 
 		public MediaSourceAccumulator(IPluginLoader pluginLoader)
 		{
@@ -34,7 +34,7 @@ namespace Noised.Core.Media
 		
 		public IEnumerable<MediaItem> Search(string search)
 		{
-			List<MediaItem> ret = new List<MediaItem>();
+			var ret = new List<MediaItem>();
 			foreach(IMediaSource sourcePlugin  in
 					pluginLoader.GetPlugins<IMediaSource>())
 			{
