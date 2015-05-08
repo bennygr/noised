@@ -24,8 +24,8 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-            ResponseMetaData response =
-                new ResponseMetaData()
+           var response =
+                new ResponseMetaData 
                 {
                     Name = "Noised.Commands.Core.Pong",
                 };

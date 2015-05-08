@@ -8,7 +8,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 {
     public class Play : AbstractCommand
     {
-        private string uri;
+        private readonly string uri;
 
         /// <summary>
         ///		Constructor

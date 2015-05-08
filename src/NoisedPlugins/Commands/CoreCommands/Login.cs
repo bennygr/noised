@@ -8,9 +8,9 @@ namespace Noised.Plugins.Commands.CoreCommands
 {
     public class Login : AbstractCommand
     {
-        private string userName;
-        private string password;
-        private ILogging logging;
+        private readonly string userName;
+        private readonly string password;
+        private readonly ILogging logging;
 
         #region Constructor
 
@@ -45,11 +45,11 @@ namespace Noised.Plugins.Commands.CoreCommands
             {
                 Context.IsAuthenticated = true;
                 Console.WriteLine("Access granted for user  " + userName);
-                ResponseMetaData response =
-                    new ResponseMetaData()
+                var response =
+                    new ResponseMetaData 
                     {
                         Name = "Noised.Commands.Core.Welcome",
-                        Parameters = new List<object>()
+                        Parameters = new List<object> 
 						{
 							"Welcome to the noised server \\m/",
 						},
