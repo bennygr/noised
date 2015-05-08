@@ -1,37 +1,21 @@
-#---------------------------
-PLUGIN_NAME=GStreamerAudioPlugin
-#---------------------------
-COMP=dmcs
-OPTIONS = 
-OUTPATH_RELEASE=../../../bin/release/plugins/
-OUTPATH_DEBUG=../../../bin/debug/plugins/
-#TODO: put in a subfolder "plugins"
-CORE_OUT_RELEASE=../../../bin/release/NoisedCore.dll
-CORE_OUT_DEBUG=../../../bin/debug/NoisedCore.dll
+OUTPATH_RELEASE=../../../bin/Release/plugins/
+OUTPATH_DEBUG=../../../bin/Debug/plugins/
+CORE_OUT_RELEASE=../../../bin/Release/NoisedCore.dll
+CORE_OUT_DEBUG=../../../bin/Debug/NoisedCore.dll
 #---------------------------
 ifdef DEBUG
-		OPTIONS += -debug
 		OUTPATH=$(OUTPATH_DEBUG)
-		CORE_OUT_PATH=$(CORE_OUT_DEBUG)
-		DEBUGPATTERN=*.mdb
-		DEBUGFILES=$(OUTPATH_DEBUG)$(DEBUGPATTERN)
 else
 		OUTPATH=$(OUTPATH_RELEASE)
-		CORE_OUT_PATH=$(CORE_OUT_RELEASE)
 endif
-COMPILER=$(COMP) $(OPTIONS)
 #---------------------------
-all: cpp Plugin 
+all: cpp 
 #---------------------------
-PLUGIN=$(shell find . -name "*.cs")
-PLUGIN_OUT=$(OUTPATH)$(PLUGIN_NAME).nplugin
-Plugin: $(PLUGIN_OUT)
-$(PLUGIN_OUT): $(PLUGIN)
-	$(COMPILER) $(PLUGIN) /t:library /r:$(CORE_OUT_PATH) /out:$(PLUGIN_OUT)
 #---------------------------
 .PHONY: cpp
 cpp:
 	g++ -Wall -shared -fPIC -o libNoisedGstreamerAudio.so \
 	`pkg-config gstreamer-1.0 --cflags` ./cpp/*.cpp \
 	`pkg-config gstreamer-1.0 --libs`;
-	mv libNoisedGstreamerAudio.so $(OUTPATH)/libNoisedGstreamerAudio.so
+	echo "Moving libNoisedGstreamerAudio.so to $(OUTPATH)";
+	mv libNoisedGstreamerAudio.so $(OUTPATH)libNoisedGstreamerAudio.so

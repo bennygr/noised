@@ -4,6 +4,7 @@ using Noised.Core;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
+using Noised.Core.Plugins.Audio;
 using Noised.Core.Plugins.Media;
 using Noised.Core.Service;
 using Noised.Logging;
@@ -34,10 +35,15 @@ namespace Noised.Server
             IMediaSource mediaSource = pluginLoader.GetPlugin<IMediaSource>();
             if (mediaSource != null)
             {
-
-
                 try
                 {
+					IAudioPlugin audioPlugin = 
+						pluginLoader.GetPlugin<IAudioPlugin>();
+					audioPlugin.SongFinished += 
+						(sender,mediaItem) => 
+						{ 
+							Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)"); 
+						};
                     var resultList = mediaSource.Search("test");
                     MediaItem test = resultList.First();
                     Console.WriteLine(test.Protocol);
@@ -49,13 +55,6 @@ namespace Noised.Server
                 }
 
 
-                //IAudioPlugin audioPlugin = 
-                //	pluginLoader.GetPlugin<IAudioPlugin>();
-                //audioPlugin.SongFinished += 
-                //	(sender,mediaItem) => 
-                //	{ 
-                //		Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)"); 
-                //	};
             }
             else
             {

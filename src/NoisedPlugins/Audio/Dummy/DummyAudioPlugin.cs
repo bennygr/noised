@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
-using Noised.Core.Media;
 
 namespace Noised.Plugins.Audio.Dummy
 {
@@ -82,6 +84,23 @@ namespace Noised.Plugins.Audio.Dummy
 		}
 		
 		#endregion
+		
+        /// <summary>
+        ///		Internal method to invoke the SongFinished event
+        /// </summary>
+        /// <param name="mediaItem">The item which has been finished</param>
+        private void OnSongFinished(MediaItem mediaItem)
+        {
+            AudioEventHandler handler = SongFinished;
+            if (handler != null)
+            {
+                handler(this,
+                        new AudioEventArgs()
+                        {
+                            MediaItem = mediaItem
+                        });
+            }
+        }
 
 		#region IAudioPlugin
 
@@ -103,9 +122,11 @@ namespace Noised.Plugins.Audio.Dummy
 		public void Play(MediaItem item, int pos)
 		{
 			isPlaying = true;
-			Console.WriteLine( String.Format( "Playing song {0} from position {1}",
-											  item.Uri.ToString(), 
-											  pos));
+			Console.WriteLine( String.Format("Playing song {0} from position {1}",
+											 item.Uri.ToString(), 
+											 pos));
+			Thread.Sleep(3000);
+			OnSongFinished(item);
 		}
 
 		public void Stop()
