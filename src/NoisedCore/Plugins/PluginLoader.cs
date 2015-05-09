@@ -15,7 +15,7 @@ namespace Noised.Core.Plugins
 	{
 		#region Fields
 		
-		private List<IPlugin> plugins = new List<IPlugin>();
+		private readonly List<IPlugin> plugins = new List<IPlugin>();
 		
 		#endregion
 

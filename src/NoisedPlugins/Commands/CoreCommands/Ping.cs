@@ -16,7 +16,9 @@ namespace Noised.Plugins.Commands.CoreCommands
         /// </summary>
         /// <param name="context">Connection context</param>
         public Ping(ServiceConnectionContext context)
-            : base(context) { }
+            : base(context)
+        {
+        }
 
         #endregion
 
@@ -24,10 +26,10 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-           var response =
-                new ResponseMetaData 
-                {
-                    Name = "Noised.Commands.Core.Pong",
+            var response =
+                new ResponseMetaData
+				{
+					Name = "Noised.Commands.Core.Pong",
                 };
             Console.WriteLine("PING!!!!");
             Context.SendResponse(response);

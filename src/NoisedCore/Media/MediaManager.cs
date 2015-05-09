@@ -56,7 +56,7 @@ namespace Noised.Core.Media
 				{
 					throw new CoreException(
 						"Could not find an audio plugin supporting playback for " + 
-						item.Uri.ToString());
+						item.Uri);
 				}
 
 				//Stopping if another plugin is already playing
@@ -71,7 +71,7 @@ namespace Noised.Core.Media
 				//Setting current audio plugin and play the song
 				logger.Debug(String.Format("Using audio plugin {0} to play item {1}",
 								            audio.Name,
-											item.Uri.ToString()));
+											item.Uri));
 				currentAudioOutput = audio;
 			}
 			currentAudioOutput.Play(item);

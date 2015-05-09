@@ -29,7 +29,7 @@ namespace Noised.Server
             ICore core = IocContainer.Get<ICore>();
             core.Start();
 
-            ServiceConnectionManager serviceConnectionManager = new ServiceConnectionManager();
+            var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
 
             IMediaSource mediaSource = pluginLoader.GetPlugin<IMediaSource>();
