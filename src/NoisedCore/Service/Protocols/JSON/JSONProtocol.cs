@@ -1,14 +1,12 @@
-using System;
-using System.Text;
-using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using Newtonsoft.Json;
 using Noised.Logging;
 using Noised.Core.Commands; 
 
 namespace Noised.Core.Service.Protocols.JSON
 {
-	internal class JSONProtocol : IProtocol
+	class JSONProtocol : IProtocol
 	{
 		private const string endTag = "{NOISEDEOC}";
 		private ILogging logging;
@@ -18,6 +16,7 @@ namespace Noised.Core.Service.Protocols.JSON
 		///		Constrcutor
 		/// </summary>
 		/// <param name="logging">Logging object</param>
+        /// <param name = "commandFactory">The command factory</param>
 		public JSONProtocol(ILogging logging,
 							ICommandFactory commandFactory) 
 		{
@@ -41,7 +40,7 @@ namespace Noised.Core.Service.Protocols.JSON
 				JsonConvert.DeserializeObject<CommandMetaData>(commandData);
 
 			//Injection the context as first argument
-			List<object> parameters = new List<object>();
+			var parameters = new List<object>();
 			parameters.Add(context);
 			if(commandMetaData.Parameters != null)
 				parameters.AddRange(commandMetaData.Parameters);

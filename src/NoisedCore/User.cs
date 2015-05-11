@@ -23,7 +23,7 @@ namespace Noised.Core
 
 		public override String ToString()
 		{
-			return this.Name;
+			return Name;
 		}
 	};
 }

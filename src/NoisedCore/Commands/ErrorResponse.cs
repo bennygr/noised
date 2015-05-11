@@ -14,7 +14,7 @@ namespace Noised.Core.Commands
 		/// <summary>
 		///		Constructor
 		/// </summary>
-		/// <param name="e">Error message related to this error</param>
+		/// <param name="message">Error message related to this error</param>
 		public ErrorResponse (string message)
 		{
 			this.Name = "Noised.Core.Commands.Error";

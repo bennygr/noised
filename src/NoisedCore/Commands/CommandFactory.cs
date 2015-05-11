@@ -1,26 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 using Noised.Logging;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Commands;
-using Noised.Core.Service.Protocols;
 
 namespace Noised.Core.Commands
 {
 	/// <summary>
 	///		A factory creating commands
 	/// </summary>
-	internal class CommandFactory : ICommandFactory
+	class CommandFactory : ICommandFactory
 	{
-		private IPluginLoader pluginLoader;
-		private ILogging logging;
+		private readonly IPluginLoader pluginLoader;
+		private readonly ILogging logging;
 
 		/// <summary>
 		///		Constructor
 		/// </summary>
-		/// <param name="The plugin loader"></param>
 		public CommandFactory(IPluginLoader pluginLoader,ILogging logging)
 		{
 			this.pluginLoader = pluginLoader;
@@ -43,11 +41,11 @@ namespace Noised.Core.Commands
 		public AbstractCommand CreateCommand(string name, params object[] parameters)
 		{
 			if(name == null)
-				throw new ArgumentNullException("Name");
+				throw new ArgumentNullException("name");
 			IEnumerable<ICommandBundle> commandBundles = 
 				pluginLoader.GetPlugins<ICommandBundle>();
 			AbstractCommand command = null;
-			if(commandBundles.Count() > 0)
+			if(commandBundles.Any())
 			{
 				foreach(var commandBundle in commandBundles)
 				{
@@ -83,5 +81,5 @@ namespace Noised.Core.Commands
 			logging.Debug("CommandFactory created command: " + command);
 			return command;
 		}
-	};
-}
+	}
+};

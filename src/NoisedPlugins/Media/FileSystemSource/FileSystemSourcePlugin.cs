@@ -85,7 +85,7 @@ namespace Noised.Plugins.Media.FileSystemSource
         public MediaItem GetItem(Uri uri)
         {
             //TODO: implement: Get the item from DB 
-            return new MediaItem()
+            return new MediaItem 
             {
                 Uri = uri
             };
@@ -94,11 +94,11 @@ namespace Noised.Plugins.Media.FileSystemSource
         public IEnumerable<MediaItem> Search(string search)
         {
             //Just a test for now...
-            return new List<MediaItem>()
+            return new List<MediaItem> 
             {
-                new MediaItem()
+                new MediaItem 
                 {
-                    Uri= new Uri("file:///home/bgr/Musik/test.mp3")
+                    Uri= new Uri("file:///home/benny/Musik/test.mp3")
                 }
             };
         }

@@ -6,7 +6,7 @@ namespace Noised.Plugins.Audio.GStreamer
 	/// <summary>
 	///		Provides Interop access to native gstreamer code
 	/// </summary>
-	internal class GStreamerAccessUnix : AbstractGStreamerAccess
+	class GStreamerAccessUnix : AbstractGStreamerAccess
 	{
 		#region AbstractGStreamerAccess members
 
@@ -64,7 +64,7 @@ namespace Noised.Plugins.Audio.GStreamer
 		internal static extern void Free();
 
 		[DllImport ("libNoisedGstreamerAudio.so")]
-		internal static extern void Play(String Uri);
+		internal static extern void Play(String uri);
 
 		[DllImport ("libNoisedGstreamerAudio.so")]
 		internal static extern void Stop();

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
+using Noised.Logging;
 
 namespace Noised.Plugins.Audio.GStreamer
 {
@@ -12,26 +13,34 @@ namespace Noised.Plugins.Audio.GStreamer
         private MediaItem currentItem;
         private static GStreamerAudioPlugin plugin;
         private readonly AbstractGStreamerAccess gStreamerAccess;
+		private ILogging logging;
 
         /// <summary>
         ///		Constructor
         /// </summary>
         public GStreamerAudioPlugin(PluginInitializer initalizer)
         {
-#if (WINDOWS)
-            {
-                gStreamerAccess = new GStreamerAccessWindows();
-            }
-#else
-            {
-                gStreamerAccess = new GStreamerAccessUnix();
-            }
+			try
+			{
+				this.logging = initalizer.Logging;
+#if UNIX
+				{ gStreamerAccess = new GStreamerAccessUnix(); }
+#elif WINDOWS
+				{ gStreamerAccess = new GStreamerAccessWindows(); }
+#else 
+	#error "Unsupported Operating System"
 #endif
-
-
-            gStreamerAccess.AbsInitialize();
-            gStreamerAccess.AbsSetSongFinishedCallback(Callback);
-            plugin = this;
+				gStreamerAccess.AbsInitialize();
+				gStreamerAccess.AbsSetSongFinishedCallback(Callback);
+				plugin = this;
+			}
+			catch(Exception e)
+			{
+				if(this.logging != null)	
+				{
+					this.logging.Error(e.ToString());
+				}
+			}
         }
 
         /// <summary>

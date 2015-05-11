@@ -26,19 +26,16 @@ namespace Noised.Core.Media
 		public string Protocol 
 		{
 			get
-			{
-				string protocolRegex = @"^(.*:\/\/)";
-				var regex = new Regex(protocolRegex); 
-				var match = regex.Match(Uri.ToString());
-				if(match.Success)
-				{
-					return match.Groups[0].Value;
-				}
-				else
-				{
-					throw new ArgumentException("Invalid protocol in URI");
-				}
-			}
+            {
+                string protocolRegex = @"^(.*:\/\/)";
+                var regex = new Regex(protocolRegex); 
+                var match = regex.Match(Uri.ToString());
+                if (match.Success)
+                {
+                    return match.Groups[0].Value;
+                }
+                throw new ArgumentException("Invalid protocol in URI");
+            }
 		}
 	};
 

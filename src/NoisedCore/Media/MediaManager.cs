@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Noised.Logging;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
@@ -7,7 +6,7 @@ namespace Noised.Core.Media
 {
 	public class MediaManager : IMediaManager
 	{
-		private static object locker = new object();
+		private static readonly object locker = new object();
 		private IPluginLoader pluginLoader;
 		private IAudioPlugin currentAudioOutput;
 		private ILogging logger;
@@ -31,7 +30,7 @@ namespace Noised.Core.Media
 				foreach (string protocol in audio.SupportedProtocols)
 				{
 					if(item.Uri != null && 
-					   item.Uri.ToString().StartsWith(protocol))
+					   item.Uri.ToString().StartsWith(protocol, StringComparison.Ordinal))
 					{
 						return audio;
 					}
@@ -57,7 +56,7 @@ namespace Noised.Core.Media
 				{
 					throw new CoreException(
 						"Could not find an audio plugin supporting playback for " + 
-						item.Uri.ToString());
+						item.Uri);
 				}
 
 				//Stopping if another plugin is already playing
@@ -72,7 +71,7 @@ namespace Noised.Core.Media
 				//Setting current audio plugin and play the song
 				logger.Debug(String.Format("Using audio plugin {0} to play item {1}",
 								            audio.Name,
-											item.Uri.ToString()));
+											item.Uri));
 				currentAudioOutput = audio;
 			}
 			currentAudioOutput.Play(item);

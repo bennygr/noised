@@ -16,7 +16,7 @@ namespace Noised.Core.Service
 	{
 		#region Fields
 		
-		private ILogging logging;
+		private readonly ILogging logging;
 		private ICore core;
 		private List<ServiceConnectionContext> connections;
 		
@@ -43,7 +43,7 @@ namespace Noised.Core.Service
 		/// </summary>
 		private void ClientConnected(object sender,ServiceEventArgs eventArgs)
 		{
-			this.connections.Add(
+			connections.Add(
 				new ServiceConnectionContext(core,
 											eventArgs.Connection,
 											IocContainer.Get<IProtocol>()));
@@ -55,7 +55,7 @@ namespace Noised.Core.Service
 		/// </summary>
 		private void ClientDisconnected(object sender,ServiceEventArgs eventArgs)
 		{
-			this.connections.RemoveAll(c => c.Connection == eventArgs.Connection);
+			connections.RemoveAll(c => c.Connection == eventArgs.Connection);
 			logging.Debug("A client disconnected");
 		}
 

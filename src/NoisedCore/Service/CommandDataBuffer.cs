@@ -1,7 +1,6 @@
 using System;
-using System.Text;
 using System.Collections.Generic;
-using Noised.Logging;
+using System.Text;
 using Noised.Core.IOC;
 using Noised.Core.Service.Protocols;
 
@@ -11,7 +10,7 @@ namespace Noised.Core.Service
 	///		A buffer which stores incoming command data 
 	///		from a IService until one or more commands has been received
 	/// </summary>
-	internal class CommandDataBuffer 
+	class CommandDataBuffer 
 	{
 		#region Fields
 		
@@ -19,7 +18,7 @@ namespace Noised.Core.Service
 		private readonly string endTag;
 		private readonly List<string> ignoreList = 
 			new List<string> { "\t", "\r", "\n", "\0" };
-		private int endOfFirstCommand = 0;
+		private int endOfFirstCommand;
 		
 		#endregion
 
@@ -42,8 +41,8 @@ namespace Noised.Core.Service
 		{
 			get
 			{
-				byte[] buf = this.buffer.ToArray();
-				UTF8Encoding encoding = new UTF8Encoding();
+				byte[] buf = buffer.ToArray();
+				var encoding = new UTF8Encoding();
 				string text = encoding.GetString(buf);
 				foreach (string ignoreItem in ignoreList)
 				{
@@ -73,17 +72,17 @@ namespace Noised.Core.Service
 		/// </returns>
 		public string PopCommand()
 		{
-			if(this.endOfFirstCommand > 0)
+			if(endOfFirstCommand > 0)
 			{
 				if (CheckEnd())
 				{
-					string cmdText = this.CommandText;
+					string cmdText = CommandText;
 					string firstCommand = cmdText.Substring(0, endOfFirstCommand);
-					byte[] newBuffer = new byte[cmdText.Length - firstCommand.Length];
-					Array.Copy(this.buffer.ToArray(), endOfFirstCommand, newBuffer, 0, newBuffer.Length);
-					this.buffer = new List<byte>(newBuffer);
+					var newBuffer = new byte[cmdText.Length - firstCommand.Length];
+					Array.Copy(buffer.ToArray(), endOfFirstCommand, newBuffer, 0, newBuffer.Length);
+					buffer = new List<byte>(newBuffer);
 					if(CheckEnd())
-						endOfFirstCommand = CommandText.IndexOf(endTag) + endTag.Length;
+						endOfFirstCommand = CommandText.IndexOf(endTag, StringComparison.Ordinal) + endTag.Length;
 					else
 						endOfFirstCommand = 0;
 					return firstCommand;
@@ -105,7 +104,7 @@ namespace Noised.Core.Service
 
 			if(CheckEnd())	
 			{
-				endOfFirstCommand = CommandText.IndexOf(endTag) + endTag.Length;
+				endOfFirstCommand = CommandText.IndexOf(endTag, StringComparison.Ordinal) + endTag.Length;
 				return true;
 			}
 			return false;

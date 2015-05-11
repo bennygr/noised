@@ -16,7 +16,6 @@ namespace Noised.Plugins.Service.WebSocketsService
         private bool isRunning = false;
         private WebSocketServer server;
         private List<WebSocketConnection> connections;
-        private ILogging logging;
 
         /// <summary>
         ///		Constructor
@@ -24,7 +23,6 @@ namespace Noised.Plugins.Service.WebSocketsService
         /// <param name="initalizer">initalizting data</param>        
         public WebSocketsServicePlugin(PluginInitializer initalizer)
         {
-            this.logging = initalizer.Logging;
             server = new WebSocketServer("ws://0.0.0.0:1338");
             connections = new List<WebSocketConnection>();
         }
@@ -146,7 +144,6 @@ namespace Noised.Plugins.Service.WebSocketsService
 
         public void Start()
         {
-            Console.WriteLine(".sss");
             server.Start(
                 socket =>
                 {

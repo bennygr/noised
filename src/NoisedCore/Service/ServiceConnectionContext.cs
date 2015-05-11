@@ -14,8 +14,8 @@ namespace Noised.Core.Service
 		#region Fields
 		
 		private CommandDataBuffer commandBuffer;
-		private IProtocol protocol;
-		private ILogging logging; 
+		private readonly IProtocol protocol;
+		private readonly ILogging logging; 
 		private ICore core;
 		
 		#endregion
@@ -40,7 +40,7 @@ namespace Noised.Core.Service
 		/// <summary>
 		///		The logging object
 		/// </summary>
-		public ILogging Logging { get { return this.logging;} }
+		public ILogging Logging { get { return logging;} }
 
 		#endregion
 
@@ -75,7 +75,7 @@ namespace Noised.Core.Service
 		{
 			if(commandBuffer.Add(eventArgs.Data))
 			{
-				string commandText = String.Empty;
+				string commandText;
 				while((commandText = commandBuffer.PopCommand()) != string.Empty)
 				{
 					try
@@ -87,15 +87,13 @@ namespace Noised.Core.Service
 						if(command != null)
 						{
 							//Checking authentication if required for the command
-							if(this.IsAuthenticated || 
-							   !command.RequiresAuthentication)
+							if(IsAuthenticated || !command.RequiresAuthentication)
 							{
 								core.AddCommand(command);
 							}
 							else
 							{
-								string m = "Access denied for executing command: " + 
-									       command.ToString();	
+								string m = "Access denied for executing command: " + command;	
 								//Access denied
 								logging.Error(m);
 								SendResponse(new ErrorResponse(m));
