@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -46,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
-      <Project>{8785a9c8-505a-4069-8620-72f5228c6a51}</Project>
+      <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
       <Name>NoisedCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\NoisedLogging\NoisedLogging.csproj">
@@ -62,13 +63,12 @@
   -->
   <!-- Calling make on unix before build in order to build the native part of this audion plugin -->
   <Target Name="BeforeBuildUnixDebug" AfterTargets="BeforeBuild" Condition="'$(CONFIGURATION)'=='Debug' AND '$(UNIX)'=='TRUE'">
-	  <Exec Command="make DEBUG=TRUE"/> 
+    <Exec Command="make DEBUG=TRUE" />
   </Target>
   <Target Name="BeforeBuildUnixRelease" AfterTargets="BeforeBuild" Condition="'$(CONFIGURATION)'=='Release' AND '$(UNIX)'=='TRUE'">
-	  <Exec Command="make"/> 
+    <Exec Command="make" />
   </Target>
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFiles="$(TargetDir)\$(TargetName).nplugin" SkipUnchangedFiles="true" />
-
   </Target>
 </Project>

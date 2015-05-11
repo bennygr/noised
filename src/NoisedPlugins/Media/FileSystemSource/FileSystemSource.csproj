@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-	<OutputPath>..\..\..\bin\Debug\plugins</OutputPath>
+    <OutputPath>..\..\..\bin\Debug\plugins</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
-      <Project>{8785a9c8-505a-4069-8620-72f5228c6a51}</Project>
+      <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
       <Name>NoisedCore</Name>
     </ProjectReference>
   </ItemGroup>

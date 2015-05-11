@@ -50,11 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
-      <Project>{8785a9c8-505a-4069-8620-72f5228c6a51}</Project>
+      <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
       <Name>NoisedCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\NoisedLogging\NoisedLogging.csproj">
-      <Project>{89e504e4-0ee9-4f62-8077-8c874836bf55}</Project>
+      <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
       <Name>NoisedLogging</Name>
     </ProjectReference>
   </ItemGroup>
