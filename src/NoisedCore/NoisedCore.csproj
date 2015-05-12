@@ -80,6 +80,8 @@
     <Compile Include="User.cs" />
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="Config\File\FileConfig.cs" />
+    <Compile Include="Config\File\FileConfigReader.cs" />
+    <Compile Include="Config\File\IConfigFileReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\Commands\CommandTemplate.txt" />

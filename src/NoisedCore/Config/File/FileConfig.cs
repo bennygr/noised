@@ -49,7 +49,7 @@ namespace Noised.Core.Config.File
 			logging.Debug(String.Format("Loading *.nconfig files from directory {0}", configPath));
 			if (Directory.Exists(configPath))
 			{
-				//Loading all lthe nconfig files in the config folder
+				//Loading all the nconfig files in the config folder
 				var configFiles = Directory.GetFiles(configPath, "*.nconfig");
 				foreach (var configFile in configFiles)
 				{
@@ -83,7 +83,8 @@ namespace Noised.Core.Config.File
 						{
                             var property = splits[0].Trim();
                             var value = splits[0].Trim();
-                            SetProperty(property,value);
+							properties[property] = value;
+							logging.Debug(String.Format("Added property {0}", property));
 						}
 						else
 						{
@@ -112,11 +113,6 @@ namespace Noised.Core.Config.File
 		public string GetProperty(string property, string defaultvalue=null)
 		{
 			return (properties.ContainsKey(property) ? properties[property] : defaultvalue);
-		}
-		public void SetProperty(string property, string value)
-		{
-			properties[property] = value;
-			logging.Debug(String.Format("Added property {0}", property));
 		}
 
 #endregion

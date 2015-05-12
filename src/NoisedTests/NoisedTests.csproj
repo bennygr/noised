@@ -37,10 +37,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\Config\FileConfigTests.cs" />
+    <Compile Include="Core\Config\ConfigTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NoisedCore\NoisedCore.csproj">
+      <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
+      <Name>NoisedCore</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
