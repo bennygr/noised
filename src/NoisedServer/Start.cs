@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Noised.Core;
+using Noised.Core.Config;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
@@ -20,10 +21,14 @@ namespace Noised.Server
             ILogging logger = IocContainer.Get<ILogging>();
             logger.AddLogger(new ConsoleLogger());
 
+			//Loading configuration
+			IocContainer.Get<IConfig>();
+
             logger.Debug("Hello Noised");
             IPluginLoader pluginLoader = IocContainer.Get<IPluginLoader>();
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
+
 
             //Add a factory and create a ping command
             ICore core = IocContainer.Get<ICore>();

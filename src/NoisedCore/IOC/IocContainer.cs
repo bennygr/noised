@@ -3,6 +3,8 @@ using LightCore.Lifecycle;
 using Noised.Logging;
 using Noised.Core;
 using Noised.Core.Commands;
+using Noised.Core.Config;
+using Noised.Core.Config.File;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Service.Protocols;
@@ -33,6 +35,8 @@ namespace Noised.Core.IOC
 			//Logging
 			builder.Register<ILogging,Logger>().
 				ControlledBy<SingletonLifecycle>();
+			//Configuration
+			builder.Register<IConfig,FileConfig>();
 			//The core
 			builder.Register<ICore,Core>().
 				ControlledBy<SingletonLifecycle>();
