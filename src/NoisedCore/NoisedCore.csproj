@@ -79,9 +79,9 @@
     <Compile Include="Service\ServiceEventArgs.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Config\IConfig.cs" />
-    <Compile Include="Config\File\FileConfig.cs" />
-    <Compile Include="Config\File\FileConfigReader.cs" />
-    <Compile Include="Config\File\IConfigFileReader.cs" />
+    <Compile Include="Config\IConfigSource.cs" />
+    <Compile Include="Config\File\FileConfigSource.cs" />
+    <Compile Include="Config\Config.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\Commands\CommandTemplate.txt" />
