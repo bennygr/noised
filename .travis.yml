@@ -1,0 +1,8 @@
+language: csharp
+solution: src/noised.sln
+install:
+      - nuget restore src/noised.sln
+      - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+script:
+      - xbuild /p:Configuration=Release src/noised.sln
+      - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe .src/NoisedTests/bin/Release/NoisedTests.dll
