@@ -6,3 +6,10 @@ install:
 script:
       - xbuild /p:Configuration=Release src/noised.sln
       - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./src/NoisedTests/bin/Release/NoisedTests.dll
+notifications:
+    email:
+        recipients:
+            - bennygr@gmx.net
+            - sebingel+noised@googlemail.com
+        on_success: [change] # default: change
+        on_failure: [always] # default: always

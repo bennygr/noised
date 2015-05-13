@@ -112,6 +112,8 @@ namespace Noised.Tests.Core.Config
 
 			var value1 = config.GetProperty("Noised.Test.SimpleConfiguration.Value1");
 			value1.ShouldEqual("latest");
+
+			throw new Exception("Test-Exception for testing CI notificaions");
 		}
 	};
 }
