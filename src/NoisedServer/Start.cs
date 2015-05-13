@@ -21,10 +21,13 @@ namespace Noised.Server
             ILogging logger = IocContainer.Get<ILogging>();
             logger.AddLogger(new ConsoleLogger());
 
+            logger.Debug("Hello I am Noised - your friendly music player daemon");
+			
 			//Loading configuration
-			IocContainer.Get<IConfig>();
+			var config = IocContainer.Get<IConfig>();
+			config.Load(IocContainer.Get<IConfigurationLoader>());
 
-            logger.Debug("Hello Noised");
+			//loading plugins
             IPluginLoader pluginLoader = IocContainer.Get<IPluginLoader>();
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");

@@ -6,7 +6,7 @@ using Noised.Logging;
 namespace Noised.Core.Config
 {
     /// <summary>
-    ///		Default implementation for property handling
+    ///		Default implementation of IConfig for property handling
     /// </summary>
     public class Config : IConfig
     {
@@ -36,38 +36,54 @@ namespace Noised.Core.Config
         #region Methods
 
 		/// <summary>
-		///		Internal method to read and parse the properties from the given source
+		///		Internal method to read and parse the properties from the given loader
 		/// </summary>
-		/// <param name="source">The configuration source to read data from</param>
-        private void LoadProperties(IConfigSource source)
+		/// <param name="loader">the loader to read data from</param>
+        private void LoadProperties(IConfigurationLoader loader)
         {
-            using (var sourceReader = new StringReader(source.GetSourceData()))
+			var configurationData = loader.LoadData();
+            foreach (var data in configurationData)
             {
-				string line;
-				do
-                {
-					line = sourceReader.ReadLine();
-					//Filter comments
-                    if (line != null && 
-						!line.StartsWith(CharComment.ToString(), StringComparison.Ordinal)) 
-                    {
-                        var splits = line.Split(CharAssign);
-                        if (splits.Length == 2)
-                        {
-                            var property = splits[0].Trim();
-                            var value = splits[1].Trim();
-                            properties[property] = value;
-                            logging.Debug(String.Format("Added property {0}", property));
-                        }
-                        else
-                        {
-                            logging.Error(
-                                String.Format("Failed to load value {0}. Could not split line.",
-                                    line));
-                        }
-                    }
-                } while (line != null);
+				string rawStringData = data.Data;
+				if(rawStringData != null)
+				{
+					using (var sourceReader = new StringReader(rawStringData))
+					{
+						string line;
+						int lineCounter = 0;
+						do
+						{
+							lineCounter++;
+							line = sourceReader.ReadLine();
+							//Filter comments
+							if (line != null &&
+								line.Trim() != String.Empty && 
+								!line.StartsWith(CharComment.ToString(), StringComparison.Ordinal)) 
+							{
+								var splits = line.Split(CharAssign);
+								if (splits.Length == 2)
+								{
+									var property = splits[0].Trim();
+									var value = splits[1].Trim();
+									properties[property] = value;
+								}
+								else
+								{
+									logging.Error(
+											String.Format("Failed to load value {0} from {1} at line {2}. Could not split line.",
+												line,
+												data.Name,
+												lineCounter
+												));
+								}
+							}
+						} while (line != null);
+					}
+				}
             }
+			logging.Debug(String.Format("{0} properties loaded from configuration",
+										properties.Count));
+
         }
 
         #endregion
@@ -80,15 +96,15 @@ namespace Noised.Core.Config
             return (properties.ContainsKey(property) ? properties[property] : defaultvalue);
         }
 
-        public void Load(IConfigSource source)
+        public void Load(IConfigurationLoader loader)
         {
             properties.Clear();
-            LoadProperties(source);
+            LoadProperties(loader);
         }
 
-		public int Count()
+		public int Count
 		{
-			return properties.Count;
+			get { return properties.Count; }
 		}
 
         #endregion
