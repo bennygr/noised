@@ -3,13 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoisedCore", "NoisedCore\NoisedCore.csproj", "{8785A9C8-505A-4069-8620-72F5228C6A51}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7C36624D-9E66-49E3-B997-FD659BA5C187}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoisedLogging", "NoisedLogging\NoisedLogging.csproj", "{89E504E4-0EE9-4F62-8077-8C874836BF55}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NoisedPlugins", "NoisedPlugins", "{D089826F-A431-4376-B4C9-C916AE7D224C}"
