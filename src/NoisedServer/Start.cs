@@ -22,12 +22,12 @@ namespace Noised.Server
             logger.AddLogger(new ConsoleLogger());
 
             logger.Debug("Hello I am Noised - your friendly music player daemon");
-			
-			//Loading configuration
-			var config = IocContainer.Get<IConfig>();
-			config.Load(IocContainer.Get<IConfigurationLoader>());
 
-			//loading plugins
+            //Loading configuration
+            var config = IocContainer.Get<IConfig>();
+            config.Load(IocContainer.Get<IConfigurationLoader>());
+
+            //loading plugins
             IPluginLoader pluginLoader = IocContainer.Get<IPluginLoader>();
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
@@ -45,11 +45,11 @@ namespace Noised.Server
             {
                 try
                 {
-					IAudioPlugin audioPlugin = 
-						pluginLoader.GetPlugin<IAudioPlugin>();
-					audioPlugin.SongFinished += 
-						(sender,mediaItem) => 
-						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
+                    IAudioPlugin audioPlugin =
+                        pluginLoader.GetPlugin<IAudioPlugin>();
+                    audioPlugin.SongFinished +=
+                        (sender, mediaItem) =>
+                        Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
                     var resultList = mediaSource.Search("test");
                     MediaItem test = resultList.First();
                     Console.WriteLine(test.Protocol);
