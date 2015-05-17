@@ -1,7 +1,5 @@
-OUTPATH_RELEASE=../../../bin/Release/plugins/
-OUTPATH_DEBUG=../../../bin/Debug/plugins/
-CORE_OUT_RELEASE=../../../bin/Release/NoisedCore.dll
-CORE_OUT_DEBUG=../../../bin/Debug/NoisedCore.dll
+OUTPATH_RELEASE=./bin/Release/
+OUTPATH_DEBUG=./bin/Debug/
 #---------------------------
 ifdef DEBUG
 		OUTPATH=$(OUTPATH_DEBUG)

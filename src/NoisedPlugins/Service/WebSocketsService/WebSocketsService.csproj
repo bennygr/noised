@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <UsingTask AssemblyFile="$(OutputPath)\NoisedPluginsSDK.dll" TaskName="CreatePluginPackage" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -17,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug\plugins</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,15 +26,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release\plugins</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fleck">
-      <HintPath>..\..\..\packages\Fleck.0.12.0.40\lib\net40\Fleck.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +39,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Fleck">
+      <HintPath>..\..\..\packages\Fleck.0.13.0.48\lib\net40\Fleck.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,6 +57,10 @@
       <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
       <Name>NoisedLogging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\NoisedPluginsSDK\NoisedPluginsSDK.csproj">
+      <Project>{F27DE48B-4389-4A05-BED5-05F919B45899}</Project>
+      <Name>NoisedPluginsSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -64,6 +69,23 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFiles="$(TargetDir)\$(TargetName).nplugin" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetDir)\WebSocketsService.dll" DestinationFiles="$(TargetDir)\WebSocketsService.nplugin" SkipUnchangedFiles="true" />
+    <ItemGroup>
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\WebSocketsService.nplugin" />
+    </ItemGroup>
+    <ItemGroup>
+      <PluginConfigurationFiles Include=".\bin\$(Configuration)\etc\noised.plugins.service.websocketsservice.nconfig" />
+    </ItemGroup>
+    <CreatePluginPackage Name="WebSocketsService" PluginRuntimeFiles="@(PluginRuntimeFiles)" PluginConfigurationFiles="@(PluginConfigurationFiles)">
+    </CreatePluginPackage>
+    <Copy SourceFiles="$(TargetDir)\..\WebSocketsService.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\WebSocketsService.npluginz" SkipUnchangedFiles="true" />
   </Target>
+  <ItemGroup>
+    <Folder Include="etc\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="etc\noised.plugins.service.websocketsservice.nconfig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

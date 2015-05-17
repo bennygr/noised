@@ -1,0 +1,5 @@
+﻿#Configuration file for the noised WebSockets plugin
+#------------------------------------------------------------------
+
+#Port to listen for incoming websocket connections
+noised.plugins.service.websocketsservice.port = 1338

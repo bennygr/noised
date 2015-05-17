@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <UsingTask AssemblyFile="$(OutputPath)\NoisedPluginsSDK.dll" TaskName="CreatePluginPackage" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -16,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug\plugins</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release\plugins</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -54,6 +55,10 @@
       <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
       <Name>NoisedLogging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\NoisedPluginsSDK\NoisedPluginsSDK.csproj">
+      <Project>{F27DE48B-4389-4A05-BED5-05F919B45899}</Project>
+      <Name>NoisedPluginsSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -69,6 +74,13 @@
     <Exec Command="make" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFiles="$(TargetDir)\$(TargetName).nplugin" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(TargetDir)\GStreamer.dll" DestinationFiles="$(TargetDir)\GStreamer.nplugin" SkipUnchangedFiles="true" />
+    <ItemGroup>
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\GStreamer.nplugin" />
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\libNoisedGstreamerAudio.so" />
+    </ItemGroup>
+    <CreatePluginPackage Name="Dummy" PluginRuntimeFiles="@(PluginRuntimeFiles)">
+    </CreatePluginPackage>
+    <Copy SourceFiles="$(TargetDir)\..\Dummy.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\Gstreamer.npluginz" SkipUnchangedFiles="true" />
   </Target>
 </Project>

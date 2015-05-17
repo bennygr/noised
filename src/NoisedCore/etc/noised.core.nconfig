@@ -1,0 +1,4 @@
+﻿#noised core configuration file
+
+#Test property
+noised.core.test = Just a test

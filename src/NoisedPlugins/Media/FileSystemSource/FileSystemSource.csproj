@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <UsingTask AssemblyFile="$(OutputPath)\NoisedPluginsSDK.dll" TaskName="CreatePluginPackage" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -16,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug\plugins</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release\plugins</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -47,6 +48,10 @@
       <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
       <Name>NoisedCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\NoisedPluginsSDK\NoisedPluginsSDK.csproj">
+      <Project>{F27DE48B-4389-4A05-BED5-05F919B45899}</Project>
+      <Name>NoisedPluginsSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -55,6 +60,12 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFiles="$(TargetDir)\$(TargetName).nplugin" SkipUnchangedFiles="true" />
+	  <Copy SourceFiles="$(TargetDir)\FileSystemSource.dll" DestinationFiles="$(TargetDir)\FileSystemSource.nplugin" />
+    <ItemGroup>
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\FileSystemSource.nplugin" />
+    </ItemGroup>
+    <CreatePluginPackage Name="FileSystemSource" PluginRuntimeFiles="@(PluginRuntimeFiles)">
+    </CreatePluginPackage>
+	<Copy SourceFiles="$(TargetDir)\..\FileSystemSource.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\FileSystemSource.npluginz" />
   </Target>
 </Project>

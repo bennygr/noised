@@ -1,0 +1,5 @@
+﻿#Configuration file for the noised TCP service plugin
+#------------------------------------------------------------------
+
+#Port to listen for incoming connections
+noised.plugins.service.tcpservice.port = 1337
