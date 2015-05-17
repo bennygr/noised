@@ -60,6 +60,7 @@
   </Target>
   -->
   <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)\Dummy.dll" DestinationFiles="$(TargetDir)\Dummy.nplugin" SkipUnchangedFiles="true" />
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\Dummy.nplugin" />
     </ItemGroup>

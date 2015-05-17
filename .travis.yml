@@ -13,3 +13,7 @@ notifications:
             - sebingel+noised@googlemail.com
         on_success: change # default: change
         on_failure: always # default: always
+addons:
+    apt:
+        packages:
+            - libgstreamer1.0-dev 

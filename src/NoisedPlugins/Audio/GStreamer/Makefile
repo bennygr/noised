@@ -16,4 +16,5 @@ cpp:
 	`pkg-config gstreamer-1.0 --cflags` ./cpp/*.cpp \
 	`pkg-config gstreamer-1.0 --libs`;
 	echo "Moving libNoisedGstreamerAudio.so to $(OUTPATH)";
+	mkdir -p $(OUTPATH)
 	mv libNoisedGstreamerAudio.so $(OUTPATH)libNoisedGstreamerAudio.so
