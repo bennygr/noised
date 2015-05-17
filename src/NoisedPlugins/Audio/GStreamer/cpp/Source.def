@@ -1,0 +1,11 @@
+LIBRARY  "GStreamerCpp.dll"
+EXPORTS
+  Initialize
+  Free
+  Play
+  Stop
+  Pause
+  Resume
+  IsPlaying
+  IsPaused
+  SetSongFinishedCallback

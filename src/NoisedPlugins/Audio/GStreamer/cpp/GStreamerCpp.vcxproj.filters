@@ -27,4 +27,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Source.def">
+      <Filter>Quelldateien</Filter>
+    </None>
+  </ItemGroup>
 </Project>
