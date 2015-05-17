@@ -1,4 +1,5 @@
 using Noised.Logging;
+
 namespace Noised.Core.Plugins
 {
 	/// <summary>

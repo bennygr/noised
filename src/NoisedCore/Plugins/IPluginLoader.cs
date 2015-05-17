@@ -2,7 +2,7 @@ using System.Collections.Generic;
 namespace Noised.Core.Plugins
 {
 	/// <summary>
-	///		A plugin loader
+	///		A plugin loader for loading installed plugins
 	/// </summary>
 	public interface IPluginLoader
 	{
