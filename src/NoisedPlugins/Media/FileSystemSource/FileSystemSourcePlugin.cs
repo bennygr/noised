@@ -98,7 +98,7 @@ namespace Noised.Plugins.Media.FileSystemSource
             {
                 new MediaItem 
                 {
-                    Uri= new Uri("file:///home/benny/Musik/test.mp3")
+                    Uri= new Uri("file:///home/bgr/Musik/test.mp3")
                 }
             };
         }

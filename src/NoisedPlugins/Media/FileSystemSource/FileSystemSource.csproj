@@ -60,12 +60,12 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-	  <Copy SourceFiles="$(TargetDir)\FileSystemSource.dll" DestinationFiles="$(TargetDir)\FileSystemSource.nplugin" />
+    <Copy SourceFiles="$(TargetDir)\FileSystemSource.dll" DestinationFiles="$(TargetDir)\FileSystemSource.nplugin" />
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\FileSystemSource.nplugin" />
     </ItemGroup>
     <CreatePluginPackage Name="FileSystemSource" PluginRuntimeFiles="@(PluginRuntimeFiles)">
     </CreatePluginPackage>
-	<Copy SourceFiles="$(TargetDir)\..\FileSystemSource.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\FileSystemSource.npluginz" />
+    <Copy SourceFiles="$(TargetDir)\..\FileSystemSource.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\FileSystemSource.npluginz" />
   </Target>
 </Project>

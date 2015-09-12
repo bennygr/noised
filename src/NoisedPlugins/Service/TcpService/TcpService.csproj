@@ -74,7 +74,7 @@
     <ItemGroup>
       <PluginConfigurationFiles Include=".\bin\$(Configuration)\etc\noised.plugins.service.tcpservice.nconfig" />
     </ItemGroup>
-	<CreatePluginPackage Name="TcpService" PluginRuntimeFiles="@(PluginRuntimeFiles)" PluginConfigurationFiles="@(PluginConfigurationFiles)"/>
+    <CreatePluginPackage Name="TcpService" PluginRuntimeFiles="@(PluginRuntimeFiles)" PluginConfigurationFiles="@(PluginConfigurationFiles)" />
     <Copy SourceFiles="$(TargetDir)\..\TcpService.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\TcpService.npluginz" />
   </Target>
   <ItemGroup>

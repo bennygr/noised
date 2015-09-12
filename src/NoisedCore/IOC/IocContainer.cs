@@ -42,6 +42,7 @@ namespace Noised.Core.IOC
 			builder.Register<ICore,Core>().
 				ControlledBy<SingletonLifecycle>();
 			//Plugins
+			builder.Register<IPluginInstaller,PluginInstaller>();
 			builder.Register<IPluginLoader,PluginLoader>().
 				ControlledBy<SingletonLifecycle>();
 			//Protocol

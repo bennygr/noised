@@ -9,7 +9,7 @@ namespace Noised.Core.Plugins.Service
 	public delegate void ServiceEventHandler(object sender, ServiceEventArgs eventArgs);
 
 	/// <summary>
-	///		A plugin for a a noised service
+	///		A plugin for a noised service
 	/// </summary>
 	/// <remarks>
 	///		A noised service provides all noised functionality

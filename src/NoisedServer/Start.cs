@@ -27,26 +27,28 @@ namespace Noised.Server
 			var config = IocContainer.Get<IConfig>();
 			config.Load(IocContainer.Get<IConfigurationLoader>());
 
+			//installing new plugins
+			var pluginInstaller = IocContainer.Get<IPluginInstaller>();
+			pluginInstaller.InstallAll("./plugins");
+
 			//loading plugins
-            IPluginLoader pluginLoader = IocContainer.Get<IPluginLoader>();
+            var pluginLoader = IocContainer.Get<IPluginLoader>();
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
 
-
             //Add a factory and create a ping command
-            ICore core = IocContainer.Get<ICore>();
+            var core = IocContainer.Get<ICore>();
             core.Start();
 
             var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
 
-            IMediaSource mediaSource = pluginLoader.GetPlugin<IMediaSource>();
+            var mediaSource = pluginLoader.GetPlugin<IMediaSource>();
             if (mediaSource != null)
             {
                 try
                 {
-					IAudioPlugin audioPlugin = 
-						pluginLoader.GetPlugin<IAudioPlugin>();
+					var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
 					audioPlugin.SongFinished += 
 						(sender,mediaItem) => 
 						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
@@ -59,8 +61,6 @@ namespace Noised.Server
                 {
                     logger.Error(e.Message);
                 }
-
-
             }
             else
             {

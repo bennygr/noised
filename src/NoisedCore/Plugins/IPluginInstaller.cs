@@ -1,12 +1,16 @@
-/// <summary>
-///		Installs plugins	
-/// </summary>
-interface IPluginInstaller
+using System;
+
+namespace Noised.Core.Plugins
 {
 	/// <summary>
-	///		Installs plugins
+	///		Basic plugin installer installing *.npluginz files
 	/// </summary>
-	/// <param name="plugins">Full pathes of the plugins to install</param>
-	///
-	void  InstallPlugins(params string[] plugins);
-};
+	public interface IPluginInstaller
+	{
+		/// <summary>
+		///		Installs all plugins from a given path
+		/// </summary>
+		/// <param name=""></param>
+		void InstallAll(String path);
+	};
+}

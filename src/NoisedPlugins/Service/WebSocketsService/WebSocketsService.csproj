@@ -49,10 +49,6 @@
     <Compile Include="WebSocketsServicePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
-      <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
-      <Name>NoisedCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\NoisedLogging\NoisedLogging.csproj">
       <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
       <Name>NoisedLogging</Name>
@@ -60,6 +56,10 @@
     <ProjectReference Include="..\..\NoisedPluginsSDK\NoisedPluginsSDK.csproj">
       <Project>{F27DE48B-4389-4A05-BED5-05F919B45899}</Project>
       <Name>NoisedPluginsSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
+      <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
+      <Name>NoisedCore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -72,6 +72,8 @@
     <Copy SourceFiles="$(TargetDir)\WebSocketsService.dll" DestinationFiles="$(TargetDir)\WebSocketsService.nplugin" SkipUnchangedFiles="true" />
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\WebSocketsService.nplugin" />
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\Fleck.dll" />
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\Newtonsoft.Json.dll" />
     </ItemGroup>
     <ItemGroup>
       <PluginConfigurationFiles Include=".\bin\$(Configuration)\etc\noised.plugins.service.websocketsservice.nconfig" />

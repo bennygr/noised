@@ -34,15 +34,15 @@ namespace Noised.Core.Plugins
 				{
 					//Getting IPlugin types from the plugin assembly 
 					Assembly assembly = Assembly.LoadFrom(file);
+
 					String strPluginType = "Noised.Core.Plugins.IPlugin";
 					Type pluginBaseType = Type.GetType(strPluginType);
 					pluginTypes = assembly.GetTypes().Where(pluginBaseType.IsAssignableFrom);
-
 					if(pluginTypes != null && pluginTypes.Any())
 					{	
 						//Plugin init data
-						PluginInitializer pluginInitializer = 
-							new PluginInitializer()
+						var pluginInitializer = 
+							new PluginInitializer
 							{
 								Logging =  IocContainer.Get<ILogging>()
 							};
