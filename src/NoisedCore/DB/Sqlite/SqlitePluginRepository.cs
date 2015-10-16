@@ -19,12 +19,12 @@ namespace Noised.Core.DB.Sqlite
 	
 	    #region IPluginRegistrationRepository implementation
 	
-		public void RegisterPlugin(PluginRegistration pluginRegistration,List<FileInfo> files)	
+		public void RegisterPlugin(PluginRegistrationData pluginRegistration,List<FileInfo> files)	
 	    {
 	        throw new System.NotImplementedException();
 	    }
 	
-	    public PluginRegistration GetByGuid(Guid guid)
+	    public PluginRegistrationData GetByGuid(Guid guid)
 	    {
 			using(var cmd = connection.CreateCommand())
 			{
@@ -35,7 +35,7 @@ namespace Noised.Core.DB.Sqlite
 				{
 					if(reader.HasRows)
 					{
-						return new PluginRegistration
+						return new PluginRegistrationData
 						{
 							Guid = Guid.Parse((string)reader["GUID"]),
 							Version = Version.Parse((string)reader["Version"]),

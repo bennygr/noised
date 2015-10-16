@@ -115,7 +115,7 @@
     <Compile Include="DB\Sqlite\MediaItemsSql.cs" />
     <Compile Include="DB\Sqlite\MetaDataSql.cs" />
     <Compile Include="DB\Sqlite\SqliteUtils.cs" />
-    <Compile Include="Plugins\PluginRegistration.cs" />
+    <Compile Include="Plugins\PluginRegistrationData.cs" />
     <Compile Include="Plugins\PluginFile.cs" />
     <Compile Include="DB\IPluginRepository.cs" />
     <Compile Include="DB\Sqlite\SqlitePluginRepository.cs" />

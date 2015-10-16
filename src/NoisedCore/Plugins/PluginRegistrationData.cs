@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Noised.Core.Plugins
 {
-	public class PluginRegistration
+	public class PluginRegistrationData
 	{
 		/// <summary>
 		///		The unique plugin ID
