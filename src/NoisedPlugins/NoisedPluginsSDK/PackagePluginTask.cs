@@ -30,6 +30,11 @@ namespace Noised.Plugins.SDK
 
         public override bool Execute()
         {
+			string metaDataFilePath = "plugin.nplugininfo";
+			NoisedFile metaDataFile = new NoisedFile {
+				FileSource = metaDataFilePath,
+			};
+
             string packageFile = "bin" + Path.DirectorySeparatorChar + Name + ".npluginz";
             var files = new List<NoisedFile>();
             if (PluginRuntimeFiles != null)
@@ -58,7 +63,7 @@ namespace Noised.Plugins.SDK
                 }
             }
 
-			new PluginPackager().CreatePlugin(packageFile, files, configs);
+			new PluginPackager().CreatePlugin(packageFile,metaDataFile, files, configs);
             return true;
         }
 

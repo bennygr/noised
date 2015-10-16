@@ -6,7 +6,7 @@ namespace Noised.Core.Plugins
 	public class PluginRegistration
 	{
 		/// <summary>
-		///		Tje unique plugin ID
+		///		The unique plugin ID
 		/// </summary>
 		public Guid Guid{get;set;}
 	
@@ -16,8 +16,8 @@ namespace Noised.Core.Plugins
 		public Version Version{get;set;}
 	
 		/// <summary>
-		///		A list of files related to the Plugin
+		///		The name of the plugin
 		/// </summary>
-		public List<PluginFile> PluginFiles {get;set;}
+		public String Name{get;set;}
 	};
 }

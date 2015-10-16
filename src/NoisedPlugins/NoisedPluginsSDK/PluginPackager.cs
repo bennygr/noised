@@ -52,15 +52,22 @@ public class PluginPackager
     /// <param name="outputFile">
     ///		The full path and file name where to save the created plugin package
     /// </param>
+	/// <param name="pluginMetaDataFile">The file contains meta data about the plugin</param>
     /// <param name="pluginFiles">The plugin files to add to the plugin package</param>
     /// <param name="configurationFiles">The configuration files to add to the plugin package</param>
     public void CreatePlugin(string outputFile, 
+		NoisedFile pluginMetaDataFile,
         IEnumerable<NoisedFile> pluginFiles, 
         IEnumerable<NoisedFile> configurationFiles)
     {
         string tmpPath = CreateTmpDirectory();
         string contentPath = tmpPath + "plugins" + Path.DirectorySeparatorChar;
         string configPath = tmpPath + "etc" + Path.DirectorySeparatorChar;
+		//Copy meta dat file
+		FileInfo metaDataFile = new FileInfo(pluginMetaDataFile.FileSource);
+		System.Console.Write ("HELLOOO" + metaDataFile.FullName);
+		File.Copy (metaDataFile.FullName, tmpPath + metaDataFile.Name);
+
 
         //Copy plugin files
         foreach (var runtimeFile in pluginFiles)

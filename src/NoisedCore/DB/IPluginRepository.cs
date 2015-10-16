@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using Noised.Core.Plugins;
 
 namespace Noised.Core.DB
@@ -9,12 +11,18 @@ namespace Noised.Core.DB
 		///		Registers a new plugin
 		/// </summary>
 		/// <param name="pluginRegistration">The data of the plugin to register</param>
-		void RegisterPlugin(PluginRegistration pluginRegistration);	
+		/// <param name="files">The files of the plugin to register</param>
+		void RegisterPlugin(PluginRegistration pluginRegistration,List<FileInfo> files);	
 	
 		/// <summary>
 		///		Gets the registration data for a plugin
 		/// </summary>
 		/// <param name="guid">The GUID of the plugin to get the data for</param>
 		PluginRegistration GetByGuid(Guid guid);
+
+		/// <summary>
+		///		Gets a list of files registered for the plugin
+		/// </summary>
+		List<FileInfo> GetRegisteredFilesForPlugin(Guid guid);
 	};
 }

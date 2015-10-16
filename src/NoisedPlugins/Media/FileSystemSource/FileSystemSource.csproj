@@ -68,4 +68,9 @@
     </CreatePluginPackage>
     <Copy SourceFiles="$(TargetDir)\..\FileSystemSource.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\FileSystemSource.npluginz" />
   </Target>
+  <ItemGroup>
+    <None Include="plugin.nplugininfo">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
