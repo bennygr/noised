@@ -126,6 +126,11 @@ namespace Noised.Plugins.Audio.GStreamer
 
         #region IPlugin
 
+		public Guid Guid 
+		{
+			get { return Guid.Parse("bd7dacca-f0da-4dd9-a8ec-c703425cf751"); }
+		}
+
         public String Name
         {
             get

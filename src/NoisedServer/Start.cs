@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Noised.Core;
 using Noised.Core.Config;
+using Noised.Core.DB;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
@@ -23,15 +24,38 @@ namespace Noised.Server
 
             logger.Debug("Hello I am Noised - your friendly music player daemon");
 			
-			//Loading configuration
-			var config = IocContainer.Get<IConfig>();
-			config.Load(IocContainer.Get<IConfigurationLoader>());
+            //Loading configuration
+            var config = IocContainer.Get<IConfig>();
+            config.Load(IocContainer.Get<IConfigurationLoader>());
 
-			//installing new plugins
-			var pluginInstaller = IocContainer.Get<IPluginInstaller>();
-			pluginInstaller.InstallAll("./plugins");
+			//Creating the DB or update if neccessary
+			var db = IocContainer.Get<IDB>();
+			db.CreateOrUpdate();
+			
+            //DB test
+			using (var unitOfWork = IocContainer.Get<IUnitOfWork>())
+            {
+				var itemOne = new MediaItem(new Uri("file://testNEU1.mp3")); 
+				itemOne.AddMetaData("Artist","Benny The King");
+                unitOfWork.MediaItemRepository.Create(itemOne);
 
-			//loading plugins
+				var itemTwo = new MediaItem(new Uri("file://testNEU2.mp3")); 
+				itemTwo.AddMetaData("Artist","Benny The King");
+                unitOfWork.MediaItemRepository.Create(itemTwo);
+
+				unitOfWork.SaveChanges();
+            }
+
+			using(var unitOfWork = IocContainer.Get<IUnitOfWork>())
+			{
+				unitOfWork.MediaItemRepository.GetByUri(new Uri("file://testNEU2.mp3"));
+			}
+
+            //installing new plugins
+            var pluginInstaller = IocContainer.Get<IPluginInstaller>();
+            pluginInstaller.InstallAll("./plugins");
+
+            //loading plugins
             var pluginLoader = IocContainer.Get<IPluginLoader>();
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
@@ -40,17 +64,19 @@ namespace Noised.Server
             var core = IocContainer.Get<ICore>();
             core.Start();
 
+            //Starting services
             var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
 
+			
             var mediaSource = pluginLoader.GetPlugin<IMediaSource>();
             if (mediaSource != null)
             {
                 try
                 {
-					var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
-					audioPlugin.SongFinished += 
-						(sender,mediaItem) => 
+                    var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
+                    audioPlugin.SongFinished += 
+						(sender, mediaItem) => 
 						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
                     var resultList = mediaSource.Search("test");
                     MediaItem test = resultList.First();

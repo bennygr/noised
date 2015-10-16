@@ -8,6 +8,14 @@ namespace Noised.Core.Plugins
 	public interface IPlugin : IDisposable
 	{
 		/// <summary>
+		///		A unique and constant identifier of the plugin
+		/// </summary>
+		/// <remarks>
+		///		The returned GUID must always be the same for the plugin
+		/// </remarks>
+		Guid Guid{get;}
+
+		/// <summary>
 		///		The name of the plugin
 		/// </summary>
 		String Name{get;}

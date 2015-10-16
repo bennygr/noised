@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+
 namespace Noised.Core.Media
 {
 	/// <summary>
@@ -8,6 +10,11 @@ namespace Noised.Core.Media
 	public class MediaItem
 	{
 		/// <summary>
+		///		Numeric id of an item
+		/// </summary>
+		public Int64 Id{get; set;}
+
+		/// <summary>
 		///		Uri of the media item
 		/// </summary>
 		public Uri Uri{get; set;}	
@@ -15,7 +22,13 @@ namespace Noised.Core.Media
 		/// <summary>
 		///		The meta data of the media item
 		/// </summary>
-		public MetaData MetaData{get;set;}
+		public List<MetaData> MetaData{get;set;} 
+
+		public MediaItem(Uri uri)
+		{
+			Uri = uri;
+			MetaData = new List<MetaData>();
+		}
 
 		/// <summary>
 		///		The protocol 
@@ -37,6 +50,10 @@ namespace Noised.Core.Media
                 throw new ArgumentException("Invalid protocol in URI");
             }
 		}
-	};
 
+		public void AddMetaData(String name,String metaValue)
+		{
+			MetaData.Add(new MetaData(this,name,metaValue));
+		}
+	};
 }

@@ -1,16 +1,38 @@
 using System;
+using Noised.Core.Media;
 /// <summary>
 ///		A media item's meta data
 /// </summary>
-/// //TODO: maybe it would be be better to 
-///         have this class a dynamic list
-///         instead of fixed properties?!
 public class MetaData
 {
-	public string Artist {get;set;}
-	public string Album {get;set;}
-	public string Title {get;set;}
-	public DateTime Date {get;set;}
-	public string Comment {get;set;}
-	public string Genrgenre {get;set;}
+    public MediaItem MediaItem{get;set;}
+	public string Name{get;set;}
+	public string Value{get;set;}
+
+	public MetaData(MediaItem mediaItem, string name, string dataValue)
+	{
+        this.MediaItem = mediaItem;
+		this.Name = name;
+		this.Value = dataValue;
+	}
+
+	public int GetAsInt()
+	{
+		return Int32.Parse(Value);
+	}
+
+	public long GetAsLong()
+	{
+		return Int64.Parse(Value);
+	}
+
+	public float GetAsFloat()
+	{
+		return float.Parse(Value);
+	}
+
+	public double GetAsDouble()
+	{
+		return Double.Parse(Value);
+	}
 };

@@ -24,6 +24,11 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         #region IPlugin
 
+		public Guid Guid 
+		{
+			get { return Guid.Parse("5267303e-c7b8-4320-af46-5f442e35415c"); }
+		}
+
         public String Name
         {
             get

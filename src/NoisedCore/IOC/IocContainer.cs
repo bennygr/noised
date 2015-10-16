@@ -9,6 +9,8 @@ using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Service.Protocols;
 using Noised.Core.Service.Protocols.JSON;
+using Noised.Core.DB;
+using Noised.Core.DB.Sqlite;
 
 namespace Noised.Core.IOC
 {
@@ -38,6 +40,10 @@ namespace Noised.Core.IOC
 			//Configuration
 			builder.Register<IConfigurationLoader,FilesystemConfigurationLoader>();
 			builder.Register<IConfig,Config.Config>();
+			//DB
+			builder.Register<IDB,SqliteDB>();
+			builder.Register<IUnitOfWork,SqliteUnitOfWork>();
+			builder.Register<IPluginRepository,SqlitePluginRepository>();
 			//The core
 			builder.Register<ICore,Core>().
 				ControlledBy<SingletonLifecycle>();

@@ -32,7 +32,12 @@ namespace Noised.Plugins.Audio.Dummy
 		#endregion
 
 		#region IPlugin
-		
+
+		public Guid Guid 
+		{
+			get { return Guid.Parse("ab2b7e37-3ee6-4566-b7c4-0b9515e9ff6f"); }
+		}
+
 		public String Name
 		{
 			get

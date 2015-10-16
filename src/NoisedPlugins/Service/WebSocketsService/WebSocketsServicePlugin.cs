@@ -81,6 +81,12 @@ namespace Noised.Plugins.Service.WebSocketsService
 
         #region IPlugin
 
+		public Guid Guid 
+		{
+			get { return Guid.Parse("bfa654d-e9ef-43b8-95fb-ad7ee1a93c91"); }
+		}
+
+
         public String Name
         {
             get

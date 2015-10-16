@@ -22,7 +22,7 @@ namespace Noised.Core.Media
 		
 		public MediaItem GetItem(Uri uri)
 		{
-			foreach(IMediaSource sourcePlugin  in
+			foreach(IMediaSource sourcePlugin in
 					pluginLoader.GetPlugins<IMediaSource>())
 			{
 				MediaItem item = sourcePlugin.GetItem(uri);

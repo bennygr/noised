@@ -141,6 +141,11 @@ namespace Noised.Plugins.Service.TcpService
 		#endregion
 		
 		#region IPlugin
+
+		public Guid Guid
+		{
+			get { return Guid.Parse("874daa40-7621-45d9-9f6b-8770887dff49"); }
+		}
 		
 		public String Name
 		{
