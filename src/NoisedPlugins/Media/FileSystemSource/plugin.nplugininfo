@@ -1,3 +1,5 @@
-GUID=2d8ae388-0020-486e-b606-3f06ec20699a
-VERSION=1.0.0
-NAME=Filesystem media source
+{
+	"GUID": "2d8ae388-0020-486e-b606-3f06ec20699a",
+	"Version": "1.0.0",
+	"Name": "Filesystem media source"
+}

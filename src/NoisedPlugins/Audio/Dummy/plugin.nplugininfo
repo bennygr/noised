@@ -1,3 +1,5 @@
-GUID=7bf101aa-6994-411e-a7bf-ebede0e60cf6
-VERSION=1.0.0
-NAME=Dummy Audio Plugin
+{
+	"GUID": "7bf101aa-6994-411e-a7bf-ebede0e60cf6",
+	"Version": "1.0.0",
+	"Name": "Dummy Audio Plugin"
+}
