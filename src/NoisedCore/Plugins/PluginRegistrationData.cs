@@ -13,7 +13,7 @@ namespace Noised.Core.Plugins
 		/// <summary>
 		///		The Plugin Version
 		/// </summary>
-		public Version Version{get;set;}
+		public String Version{get;set;}
 	
 		/// <summary>
 		///		The name of the plugin

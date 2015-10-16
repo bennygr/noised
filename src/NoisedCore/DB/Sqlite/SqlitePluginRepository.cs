@@ -37,8 +37,9 @@ namespace Noised.Core.DB.Sqlite
 					{
 						return new PluginRegistrationData
 						{
+							Name = (string)reader["Name"],
 							Guid = Guid.Parse((string)reader["GUID"]),
-							Version = Version.Parse((string)reader["Version"]),
+							Version = (string)reader["Version"]
 						};
 					}
 					return null;

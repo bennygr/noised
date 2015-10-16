@@ -8,9 +8,14 @@ namespace Noised.Core.Plugins
 	public interface IPluginInstaller
 	{
 		/// <summary>
-		///		Installs all plugins from a given path
+		///		Installs all npluginz files from a given path
 		/// </summary>
-		/// <param name=""></param>
+		/// <param name="path">The path containing the npluginz files to install </param>
 		void InstallAll(String path);
+
+		/// <summary>
+		///		Installs a noised plugin from a npluginz file
+		/// </summary>
+		void Install(String npluginzPath);
 	};
 }

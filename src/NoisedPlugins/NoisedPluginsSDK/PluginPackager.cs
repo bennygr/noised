@@ -65,7 +65,6 @@ public class PluginPackager
         string configPath = tmpPath + "etc" + Path.DirectorySeparatorChar;
 		//Copy meta dat file
 		FileInfo metaDataFile = new FileInfo(pluginMetaDataFile.FileSource);
-		System.Console.Write ("HELLOOO" + metaDataFile.FullName);
 		File.Copy (metaDataFile.FullName, tmpPath + metaDataFile.Name);
 
 
