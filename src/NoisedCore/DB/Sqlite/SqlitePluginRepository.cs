@@ -21,7 +21,27 @@ namespace Noised.Core.DB.Sqlite
 	
 		public void RegisterPlugin(PluginRegistrationData pluginRegistration,List<FileInfo> files)	
 	    {
-	        throw new System.NotImplementedException();
+			using(var cmd = connection.CreateCommand())
+			{
+				cmd.CommandText = PluginRegistrationSql.INSERT_REG_DATA_STMT;
+				cmd.CommandType = CommandType.Text;
+				cmd.Parameters.Add(new SqliteParameter("@Guid",pluginRegistration.Guid.ToString()));
+				cmd.Parameters.Add(new SqliteParameter("@Version",pluginRegistration.Version));
+				cmd.Parameters.Add(new SqliteParameter("@Name",pluginRegistration.Name));
+				cmd.ExecuteNonQuery();
+			}
+
+			foreach(var file in files)
+			{
+				using(var cmd = connection.CreateCommand())
+				{
+					cmd.CommandText = PluginFilesSql.INSERT_FILE_STMT;
+					cmd.CommandType = CommandType.Text;
+					cmd.Parameters.Add(new SqliteParameter("@Guid",pluginRegistration.Guid.ToString()));
+					cmd.Parameters.Add(new SqliteParameter("@File",file.FullName));
+					cmd.ExecuteNonQuery();
+				}
+			}
 	    }
 	
 	    public PluginRegistrationData GetByGuid(Guid guid)
@@ -30,7 +50,8 @@ namespace Noised.Core.DB.Sqlite
 			{
 				cmd.CommandText = PluginRegistrationSql.GET_BY_GUID_STMT;
 				cmd.CommandType = CommandType.Text;
-				cmd.Parameters.Add(new SqliteParameter("@Guid",guid.ToString()));
+				String guidString = guid.ToString ("D");
+				cmd.Parameters.Add(new SqliteParameter("@Guid",guidString));
 				using(var reader = cmd.ExecuteReader())
 				{
 					if(reader.HasRows)

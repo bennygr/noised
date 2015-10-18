@@ -32,7 +32,7 @@ namespace Noised.Core.DB.Sqlite
 			}
 		}
 
-		public IPluginRepository IPluginRepository
+		public IPluginRepository PluginRepository
 		{
 			get
 			{

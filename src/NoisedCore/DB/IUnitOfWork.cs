@@ -16,7 +16,7 @@ namespace Noised.Core.DB
 		/// <summary>
 		///		Repository for accesing PluginRegistration
 		/// </summary>
-		IPluginRepository IPluginRepository{get;} 
+		IPluginRepository PluginRepository{get;} 
 
 		/// <summary>
 		///		Saves all changes made to the repositories 

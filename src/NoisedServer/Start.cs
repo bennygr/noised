@@ -32,25 +32,6 @@ namespace Noised.Server
 			var db = IocContainer.Get<IDB>();
 			db.CreateOrUpdate();
 			
-            //DB test
-			using (var unitOfWork = IocContainer.Get<IUnitOfWork>())
-            {
-				var itemOne = new MediaItem(new Uri("file://testNEU1.mp3")); 
-				itemOne.AddMetaData("Artist","Benny The King");
-                unitOfWork.MediaItemRepository.Create(itemOne);
-
-				var itemTwo = new MediaItem(new Uri("file://testNEU2.mp3")); 
-				itemTwo.AddMetaData("Artist","Benny The King");
-                unitOfWork.MediaItemRepository.Create(itemTwo);
-
-				unitOfWork.SaveChanges();
-            }
-
-			using(var unitOfWork = IocContainer.Get<IUnitOfWork>())
-			{
-				unitOfWork.MediaItemRepository.GetByUri(new Uri("file://testNEU2.mp3"));
-			}
-
             //installing new plugins
             var pluginInstaller = IocContainer.Get<IPluginInstaller>();
             pluginInstaller.InstallAll("./plugins");
