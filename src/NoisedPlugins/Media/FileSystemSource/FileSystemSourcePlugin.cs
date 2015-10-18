@@ -98,7 +98,8 @@ namespace Noised.Plugins.Media.FileSystemSource
             {
                 new MediaItem 
                 {
-                    Uri= new Uri("file:///home/benny/Musik/test.mp3")
+                    Uri= new Uri(@"file:C:\Users\sbingel.DATASEC2003\Downloads\irrKlang-32bit-1.5.0\irrKlang-1.5.0\media\ophelia.mp3")
+                    //Uri= new Uri(@"file:C:\Users\sbingel.DATASEC2003\Downloads\irrKlang-32bit-1.5.0\irrKlang-1.5.0\media\getout.ogg")
                 }
             };
         }
