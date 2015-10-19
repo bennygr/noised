@@ -43,7 +43,6 @@ namespace Noised.Core.IOC
 			//DB
 			builder.Register<IDB,SqliteDB>();
 			builder.Register<IUnitOfWork,SqliteUnitOfWork>();
-			builder.Register<IPluginRepository,SqlitePluginRepository>();
 			//The core
 			builder.Register<ICore,Core>().
 				ControlledBy<SingletonLifecycle>();

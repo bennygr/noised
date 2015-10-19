@@ -23,7 +23,7 @@ namespace Noised.Core.DB.Sqlite
 			{
 				MetaDataSql.CREATE_TABLE_STMT,
 				MediaItemsSql.CREATE_TABLE_STMT,
-				PluginRegistrationSql.CREATE_TABLE_STMT,
+				PluginsSql.CREATE_TABLE_STMT,
 				PluginFilesSql.CREATE_TABLE_STMT
 			};	
 	    }

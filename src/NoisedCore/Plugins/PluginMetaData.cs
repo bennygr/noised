@@ -2,7 +2,7 @@ using System;
 
 namespace Noised.Core.Plugins
 {
-	public class PluginRegistrationData
+	public class PluginMetaData
 	{
 		/// <summary>
 		///		The unique plugin ID

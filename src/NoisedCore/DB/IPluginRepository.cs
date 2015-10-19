@@ -12,13 +12,13 @@ namespace Noised.Core.DB
 		/// </summary>
 		/// <param name="pluginRegistration">The data of the plugin to register</param>
 		/// <param name="files">The files of the plugin to register</param>
-		void RegisterPlugin(PluginRegistrationData pluginRegistration,List<FileInfo> files);	
+		void RegisterPlugin(PluginMetaData pluginRegistration,List<FileInfo> files);	
 	
 		/// <summary>
 		///		Gets the registration data for a plugin
 		/// </summary>
 		/// <param name="guid">The GUID of the plugin to get the data for</param>
-		PluginRegistrationData GetByGuid(Guid guid);
+		PluginMetaData GetByGuid(Guid guid);
 
 		/// <summary>
 		///		Gets a list of files registered for the plugin

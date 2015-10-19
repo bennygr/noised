@@ -19,11 +19,11 @@ namespace Noised.Core.DB.Sqlite
 	
 	    #region IPluginRegistrationRepository implementation
 	
-		public void RegisterPlugin(PluginRegistrationData pluginRegistration,List<FileInfo> files)	
+		public void RegisterPlugin(PluginMetaData pluginRegistration,List<FileInfo> files)	
 	    {
 			using(var cmd = connection.CreateCommand())
 			{
-				cmd.CommandText = PluginRegistrationSql.INSERT_REG_DATA_STMT;
+				cmd.CommandText = PluginsSql.INSERT_REG_DATA_STMT;
 				cmd.CommandType = CommandType.Text;
 				cmd.Parameters.Add(new SqliteParameter("@Guid",pluginRegistration.Guid.ToString()));
 				cmd.Parameters.Add(new SqliteParameter("@Version",pluginRegistration.Version));
@@ -44,11 +44,11 @@ namespace Noised.Core.DB.Sqlite
 			}
 	    }
 	
-	    public PluginRegistrationData GetByGuid(Guid guid)
+	    public PluginMetaData GetByGuid(Guid guid)
 	    {
 			using(var cmd = connection.CreateCommand())
 			{
-				cmd.CommandText = PluginRegistrationSql.GET_BY_GUID_STMT;
+				cmd.CommandText = PluginsSql.GET_BY_GUID_STMT;
 				cmd.CommandType = CommandType.Text;
 				String guidString = guid.ToString ("D");
 				cmd.Parameters.Add(new SqliteParameter("@Guid",guidString));
@@ -56,7 +56,7 @@ namespace Noised.Core.DB.Sqlite
 				{
 					if(reader.HasRows)
 					{
-						return new PluginRegistrationData
+						return new PluginMetaData
 						{
 							Name = (string)reader["Name"],
 							Guid = Guid.Parse((string)reader["GUID"]),
