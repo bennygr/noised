@@ -84,8 +84,6 @@
     <Copy SourceFiles="$(TargetDir)\..\Dummy.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\Gstreamer.npluginz" SkipUnchangedFiles="true" />
   </Target>
   <ItemGroup>
-    <None Include="plugin.nplugininfo">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="plugin.nplugininfo" />
   </ItemGroup>
 </Project>

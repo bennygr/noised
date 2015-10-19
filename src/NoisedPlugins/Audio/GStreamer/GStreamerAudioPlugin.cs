@@ -13,34 +13,34 @@ namespace Noised.Plugins.Audio.GStreamer
         private MediaItem currentItem;
         private static GStreamerAudioPlugin plugin;
         private readonly AbstractGStreamerAccess gStreamerAccess;
-		private ILogging logging;
+        private ILogging logging;
 
         /// <summary>
         ///		Constructor
         /// </summary>
         public GStreamerAudioPlugin(PluginInitializer initalizer)
         {
-			try
-			{
-				this.logging = initalizer.Logging;
+            try
+            {
+                this.logging = initalizer.Logging;
 #if UNIX
-				{ gStreamerAccess = new GStreamerAccessUnix(); }
+                { gStreamerAccess = new GStreamerAccessUnix(); }
 #elif WINDOWS
-				{ gStreamerAccess = new GStreamerAccessWindows(); }
+                { gStreamerAccess = new GStreamerAccessWindows(); }
 #else 
-	#error "Unsupported Operating System"
+    #error "Unsupported Operating System"
 #endif
-				gStreamerAccess.AbsInitialize();
-				gStreamerAccess.AbsSetSongFinishedCallback(Callback);
-				plugin = this;
-			}
-			catch(Exception e)
-			{
-				if(this.logging != null)	
-				{
-					this.logging.Error(e.ToString());
-				}
-			}
+                gStreamerAccess.AbsInitialize();
+                gStreamerAccess.AbsSetSongFinishedCallback(Callback);
+                plugin = this;
+            }
+            catch(Exception e)
+            {
+                if(this.logging != null)	
+                {
+                    this.logging.Error(e.ToString());
+                }
+            }
         }
 
         /// <summary>
