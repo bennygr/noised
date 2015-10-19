@@ -61,7 +61,7 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <!-- Calling make on unix before build in order to build the native part of this audion plugin -->
+  <!-- Calling make on unix before build in order to build the native part of this audio plugin -->
   <Target Name="BeforeBuildUnixDebug" AfterTargets="BeforeBuild" Condition="'$(CONFIGURATION)'=='Debug' AND '$(UNIX)'=='TRUE'">
     <Exec Command="make DEBUG=TRUE" />
   </Target>

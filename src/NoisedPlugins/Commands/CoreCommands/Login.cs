@@ -50,9 +50,9 @@ namespace Noised.Plugins.Commands.CoreCommands
                     {
                         Name = "Noised.Commands.Core.Welcome",
                         Parameters = new List<object> 
-						{
-							"Welcome to the noised server \\m/",
-						},
+                        {
+                            "Welcome to the noised server \\m/",
+                        },
                     };
                 Context.SendResponse(response);
             }
