@@ -79,5 +79,15 @@ namespace Noised.Plugins.Audio.IrrKlang.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        internal static byte[] irrKlang_NET4 {
+            get {
+                object obj = ResourceManager.GetObject("irrKlang_NET4", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }
