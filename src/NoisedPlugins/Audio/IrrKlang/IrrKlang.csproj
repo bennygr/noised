@@ -7,7 +7,7 @@
     <ProjectGuid>{F7FA4F44-BA43-4205-9BC6-D3963E3681F2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IrrKlang</RootNamespace>
+    <RootNamespace>Noised.Plugins.Audio.IrrKlang</RootNamespace>
     <AssemblyName>IrrKlang</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -53,6 +53,10 @@
     <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
       <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
       <Name>NoisedCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\NoisedLogging\NoisedLogging.csproj">
+      <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
+      <Name>NoisedLogging</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

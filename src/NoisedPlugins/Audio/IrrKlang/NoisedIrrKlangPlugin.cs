@@ -2,24 +2,42 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using IrrKlang;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
+using Noised.Logging;
 
-namespace IrrKlang
+namespace Noised.Plugins.Audio.IrrKlang
 {
+    /// <summary>
+    /// Audio Playback via IrrKlang Framework
+    /// </summary>
     public class NoisedIrrKlangPlugin : IAudioPlugin
     {
+        // SoundEngine used by IrrKlang
         private readonly ISoundEngine engine;
+        private readonly ILogging log;
 
+        // Current Song
         private ISound currentPlayback;
 
+        /// <summary>
+        /// Audio Playback via IrrKlang Framework
+        /// </summary>
+        /// <param name="pluginInitializer">Noised PluginInitializer</param>
         public NoisedIrrKlangPlugin(PluginInitializer pluginInitializer)
         {
+            log = pluginInitializer.Logging;
+
+            log.Debug("Initialize IrrKlang Plugin");
+
+            log.Debug("Extract IrrKlang Librabries");
             string exeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", string.Empty);
             ExtractEmbeddedResource(exeDir, "IrrKlang.Resources",
                 new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
 
+            log.Debug("Create IrrKlang SoundEngine");
             engine = new ISoundEngine();
         }
 
@@ -130,6 +148,7 @@ namespace IrrKlang
         /// <param name="item">The item to play</param>
         public void Play(MediaItem item)
         {
+            log.Debug("Play -> " + item.Uri.AbsolutePath);
             currentPlayback = engine.Play2D(item.Uri.AbsolutePath);
         }
 
@@ -140,6 +159,7 @@ namespace IrrKlang
         /// <param name="pos">The position from which to play playback in milliseconds</param>
         public void Play(MediaItem item, int pos)
         {
+            log.Debug("Play -> " + item.Uri.AbsolutePath + " at position " + pos);
             currentPlayback = engine.Play2D(item.Uri.AbsolutePath);
             currentPlayback.PlayPosition = Convert.ToUInt32(pos);
         }
@@ -149,6 +169,7 @@ namespace IrrKlang
         /// </summary>
         public void Stop()
         {
+            log.Debug("Stop");
             if (currentPlayback != null)
                 currentPlayback.Stop();
         }
@@ -158,6 +179,7 @@ namespace IrrKlang
         /// </summary>
         public void Pause()
         {
+            log.Debug("Pause");
             if (currentPlayback != null)
                 currentPlayback.Paused = true;
         }
@@ -167,6 +189,7 @@ namespace IrrKlang
         /// </summary>
         public void Resume()
         {
+            log.Debug("Resume");
             if (currentPlayback != null)
                 currentPlayback.Paused = false;
         }
@@ -197,6 +220,7 @@ namespace IrrKlang
             }
             set
             {
+                log.Debug("Set position " + value);
                 if (currentPlayback != null)
                     currentPlayback.PlayPosition = Convert.ToUInt32(value);
             }
@@ -228,6 +252,7 @@ namespace IrrKlang
             }
             set
             {
+                log.Debug("Set volume " + value);
                 if (currentPlayback != null)
                     currentPlayback.Volume = value;
             }
@@ -235,22 +260,34 @@ namespace IrrKlang
 
         #endregion
 
-        private static void ExtractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
+        /// <summary>
+        /// Extracts Embedded Resources to a certain location
+        /// </summary>
+        /// <param name="outputDir">Destination Path</param>
+        /// <param name="resourceLocation">Location of Resources in the Assembly</param>
+        /// <param name="files">List of Names of Files to extract</param>
+        private void ExtractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
         {
             foreach (string file in files)
             {
+                log.Debug("Extracting of " + file + " ...");
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
                 {
                     string path = Path.Combine(outputDir, file);
+                    log.Debug("... into " + path);
 
                     if (File.Exists(path))
+                    {
+                        log.Debug(path + " already exists. Skipping extraction.");
                         continue;
+                    }
 
                     using (FileStream fileStream = new FileStream(path, FileMode.Create))
                     {
                         for (int i = 0; i < stream.Length; i++)
                             fileStream.WriteByte((byte)stream.ReadByte());
                         fileStream.Close();
+                        log.Debug("Extraction completed.");
                     }
                 }
             }

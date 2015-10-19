@@ -32,7 +32,6 @@ namespace Noised.Server
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
 
-
             //Add a factory and create a ping command
             ICore core = IocContainer.Get<ICore>();
             core.Start();
@@ -59,8 +58,6 @@ namespace Noised.Server
                 {
                     logger.Error(e.Message);
                 }
-
-
             }
             else
             {
@@ -68,5 +65,5 @@ namespace Noised.Server
             }
             return 0;
         }
-    };
+    }
 }
