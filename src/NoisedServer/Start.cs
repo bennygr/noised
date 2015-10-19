@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Noised.Core;
 using Noised.Core.Config;
 using Noised.Core.IOC;
@@ -53,6 +54,13 @@ namespace Noised.Server
                     MediaItem test = resultList.First();
                     Console.WriteLine(test.Protocol);
                     IocContainer.Get<IMediaManager>().Play(test);
+
+                    Thread.Sleep(5000);
+                    IocContainer.Get<IMediaManager>().Pause();
+                    Thread.Sleep(3000);
+                    IocContainer.Get<IMediaManager>().Resume();
+                    Thread.Sleep(3000);
+                    IocContainer.Get<IMediaManager>().Stop();
                 }
                 catch (Exception e)
                 {
