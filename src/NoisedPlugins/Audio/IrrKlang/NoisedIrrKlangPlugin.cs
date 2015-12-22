@@ -34,7 +34,7 @@ namespace Noised.Plugins.Audio.IrrKlang
 
             log.Debug("Extract IrrKlang Librabries");
             string exeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", string.Empty);
-            ExtractEmbeddedResource(exeDir, "IrrKlang.Resources",
+            ExtractEmbeddedResource(exeDir, "Noised.Plugins.Audio.IrrKlang.Resources",
                 new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
 
             log.Debug("Create IrrKlang SoundEngine");
@@ -53,11 +53,11 @@ namespace Noised.Plugins.Audio.IrrKlang
 
         #region Implementation of IPlugin
 
-		public Guid Guid 
-		{
-			get { return Guid.Parse("3bfa8f10-08f5-49ea-b94a-f859e4bc4141\n"); }
-		}
-	
+        public Guid Guid
+        {
+            get { return Guid.Parse("3bfa8f10-08f5-49ea-b94a-f859e4bc4141\n"); }
+        }
+
         /// <summary>
         ///		The name of the plugin
         /// </summary>
@@ -275,7 +275,7 @@ namespace Noised.Plugins.Audio.IrrKlang
         {
             foreach (string file in files)
             {
-                log.Debug("Extracting of " + file + " ...");
+                log.Debug("Extraction of " + file + " ...");
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
                 {
                     string path = Path.Combine(outputDir, file);

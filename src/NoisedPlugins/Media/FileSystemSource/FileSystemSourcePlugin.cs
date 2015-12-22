@@ -29,10 +29,10 @@ namespace Noised.Plugins.Media.FileSystemSource
 
         #region IPlugin
 
-		public Guid Guid 
-		{
-			get { return Guid.Parse("17abe4da-0480-4481-9aee-2baf362dfe50"); }
-		}
+        public Guid Guid
+        {
+            get { return Guid.Parse("17abe4da-0480-4481-9aee-2baf362dfe50"); }
+        }
 
         public String Name
         {
@@ -90,7 +90,7 @@ namespace Noised.Plugins.Media.FileSystemSource
         public MediaItem GetItem(Uri uri)
         {
             //TODO: implement: Get the item from DB 
-            return new MediaItem (uri);
+            return new MediaItem(uri);
         }
 
         public IEnumerable<MediaItem> Search(string search)
@@ -98,7 +98,7 @@ namespace Noised.Plugins.Media.FileSystemSource
             //Just a test for now...
             return new List<MediaItem> 
             {
-                new MediaItem(new Uri(@"file:C:\Users\sbingel.DATASEC2003\Downloads\irrKlang-32bit-1.5.0\irrKlang-1.5.0\media\ophelia.mp3")) 
+                new MediaItem(new Uri(@"file:C:\test.mp3")) 
             };
         }
 

@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -82,9 +83,7 @@
     </CreatePluginPackage>
     <Copy SourceFiles="$(TargetDir)\..\WebSocketsService.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\WebSocketsService.npluginz" SkipUnchangedFiles="true" />
   </Target>
-  <ItemGroup>
-    <Folder Include="etc\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="etc\noised.plugins.service.websocketsservice.nconfig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
