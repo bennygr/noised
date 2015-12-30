@@ -66,6 +66,7 @@ namespace Noised.Core.Config
 									var property = splits[0].Trim();
 									var value = splits[1].Trim();
 									properties[property] = value;
+									logging.Debug(String.Format("{0} property loaded ", property));
 								}
 								else
 								{

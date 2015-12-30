@@ -42,7 +42,6 @@ namespace Noised.Server
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
 
-
             //Add a factory and create a ping command
             var core = IocContainer.Get<ICore>();
             core.Start();
@@ -51,6 +50,12 @@ namespace Noised.Server
             var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
 
+			//Test:
+			//Checking sources for new Music
+			logger.Debug("Refreshing music...");
+			var sourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
+			sourceAccumulator.Refresh();
+			logger.Debug("Done refreshing music.");
 			
             var mediaSource = pluginLoader.GetPlugin<IMediaSource>();
             if (mediaSource != null)

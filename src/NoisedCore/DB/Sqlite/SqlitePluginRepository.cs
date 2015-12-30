@@ -43,6 +43,27 @@ namespace Noised.Core.DB.Sqlite
 				}
 			}
 	    }
+
+		public void UnregisterPlugin(PluginMetaData pluginRegistration)
+		{
+			//Files
+			using(var cmd = connection.CreateCommand())
+			{
+				cmd.CommandText = PluginFilesSql.DELETE_FILE_BY_GUID_STMT;
+				cmd.CommandType = CommandType.Text;
+				cmd.Parameters.Add(new SqliteParameter("@Guid",pluginRegistration.Guid.ToString()));
+				cmd.ExecuteNonQuery();
+			}
+
+			//Plugin
+			using(var cmd = connection.CreateCommand())
+			{
+				cmd.CommandText = PluginsSql.DELETE_BY_GUID_STMT;
+				cmd.CommandType = CommandType.Text;
+				cmd.Parameters.Add(new SqliteParameter("@Guid",pluginRegistration.Guid.ToString()));
+				cmd.ExecuteNonQuery();
+			}
+		}
 	
 	    public PluginMetaData GetByGuid(Guid guid)
 	    {

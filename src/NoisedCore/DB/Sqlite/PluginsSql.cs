@@ -13,5 +13,7 @@ namespace Noised.Core.DB.Sqlite
 															VALUES
 															(@Guid,@Version,@Name);";
 
+			internal static string DELETE_BY_GUID_STMT = @"DELETE FROM Plugins WHERE GUID=@Guid;";
+
 	};
 }

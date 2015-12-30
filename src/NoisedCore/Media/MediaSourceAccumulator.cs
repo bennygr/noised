@@ -20,10 +20,16 @@ namespace Noised.Core.Media
 
 		#region IMediaSourceManager
 		
+		public void Refresh()
+		{
+			foreach(IMediaSource sourcePlugin in pluginLoader.GetPlugins<IMediaSource>())
+			{
+				sourcePlugin.Refresh();
+			}
+		}
 		public MediaItem GetItem(Uri uri)
 		{
-			foreach(IMediaSource sourcePlugin in
-					pluginLoader.GetPlugins<IMediaSource>())
+			foreach(IMediaSource sourcePlugin in pluginLoader.GetPlugins<IMediaSource>())
 			{
 				MediaItem item = sourcePlugin.GetItem(uri);
 				if(item != null)
@@ -35,8 +41,7 @@ namespace Noised.Core.Media
 		public IEnumerable<MediaItem> Search(string search)
 		{
 			var ret = new List<MediaItem>();
-			foreach(IMediaSource sourcePlugin  in
-					pluginLoader.GetPlugins<IMediaSource>())
+			foreach(IMediaSource sourcePlugin in pluginLoader.GetPlugins<IMediaSource>())
 			{
 				ret.AddRange(sourcePlugin.Search(search));
 			}

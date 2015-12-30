@@ -18,10 +18,13 @@ namespace Noised.Core.DB.Sqlite
 	
 	    private List<string> GenerateCreateStatements()
 	    {
-			//Metadata
 			return new List<string>
 			{
+				MetaDataSql.CREATE_ALBUM_ARTISTS_TABLE_STMT,
 				MetaDataSql.CREATE_TABLE_STMT,
+				MetaDataSql.CREATE_ARTISTS_TABLE_STMT,
+				MetaDataSql.CREATE_COMPOSER_TABLE_STMT,
+				MetaDataSql.CREATE_GENRE_TABLE_STMT,
 				MediaItemsSql.CREATE_TABLE_STMT,
 				PluginsSql.CREATE_TABLE_STMT,
 				PluginFilesSql.CREATE_TABLE_STMT

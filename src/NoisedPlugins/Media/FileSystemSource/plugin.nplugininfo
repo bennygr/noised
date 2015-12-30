@@ -1,5 +1,6 @@
 {
 	"GUID": "2d8ae388-0020-486e-b606-3f06ec20699a",
-	"Version": "1.0.0",
+	//"Version": "1.0.0",
+	"Version": "0.0.0",
 	"Name": "Filesystem media source"
 }

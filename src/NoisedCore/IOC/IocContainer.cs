@@ -5,12 +5,13 @@ using Noised.Core;
 using Noised.Core.Commands;
 using Noised.Core.Config;
 using Noised.Core.Config.Filesystem;
+using Noised.Core.Crypto;
+using Noised.Core.DB;
+using Noised.Core.DB.Sqlite;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Service.Protocols;
 using Noised.Core.Service.Protocols.JSON;
-using Noised.Core.DB;
-using Noised.Core.DB.Sqlite;
 
 namespace Noised.Core.IOC
 {
@@ -39,7 +40,8 @@ namespace Noised.Core.IOC
 				ControlledBy<SingletonLifecycle>();
 			//Configuration
 			builder.Register<IConfigurationLoader,FilesystemConfigurationLoader>();
-			builder.Register<IConfig,Config.Config>();
+			builder.Register<IConfig,Config.Config>().
+				ControlledBy<SingletonLifecycle>();
 			//DB
 			builder.Register<IDB,SqliteDB>();
 			builder.Register<IUnitOfWork,SqliteUnitOfWork>();
@@ -59,6 +61,8 @@ namespace Noised.Core.IOC
 				ControlledBy<SingletonLifecycle>();
 			builder.Register<IMediaManager,MediaManager>().
 				ControlledBy<SingletonLifecycle>();
+			//Crypto
+			builder.Register<IChecksum,MD5Checksum>();
 	
 			container = builder.Build();
 		}

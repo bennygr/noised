@@ -20,14 +20,24 @@ namespace Noised.Core.Media
 		public Uri Uri{get; set;}	
 
 		/// <summary>
+		///		The media item's checksum
+		/// </summary>
+		public string Checksum{get; private set;}
+
+		/// <summary>
 		///		The meta data of the media item
 		/// </summary>
-		public List<MetaData> MetaData{get;set;} 
+		public MetaData MetaData{get;set;} 
 
-		public MediaItem(Uri uri)
+		/// <summary>
+		///		Constructor
+		/// </summary>
+		/// <param name="uri">The MediaItems URI</param>
+		/// <param name="checksum">The unique cheksum of the media item</param>
+		public MediaItem(Uri uri,string checksum)
 		{
 			Uri = uri;
-			MetaData = new List<MetaData>();
+			Checksum = checksum;
 		}
 
 		/// <summary>
@@ -49,11 +59,6 @@ namespace Noised.Core.Media
                 }
                 throw new ArgumentException("Invalid protocol in URI");
             }
-		}
-
-		public void AddMetaData(String name,String metaValue)
-		{
-			MetaData.Add(new MetaData(this,name,metaValue));
 		}
 	};
 }

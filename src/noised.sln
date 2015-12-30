@@ -19,9 +19,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dummy", "NoisedPlugins\Audio\Dummy\Dummy.csproj", "{155A04DA-1939-4B1E-A8C2-90E120591DBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GStreamer", "NoisedPlugins\Audio\GStreamer\GStreamer.csproj", "{F65517E0-5F4D-4D4F-80A8-B48938654FEC}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A3290B02-1729-4512-84F4-3732CF0C463B} = {A3290B02-1729-4512-84F4-3732CF0C463B}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IrrKlang", "NoisedPlugins\Audio\IrrKlang\IrrKlang.csproj", "{F7FA4F44-BA43-4205-9BC6-D3963E3681F2}"
 EndProject
@@ -181,16 +178,6 @@ Global
 		{F7FA4F44-BA43-4205-9BC6-D3963E3681F2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F7FA4F44-BA43-4205-9BC6-D3963E3681F2}.Release|Win32.ActiveCfg = Release|Any CPU
 		{F7FA4F44-BA43-4205-9BC6-D3963E3681F2}.Release|Win32.Build.0 = Release|Any CPU
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Debug|Win32.Build.0 = Debug|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Release|Any CPU.ActiveCfg = Release|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Release|Win32.ActiveCfg = Release|Win32
-		{A3290B02-1729-4512-84F4-3732CF0C463B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B1DF6F0A-585C-4C1A-864A-5F03FD3BBE2D} = {D089826F-A431-4376-B4C9-C916AE7D224C}

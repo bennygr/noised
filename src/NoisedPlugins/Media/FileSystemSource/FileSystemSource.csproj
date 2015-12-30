@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <UsingTask AssemblyFile="$(OutputPath)\NoisedPluginsSDK.dll" TaskName="CreatePluginPackage" />
@@ -38,10 +38,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="policy.2.0.taglib-sharp">
+      <HintPath>..\..\..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="taglib-sharp">
+      <HintPath>..\..\..\packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSystemSourcePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="etc\FileSystemSourceProperties.cs" />
+    <Compile Include="SupportedFileTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
@@ -51,6 +59,10 @@
     <ProjectReference Include="..\..\NoisedPluginsSDK\NoisedPluginsSDK.csproj">
       <Project>{F27DE48B-4389-4A05-BED5-05F919B45899}</Project>
       <Name>NoisedPluginsSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\NoisedLogging\NoisedLogging.csproj">
+      <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
+      <Name>NoisedLogging</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -63,8 +75,12 @@
     <Copy SourceFiles="$(TargetDir)\FileSystemSource.dll" DestinationFiles="$(TargetDir)\FileSystemSource.nplugin" />
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\FileSystemSource.nplugin" />
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\taglib-sharp.dll" />
     </ItemGroup>
-    <CreatePluginPackage Name="FileSystemSource" PluginRuntimeFiles="@(PluginRuntimeFiles)">
+    <ItemGroup>
+      <PluginConfigurationFiles Include=".\bin\$(Configuration)\etc\noised.plugins.media.filesystemsource.nconfig" />
+    </ItemGroup>
+    <CreatePluginPackage Name="FileSystemSource" PluginRuntimeFiles="@(PluginRuntimeFiles)" PluginConfigurationFiles="@(PluginConfigurationFiles)">
     </CreatePluginPackage>
     <Copy SourceFiles="$(TargetDir)\..\FileSystemSource.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\FileSystemSource.npluginz" />
   </Target>
@@ -72,5 +88,9 @@
     <None Include="plugin.nplugininfo">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="etc\noised.plugins.media.filesystemsource.nconfig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

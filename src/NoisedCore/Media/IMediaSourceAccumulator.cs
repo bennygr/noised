@@ -9,6 +9,11 @@ namespace Noised.Core.Media
 	public interface IMediaSourceAccumulator
 	{
 		/// <summary>
+		///		Refreshs all known MediaSources
+		/// </summary>
+		void Refresh();
+
+		/// <summary>
 		///		Retrieves the first MediaItem found by a unique uri
 		/// </summary>
 		MediaItem GetItem(Uri uri);

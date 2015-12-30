@@ -1,14 +1,62 @@
 
 namespace Noised.Core.DB.Sqlite
 {
-	static class MetaDataSql
-	{
-		internal static string CREATE_TABLE_STMT = @"CREATE TABLE IF NOT EXISTS [MetaData] (
+    static class MetaDataSql
+    {
+        internal static string CREATE_TABLE_STMT = @"CREATE TABLE IF NOT EXISTS [MetaData] (
 													[ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 													[MediaItemId] INTEGER NOT NULL,
-													[Name] NVARCHAR(500) NOT NULL,
-													[Value] VARCHAR(2048)  NULL)";
-		internal static string INSERT_STMT = @"INSERT INTO MetaData (MediaItemId,Name,Value) 
-											   VALUES(@MediaItemId,@Name,@Value)";
-	};
+													[Title] NVARCHAR(1000),
+													[Album] NVARCHAR(1000),
+													[Comment] Comment(10000),
+													[Year] INTEGER,
+													[TrackNumber] INTEGER,
+													[TrackCount] INTEGER,
+													[Disc] INTEGER,
+													[DiscCount] INTEGER,
+													[Grouping] NVARCHAR(1000),
+													[Lyrics] NVARCHAR(10000),
+													[BeatsPerMinute] INTEGER,
+													[Conductor] NVARCHAR(1000),
+													[Copyright] NVARCHAR(1000)
+													)";
+        internal static string INSERT_STMT = @"INSERT INTO MetaData (MediaItemId,
+											   Title,Album,Comment,Year,TrackNumber,TrackCount,
+											   Disc,DiscCount,Grouping,Lyrics,BeatsPerMinute,Conductor,Copyright)
+											   VALUES(@MediaItemId,
+													 @Title,@Album, @Comment, @Year, @TrackNumber, @TrackCount,
+													 @Disc,@DiscCount,@Grouping,@Lyrics,@BeatsPerMinute,@Conductor,@Copyright);";
+
+        internal static string CREATE_ARTISTS_TABLE_STMT = @"CREATE TABLE IF NOT EXISTS [MetaDataArtists] (
+													[ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+													[MediaItemId] INTEGER NOT NULL,
+													[Artist] NVARCHAR(1000)
+													)";
+        internal static string INSERT_ARTISTS_STMT = @"INSERT INTO MetaDataArtists (MediaItemId, Artist)
+													VALUES(@MediaItemId, @Artist);";
+
+        internal static string CREATE_ALBUM_ARTISTS_TABLE_STMT = @"CREATE TABLE IF NOT EXISTS [MetaDataAlbumArtists] (
+													[ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+													[MediaItemId] INTEGER NOT NULL,
+													[AlbumArtist] NVARCHAR(1000)
+													)";
+        internal static string INSERT_ALBUM_ARTISTS_STMT = @"INSERT INTO MetaDataAlbumArtists (MediaItemId, AlbumArtist)
+													VALUES(@MediaItemId, @AlbumArtist);";
+
+        internal static string CREATE_COMPOSER_TABLE_STMT = @"CREATE TABLE IF NOT EXISTS [MetaDataComposer] (
+													[ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+													[MediaItemId] INTEGER NOT NULL,
+													[Composer] NVARCHAR(1000)
+													)";
+        internal static string INSERT_COMPOSER_STMT = @"INSERT INTO MetaDataComposer (MediaItemId, Composer)
+													VALUES(@MediaItemId, @Composer);";
+
+        internal static string CREATE_GENRE_TABLE_STMT = @"CREATE TABLE IF NOT EXISTS [MetaDataGenre] (
+													[ID] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+													[MediaItemId] INTEGER NOT NULL,
+													[Genre] NVARCHAR(1000)
+													)";
+        internal static string INSERT_GENRE_STMT = @"INSERT INTO MetaDataGenre (MediaItemId, Genre)
+													VALUES(@MediaItemId, @Genre);";
+    };
 }

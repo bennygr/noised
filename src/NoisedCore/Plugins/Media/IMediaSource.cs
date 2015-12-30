@@ -10,6 +10,11 @@ namespace Noised.Core.Plugins.Media
 	public interface IMediaSource : IPlugin
 	{
 		/// <summary>
+		///		Initializes and/or refreshs the media source
+		/// </summary>
+		void Refresh();
+
+		/// <summary>
 		///		Retrieves a media item by an Uri
 		/// </summary>
 		MediaItem GetItem(Uri uri); 

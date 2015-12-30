@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -121,6 +120,9 @@
     <Compile Include="DB\Sqlite\PluginFilesSql.cs" />
     <Compile Include="Plugins\PluginMetaData.cs" />
     <Compile Include="DB\Sqlite\PluginsSql.cs" />
+    <Compile Include="Crypto\IChecksum.cs" />
+    <Compile Include="Crypto\MD5Checksum.cs" />
+    <Compile Include="Crypto\Md5MediaItemChecksum.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\Commands\CommandTemplate.txt" />
@@ -148,5 +150,6 @@
   <ItemGroup>
     <Folder Include="etc\" />
     <Folder Include="DB\Sqlite\" />
+    <Folder Include="Crypto\" />
   </ItemGroup>
 </Project>
