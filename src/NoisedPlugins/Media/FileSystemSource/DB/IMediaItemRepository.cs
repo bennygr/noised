@@ -1,7 +1,7 @@
 using System;
 using Noised.Core.Media;
 
-namespace Noised.Core.DB
+namespace Noised.Plugins.FileSystemSource.DB
 {
     /// <summary>
     ///		Repository for accessing MediaItems
@@ -13,6 +13,12 @@ namespace Noised.Core.DB
         /// </summary>
         /// <param name="item">The MediaItem to create</param>
         void Create(MediaItem item);
+
+		/// <summary>
+		///		Deletes a MediaItem
+		/// </summary>
+		/// <param name="item">The MediaItem to delete</param>
+		void Delete(MediaItem item);
 
         /// <summary>
         ///		Gets a MediaItem by the item's URL

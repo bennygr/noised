@@ -1,14 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using Mono.Data.Sqlite;
-using Noised.Core.DB;
+using Noised.Core.DB.Sqlite;
 using Noised.Core.Media;
 
-namespace Noised.Core.DB.Sqlite
+namespace Noised.Plugins.FileSystemSource.DB
 {
     class SqliteMediaItemRepository : IMediaItemRepository
     {
-        private SqliteConnection connection;
+        private readonly SqliteConnection connection;
 
         /// <summary>
         ///		Constructor
@@ -17,6 +18,37 @@ namespace Noised.Core.DB.Sqlite
         internal SqliteMediaItemRepository(SqliteConnection connection)
         {
             this.connection = connection; 
+        }
+
+        private void deleteData(string statement, MediaItem mediaItem)
+        {
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = statement;
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqliteParameter("@MediaItemId", mediaItem.Id));
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private List<string> readStringList(string statement, string columnName, MediaItem mediaItem)
+        {
+            var ret = new List<string>();
+            //List of ALbum-Artists
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = statement;
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqliteParameter("@MediaItemId", mediaItem.Id));
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ret.Add((string)reader[columnName]);
+                    }
+                }
+            }
+            return ret;
         }
 
         #region IMediaItemRepository implementation
@@ -74,7 +106,7 @@ namespace Noised.Core.DB.Sqlite
                     }
                 }
 
-				//Album artists
+                //Album artists
                 foreach (var albumArtist in metaData.AlbumArtists)
                 {
                     using (var cmd = connection.CreateCommand())
@@ -87,7 +119,7 @@ namespace Noised.Core.DB.Sqlite
                     }
                 }
 
-				//Composers
+                //Composers
                 foreach (var composer in metaData.Composers)
                 {
                     using (var cmd = connection.CreateCommand())
@@ -100,7 +132,7 @@ namespace Noised.Core.DB.Sqlite
                     }
                 }
 
-				//Genres
+                //Genres
                 foreach (var genre in metaData.Genres)
                 {
                     using (var cmd = connection.CreateCommand())
@@ -114,9 +146,21 @@ namespace Noised.Core.DB.Sqlite
                 }
             }
         }
+		
+        public void Delete(MediaItem item)
+        {
+            deleteData(MetaDataSql.DELETE_STMT, item);
+            deleteData(MetaDataSql.DELETE_GENRE_STMT, item);
+            deleteData(MetaDataSql.DELETE_ARTISTS_STMT, item);
+            deleteData(MetaDataSql.DELETE_COMPOSER_STMT, item);
+            deleteData(MetaDataSql.DELETE_ALBUM_ARTISTS_STMT, item);
+            deleteData(MediaItemsSql.DELETE_STMT,item);
+        }
 
         public MediaItem GetByUri(Uri uri)
         {
+            MediaItem mediaItem = null;
+            //MediaItem
             using (var cmd = connection.CreateCommand())
             {
                 cmd.CommandText = MediaItemsSql.GET_BY_URI_STMT;
@@ -127,15 +171,60 @@ namespace Noised.Core.DB.Sqlite
                     {
                         reader.Read();
                         var id = (Int64)reader["ID"];
-                        var testUri = (string)reader["URI"];
-                        Console.WriteLine(" III-> " + id);
-                        Console.WriteLine(" III-> " + testUri);
-                        //TODO create item and return IT!
+                        var checksum = (string)reader["CHECKSUM"];
+                        var itemUri = (string)reader["URI"];
+                        mediaItem = new MediaItem(new Uri(itemUri), checksum);
+                        mediaItem.Id = id;
                     }
                 }
             }
 
-            return null;
+            if (mediaItem != null)
+            {
+                var metaData = mediaItem.MetaData;
+
+                //Basic meta data
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = MetaDataSql.SELECT_STMT;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.Add(new SqliteParameter("@MediaItemId", mediaItem.Id));
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            metaData.Album = reader["Album"] == DBNull.Value ? null : (string)reader["Album"]; 
+                            metaData.BeatsPerMinute = 
+								reader["BeatsPerMinute"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["BeatsPerMinute"]);
+                            metaData.Comment = reader["Comment"] == DBNull.Value ? null : (string)reader["Comment"];
+                            metaData.Conductor = reader["Conductor"] == DBNull.Value ? null : (string)reader["Conductor"];
+                            metaData.Copyright = reader["Copyright"] == DBNull.Value ? null : (string)reader["Copyright"];
+                            metaData.Disc =
+								reader["Disc"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["Disc"]);
+                            metaData.DiscCount = 
+								reader["DiscCount"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["DiscCount"]);
+                            metaData.Grouping = reader["Grouping"] == DBNull.Value ? null : (string)reader["Grouping"];
+                            metaData.Lyrics = reader["Lyrics"] == DBNull.Value ? null : (string)reader["Lyrics"];
+                            metaData.Title = reader["Title"] == DBNull.Value ? null : (string)reader["Title"];
+                            metaData.TrackCount = 
+								reader["TrackCount"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["TrackCount"]);
+                            metaData.TrackNumber = 
+								reader["TrackNumber"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["TrackNumber"]);
+                            metaData.Year =
+								reader["Year"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["Year"]);
+                        }
+                    }
+                }
+
+                //Further meta data from other tables
+                metaData.AlbumArtists = readStringList(MetaDataSql.SELECT_ALBUM_ARTISTS_STMT, "AlbumArtist", mediaItem);
+                metaData.Artists = readStringList(MetaDataSql.SELECT_ARTISTS_STMT, "Artist", mediaItem);
+                metaData.Composers = readStringList(MetaDataSql.SELECT_COMPOSER_STMT, "Composer", mediaItem);
+                metaData.Genres = readStringList(MetaDataSql.SELECT_GENRE_STMT, "Genre", mediaItem);
+            }
+			
+            return mediaItem;
         }
 
         #endregion

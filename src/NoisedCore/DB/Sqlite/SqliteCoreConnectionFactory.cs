@@ -1,14 +1,17 @@
-using System.Data.Common;
 using Mono.Data.Sqlite;
 
 namespace Noised.Core.DB.Sqlite
 {
-	static class SqliteConnectionFactory
+	class SqliteCoreConnectionFactory : ISqliteConnectionFactory
 	{
-		internal static SqliteConnection Create()
+		#region SqliteConnectionFactory
+		
+		public SqliteConnection Create()
 		{
 			var connectionString = "Data Source=" + SqliteFileSource.GetDBFileName();
 			return new SqliteConnection(connectionString);
 		}
+		
+		#endregion
 	};
 }

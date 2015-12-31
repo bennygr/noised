@@ -1,4 +1,4 @@
-namespace Noised.Core.DB.Sqlite
+namespace Noised.Plugins.FileSystemSource.DB
 {
 	static class MediaItemsSql
 	{
@@ -7,6 +7,7 @@ namespace Noised.Core.DB.Sqlite
 													 [CHECKSUM] CHAR(32) NOT NULL,
 													 [URI] NVARCHAR(500) NOT NULL UNIQUE)";
 		internal static string INSERT_STMT = @"INSERT INTO MediaItems (URI,CHECKSUM) VALUES(@URI,@CHECKSUM)";
-		internal static string GET_BY_URI_STMT = @"SELECT ID,URI FROM MediaItems WHERE URI=@URI";
+		internal static string DELETE_STMT = @"DELETE FROM MediaItems WHERE ID=@MediaItemId;";
+		internal static string GET_BY_URI_STMT = @"SELECT ID,CHECKSUM,URI FROM MediaItems WHERE URI=@URI";
 	};
 }

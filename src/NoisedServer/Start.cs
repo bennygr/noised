@@ -62,21 +62,21 @@ namespace Noised.Server
             {
                 try
                 {
-                    var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
-                    audioPlugin.SongFinished += 
-						(sender, mediaItem) => 
-						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
-                    var resultList = mediaSource.Search("test");
-                    MediaItem test = resultList.First();
-                    Console.WriteLine(test.Protocol);
-                    IocContainer.Get<IMediaManager>().Play(test);
+                    //var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
+                    //audioPlugin.SongFinished += 
+					//	(sender, mediaItem) => 
+					//	Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
+                    //var resultList = mediaSource.Search("test");
+                    //MediaItem test = resultList.First();
+                    //Console.WriteLine(test.Protocol);
+                    //IocContainer.Get<IMediaManager>().Play(test);
 
-                    Thread.Sleep(5000);
-                    IocContainer.Get<IMediaManager>().Pause();
-                    Thread.Sleep(3000);
-                    IocContainer.Get<IMediaManager>().Resume();
-                    Thread.Sleep(3000);
-                    IocContainer.Get<IMediaManager>().Stop();
+                    //Thread.Sleep(5000);
+                    //IocContainer.Get<IMediaManager>().Pause();
+                    //Thread.Sleep(3000);
+                    //IocContainer.Get<IMediaManager>().Resume();
+                    //Thread.Sleep(3000);
+                    //IocContainer.Get<IMediaManager>().Stop();
                 }
                 catch (Exception e)
                 {

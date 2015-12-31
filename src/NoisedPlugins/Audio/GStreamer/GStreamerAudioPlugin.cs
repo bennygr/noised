@@ -57,7 +57,8 @@ namespace Noised.Plugins.Audio.GStreamer
         {
             try
             {
-                //For some strange reason the this reference is NULL when get called from the
+				//FIXME
+                //For some strange reason the "this" reference is NULL when get called from the
                 //native code. Workaround saving this as static 
                 plugin.OnSongFinished(plugin.currentItem);
             }

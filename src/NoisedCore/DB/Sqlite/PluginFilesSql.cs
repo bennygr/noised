@@ -1,4 +1,3 @@
-
 namespace Noised.Core.DB.Sqlite
 {
 	static class PluginFilesSql

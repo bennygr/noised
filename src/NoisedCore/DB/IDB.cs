@@ -1,6 +1,3 @@
-using Noised.Core.DB;
-using Noised.Core.Plugins;
-
 namespace Noised.Core.DB
 {
 	/// <summary>

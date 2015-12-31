@@ -3,9 +3,9 @@ using Mono.Data.Sqlite;
 
 namespace Noised.Core.DB.Sqlite
 {
-	static class SqliteUtils
+	public static class SqliteUtils
 	{
-		internal static Int64 GetLastInsertRowId(SqliteConnection connection, String tableName)
+		public static Int64 GetLastInsertRowId(SqliteConnection connection, String tableName)
 		{
 			using(var cmd = connection.CreateCommand())
 			{

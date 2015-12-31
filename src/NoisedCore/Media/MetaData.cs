@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Noised.Core.Media;
 
 /// <summary>
@@ -16,17 +16,17 @@ public class MetaData
 	/// <summary>
 	///		A list of Artitsts (Track Artitsts) 
 	/// </summary>
-	public string[] Artists{get;set;}
+	public IList<string> Artists{get;set;}
 
 	/// <summary>
 	///		A list of Album Artists
 	/// </summary>
-	public string[] AlbumArtists{get;set;}
+	public IList<string> AlbumArtists{get;set;}
 
 	/// <summary>
 	///		A list of Composers (Songwriter, Autorship)
 	/// </summary>
-	public string[] Composers{get;set;}
+	public IList<string> Composers{get;set;}
 
 	/// <summary>
 	///		The Album 
@@ -41,7 +41,7 @@ public class MetaData
 	/// <summary>
 	///		A list of genres
 	/// </summary>
-	public string[] Genres{get;set;}
+	public IList<string> Genres{get;set;}
 
 	/// <summary>
 	///		Year of record
