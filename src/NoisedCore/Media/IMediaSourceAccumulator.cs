@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Noised.Core.Media
@@ -11,6 +12,12 @@ namespace Noised.Core.Media
 		///		Refreshs all known MediaSources
 		/// </summary>
 		void Refresh();
+
+		/// <summary>
+		///		Searches all known IMediaSources for the given URI
+		/// </summary>
+		/// <returns> The first found MediaItem for the given URI, or null if no such item was found </returns>
+		MediaItem Get(Uri uri);
 	
 		/// <summary>
 		///		Searches all known IMediaSource's for the given search pattern

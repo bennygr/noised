@@ -8,7 +8,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 {
     public class Play : AbstractCommand
     {
-        private readonly string uri;
+        private readonly Uri uri;
 
         /// <summary>
         ///		Constructor
@@ -18,15 +18,15 @@ namespace Noised.Plugins.Commands.CoreCommands
         public Play(ServiceConnectionContext context,String uri)
             : base(context)
         {
-            this.uri = uri;
+            this.uri = new Uri(uri);
         }
 
         #region AbstractCommand
 
         protected override void Execute()
         {
-            MediaItem mediaItem = null;
-			//TODO: where to get the item from?
+			var sources = IocContainer.Get<IMediaSourceAccumulator>();
+			var mediaItem = sources.Get(uri);
             if (mediaItem != null)
             {
                 var mediaManager = IocContainer.Get<IMediaManager>();

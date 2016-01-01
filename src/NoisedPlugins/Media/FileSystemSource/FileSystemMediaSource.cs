@@ -111,7 +111,6 @@ namespace Noised.Plugins.Media.FileSystemSource
         {
             if (directory.Exists)
             {
-
                 //Checking all files in the directory
                 foreach (var fileInfo in directory.GetFiles())
                 {
@@ -247,7 +246,11 @@ namespace Noised.Plugins.Media.FileSystemSource
 
         public MediaItem Get(Uri uri)
         {
-            return null;
+			this.core.Logging.Info(uri.ToString());
+            using (var unitOfWork = new SqliteFileSystemUnitOfWork())
+			{
+				return unitOfWork.MediaItemRepository.GetByUri(uri);
+			}
         }
 
         public IEnumerable<MediaSourceSearchResult> Search(string pattern)

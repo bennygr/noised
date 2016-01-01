@@ -38,6 +38,19 @@ namespace Noised.Core.Media
             }
         }
 
+		public MediaItem Get(Uri uri)
+		{
+            foreach (var source in pluginLoader.GetPlugins<IMediaSource>())
+            {
+				var ret =source.Get(uri);
+				if(ret != null)
+				{
+					return ret;
+				}
+			}
+			return null;
+		}
+
         public IEnumerable<MediaSourceSearchResult> Search(string pattern)
         {
             var ret = new List<MediaSourceSearchResult>();

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using Noised.Core;
 using Noised.Core.Config;
@@ -8,7 +7,6 @@ using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
-using Noised.Core.Plugins.Media;
 using Noised.Core.Service;
 using Noised.Logging;
 
@@ -29,9 +27,9 @@ namespace Noised.Server
             var config = IocContainer.Get<IConfig>();
             config.Load(IocContainer.Get<IConfigurationLoader>());
 
-			//Creating the DB or update if neccessary
-			var db = IocContainer.Get<IDB>();
-			db.CreateOrUpdate();
+            //Creating the DB or update if neccessary
+            var db = IocContainer.Get<IDB>();
+            db.CreateOrUpdate();
 			
             //installing new plugins
             var pluginInstaller = IocContainer.Get<IPluginInstaller>();
@@ -50,44 +48,33 @@ namespace Noised.Server
             var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
 
-			//Test:
-			//Checking sources for new Music
-			logger.Debug("Refreshing music...");
-			var sourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
-			sourceAccumulator.Refresh();
-			logger.Debug("Done refreshing music.");
+            //Test:
+            //Checking sources for new Music
+            logger.Debug("Refreshing music...");
+            var sourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
+            sourceAccumulator.Refresh();
+            logger.Debug("Done refreshing music.");
 			
-            var mediaSource = pluginLoader.GetPlugin<IMediaSource>();
-            if (mediaSource != null)
+            var sources = IocContainer.Get<IMediaSourceAccumulator>();
+            try
             {
-                try
+                var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
+                audioPlugin.SongFinished += 
+						(sender, mediaItem) => 
+						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
+				string testUri = @"file:///home/bgr/Musik/AFI/I Heard a Voice/AFI - 06 - The Days Of The Phoenix (Live Arena Long Beach CA).mp3";
+                var testItem = sources.Get(new Uri(testUri));
+                if (testItem == null)
+                    logger.Debug("NOT FOUND!!");
+                else
                 {
-                    //var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
-                    //audioPlugin.SongFinished += 
-					//	(sender, mediaItem) => 
-					//	Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
-                    //var resultList = mediaSource.Search("test");
-                    //MediaItem test = resultList.First();
-                    //Console.WriteLine(test.Protocol);
-                    //IocContainer.Get<IMediaManager>().Play(test);
-
-                    //Thread.Sleep(5000);
-                    //IocContainer.Get<IMediaManager>().Pause();
-                    //Thread.Sleep(3000);
-                    //IocContainer.Get<IMediaManager>().Resume();
-                    //Thread.Sleep(3000);
-                    //IocContainer.Get<IMediaManager>().Stop();
+                    logger.Debug(testItem.ToString());
+                    IocContainer.Get<IMediaManager>().Play(testItem);
                 }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                }
-
-
             }
-            else
+            catch (Exception e)
             {
-                logger.Error("No media source plugin found");
+                logger.Error(e.Message);
             }
             return 0;
         }
