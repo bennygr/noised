@@ -15,7 +15,7 @@ namespace Noised.Plugins.Media.FileSystemSource
     /// <summary>
     ///		Local filesystem media source 
     /// </summary>
-    public class FileSystemMediaSource : IPlugin, IMediaSource
+    public class FileSystemMediaSource : IMediaSource
     {
         private PluginInitializer core;
         public const string FILE_SYSTEM_MEDIA_SOURCE_NAME = "FILESYSTEM";
@@ -150,64 +150,6 @@ namespace Noised.Plugins.Media.FileSystemSource
         public void Dispose()
         {
         }
-
-        #endregion
-
-        #region IPlugin
-
-        public Guid Guid
-        {
-            get { return Guid.Parse("17abe4da-0480-4481-9aee-2baf362dfe50"); }
-        }
-
-        public String Name
-        {
-            get
-            {
-                return "FileSystemSourcePlugin";
-            }
-        }
-
-        public String Description
-        {
-            get
-            {
-                return "A media source from a local filesystem.";
-            }
-        }
-
-        public String AuthorName
-        {
-            get
-            {
-                return "Benjamin Grüdelbach";
-            }
-        }
-
-        public String AuthorContact
-        {
-            get
-            {
-                return "nocontact@availlable.de";
-            }
-        }
-
-        public Version Version
-        {
-            get
-            {
-                return new Version(1, 0);
-            }
-        }
-
-        public DateTime CreationDate
-        {
-            get
-            {
-                return DateTime.Parse("21.03.2015");
-            }
-        }
-
 
         #endregion
 

@@ -125,64 +125,6 @@ namespace Noised.Plugins.Audio.GStreamer
 
         #endregion
 
-        #region IPlugin
-
-		public Guid Guid 
-		{
-			get { return Guid.Parse("bd7dacca-f0da-4dd9-a8ec-c703425cf751"); }
-		}
-
-        public String Name
-        {
-            get
-            {
-                return "GStreamerAudioPlugin";
-            }
-        }
-
-        public String Description
-        {
-            get
-            {
-                return "The plugin allows sound output through the " +
-                       "gstreamer library using gstreamer's high level playbin.";
-            }
-        }
-
-        public String AuthorName
-        {
-            get
-            {
-                return "Benjamin Grüdelbach";
-            }
-        }
-
-        public String AuthorContact
-        {
-            get
-            {
-                return "nocontact@availlable.de";
-            }
-        }
-
-        public Version Version
-        {
-            get
-            {
-                return new Version(1, 0);
-            }
-        }
-
-        public DateTime CreationDate
-        {
-            get
-            {
-                return DateTime.Parse("01.03.2015");
-            }
-        }
-
-        #endregion
-
         #region IAudioPlugin
 
         public event AudioEventHandler SongFinished;

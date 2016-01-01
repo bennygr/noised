@@ -1,5 +1,8 @@
 {
 	"GUID": "bd7dacca-f0da-4dd9-a8ec-c703425cf751",
 	"Version": "1.0.0",
-	"Name": "Gstreamer Audio Plugin"
+	"Name": "GStreamer",
+	"Description": "GStreamer audio plugin",
+	"Author": "noised core team",
+	"CreationDate": "01.01.2016"
 }

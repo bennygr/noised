@@ -56,7 +56,7 @@ namespace Noised.Core.Plugins
         {
             using (IUnitOfWork unitOfWork = IocContainer.Get<IUnitOfWork>())
             {
-                var existingPlugin = unitOfWork.PluginRepository.GetByGuid(pluginMetaData.Guid);
+                var existingPlugin = unitOfWork.PluginRepository.GetByGuid(pluginMetaData.GetGuid());
                 return (existingPlugin != null && existingPlugin.GetVersion() >= pluginMetaData.GetVersion());
             }
         }
@@ -71,8 +71,16 @@ namespace Noised.Core.Plugins
             //Extract all nplugins file to the tmp directory and process them from there
             foreach (var file in files)
             {
-                IocContainer.Get<ILogging>().Debug(String.Format("Found new plugin {0}...", file));
-                Install(file);
+				try
+				{
+					IocContainer.Get<ILogging>().Debug(String.Format("Found new plugin {0}...", file));
+					Install(file);
+				}
+				catch(Exception e)
+				{
+					IocContainer.Get<ILogging>().Error(String.Format("Error while loading plugin {0}: {1}",file,e.Message));
+					IocContainer.Get<ILogging>().Debug(e.StackTrace);
+				}
             }
         }
 
@@ -111,7 +119,7 @@ namespace Noised.Core.Plugins
                 using (IUnitOfWork unitOfWork = IocContainer.Get<IUnitOfWork>())
                 {
                     //Uninstall old files first (if existing)
-                    if (unitOfWork.PluginRepository.GetByGuid(pluginRegistrationData.Guid) != null)
+                    if (unitOfWork.PluginRepository.GetByGuid(pluginRegistrationData.GetGuid()) != null)
                     {
                         logger.Debug(String.Format("Updating plugin {0}...", npluginzFilePath));
                         logger.Debug(String.Format("Uninstalling old version of plugin {0}...", npluginzFilePath));

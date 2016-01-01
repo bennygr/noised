@@ -1,5 +1,8 @@
 {
 	"GUID": "96db1e4c-1d10-47b1-a23b-d30d841473a5",
 	"Version": "1.0.0",
-	"Name": "TCP Service Plugin"
+	"Name": "TCP/IP",
+	"Description": "Provides Noised functionality over TCP/IP",
+	"Author": "noised core team",
+	"CreationDate": "01.01.2016"
 }

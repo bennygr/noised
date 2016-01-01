@@ -36,6 +36,7 @@ namespace Noised.Server
             pluginInstaller.InstallAll("./plugins");
 
             //loading plugins
+			logger.Info("Loading plugins:");
             var pluginLoader = IocContainer.Get<IPluginLoader>();
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");

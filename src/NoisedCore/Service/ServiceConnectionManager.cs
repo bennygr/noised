@@ -81,15 +81,15 @@ namespace Noised.Core.Service
 			{
 				try
 				{
-					logging.Debug("Starting service " + service.Name + "...");
+					logging.Debug("Starting service " + service.GetMetaData().Name + "...");
 					service.Start();
 					service.ClientConnected += ClientConnected;
 					service.ClientDisconnected += ClientDisconnected;
-					logging.Debug("Service " + service.Name + " started");
+					logging.Debug("Service " + service.GetMetaData().Name + " started");
 				}
 				catch(Exception e )
 				{
-					logging.Error("Error starting service " + service.Name + ": " + e.Message);
+					logging.Error("Error starting service " + service.GetMetaData().Name + ": " + e.Message);
 				}
 			}
 		}

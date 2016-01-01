@@ -27,6 +27,12 @@ namespace Noised.Core.DB
 		PluginMetaData GetByGuid(Guid guid);
 
 		/// <summary>
+		///		Gets the registration data for a plugin
+		/// </summary>
+		/// <param name="file">A file of the plugin to get the data for </param>
+		PluginMetaData GetForFile(FileInfo file);
+
+		/// <summary>
 		///		Gets a list of files registered for the plugin
 		/// </summary>
 		List<FileInfo> GetRegisteredFilesForPlugin(Guid guid);
