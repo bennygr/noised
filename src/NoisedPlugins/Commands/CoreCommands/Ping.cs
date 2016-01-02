@@ -28,8 +28,8 @@ namespace Noised.Plugins.Commands.CoreCommands
         {
             var response =
                 new ResponseMetaData
-				{
-					Name = "Noised.Commands.Core.Pong",
+                {
+                    Name = "Noised.Commands.Core.Pong",
                 };
             Console.WriteLine("PING!!!!");
             Context.SendResponse(response);

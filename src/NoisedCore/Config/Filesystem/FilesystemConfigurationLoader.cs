@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Noised.Logging;
-using Noised.Core.Config;
 
 namespace Noised.Core.Config.Filesystem
 {
-	/// <summary>
-	///		Loads configuration data from a given directory from the filesystem
-	/// </summary>
+    /// <summary>
+    ///		Loads configuration data from a given directory from the filesystem
+    /// </summary>
     public class FilesystemConfigurationLoader : IConfigurationLoader
     {
         private string configPath;
@@ -21,18 +20,18 @@ namespace Noised.Core.Config.Filesystem
         public FilesystemConfigurationLoader(ILogging logging)
         {
             this.logging = logging;
-            this.configPath = 
-				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
-				Path.DirectorySeparatorChar +
-            	"etc";
+            this.configPath =
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
+                Path.DirectorySeparatorChar +
+                "etc";
         }
 
-		/// <summary>
-		///		Internal method to load the configuration files 
-		/// </summary>
+        /// <summary>
+        ///		Internal method to load the configuration files 
+        /// </summary>
         private IEnumerable<ConfigurationData> LoadAllSources()
         {
-			var ret = new List<ConfigurationData>();
+            var ret = new List<ConfigurationData>();
             logging.Debug(String.Format("Loading *.nconfig files from directory {0}", configPath));
             if (Directory.Exists(configPath))
             {
@@ -42,29 +41,28 @@ namespace Noised.Core.Config.Filesystem
                 {
                     foreach (var configFile in configFiles)
                     {
-						ret.Add(new ConfigurationData
-								{
-									Name = configFile,
-									Data = System.IO.File.ReadAllText(configFile)
-								});
+                        ret.Add(new ConfigurationData
+                                {
+                                    Name = configFile,
+                                    Data = System.IO.File.ReadAllText(configFile)
+                                });
                     }
                 }
-				else
-				{
-					logging.Warning(String.Format(
-					        "Could not find any *.config in directory {0}.",
-					        configPath));
-				}
+                else
+                {
+                    logging.Warning(String.Format(
+                            "Could not find any *.config in directory {0}.",
+                            configPath));
+                }
             }
-			else
-			{
-				logging.Error(String.Format(
-				        "Could not load *.config files from directory {0}. Directory does not exist.",
-				        configPath));
-			}
+            else
+            {
+                logging.Error(String.Format(
+                        "Could not load *.config files from directory {0}. Directory does not exist.",
+                        configPath));
+            }
             return ret;
         }
-
 
         #region IConfigSource implementation
 

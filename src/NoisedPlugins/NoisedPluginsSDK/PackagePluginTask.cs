@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
-using Noised.Plugins.SDK;
-
 
 namespace Noised.Plugins.SDK
 {
@@ -14,32 +11,33 @@ namespace Noised.Plugins.SDK
     public class CreatePluginPackage : Task
     {
         [Required]
-        public  string Name{ get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         ///		The files which should be added to the noised plugin package
         /// </summary>
-        public ITaskItem[] PluginRuntimeFiles{ get; set; }
-		
+        public ITaskItem[] PluginRuntimeFiles { get; set; }
+
         /// <summary>
         ///		The configuration files which should be added to the noised plugin package
         /// </summary>
-        public ITaskItem[] PluginConfigurationFiles{ get; set; }
+        public ITaskItem[] PluginConfigurationFiles { get; set; }
 
         #region implemented abstract members of Task
 
         public override bool Execute()
         {
-			string metaDataFilePath = "plugin.nplugininfo";
-			NoisedFile metaDataFile = new NoisedFile {
-				FileSource = metaDataFilePath,
-			};
+            string metaDataFilePath = "plugin.nplugininfo";
+            NoisedFile metaDataFile = new NoisedFile
+            {
+                FileSource = metaDataFilePath,
+            };
 
             string packageFile = "bin" + Path.DirectorySeparatorChar + Name + ".npluginz";
             var files = new List<NoisedFile>();
             if (PluginRuntimeFiles != null)
             {
-                foreach (var file  in PluginRuntimeFiles)
+                foreach (var file in PluginRuntimeFiles)
                 {
                     var subdir = file.GetMetadata("Subdir");
                     files.Add(new NoisedFile
@@ -63,7 +61,7 @@ namespace Noised.Plugins.SDK
                 }
             }
 
-			new PluginPackager().CreatePlugin(packageFile,metaDataFile, files, configs);
+            new PluginPackager().CreatePlugin(packageFile, metaDataFile, files, configs);
             return true;
         }
 

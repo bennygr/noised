@@ -15,7 +15,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         /// </summary>
         /// <param name="context">Connection context</param>
         /// <param name="uri">Uri of the media item to play</param>
-        public Play(ServiceConnectionContext context,String uri)
+        public Play(ServiceConnectionContext context, String uri)
             : base(context)
         {
             this.uri = uri;

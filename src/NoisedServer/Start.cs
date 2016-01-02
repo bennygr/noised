@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading;
 using Noised.Core;
 using Noised.Core.Config;
 using Noised.Core.DB;
@@ -42,7 +41,6 @@ namespace Noised.Server
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
 
-
             //Add a factory and create a ping command
             var core = IocContainer.Get<ICore>();
             core.Start();
@@ -50,7 +48,6 @@ namespace Noised.Server
             //Starting services
             var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
-
 
             var mediaSource = pluginLoader.GetPlugin<IMediaSource>();
             if (mediaSource != null)
@@ -64,14 +61,14 @@ namespace Noised.Server
                     var resultList = mediaSource.Search("test");
                     MediaItem test = resultList.First();
                     Console.WriteLine(test.Protocol);
-                    IocContainer.Get<IMediaManager>().Play(test);
 
-                    Thread.Sleep(5000);
-                    IocContainer.Get<IMediaManager>().Pause();
-                    Thread.Sleep(3000);
-                    IocContainer.Get<IMediaManager>().Resume();
-                    Thread.Sleep(3000);
-                    IocContainer.Get<IMediaManager>().Stop();
+                    //IocContainer.Get<IMediaManager>().Play(test);
+                    //Thread.Sleep(5000);
+                    //IocContainer.Get<IMediaManager>().Pause();
+                    //Thread.Sleep(3000);
+                    //IocContainer.Get<IMediaManager>().Resume();
+                    //Thread.Sleep(3000);
+                    //IocContainer.Get<IMediaManager>().Stop();
                 }
                 catch (Exception e)
                 {

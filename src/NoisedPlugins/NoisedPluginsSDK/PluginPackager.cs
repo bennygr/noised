@@ -52,29 +52,29 @@ public class PluginPackager
     /// <param name="outputFile">
     ///		The full path and file name where to save the created plugin package
     /// </param>
-	/// <param name="pluginMetaDataFile">The file contains meta data about the plugin</param>
+    /// <param name="pluginMetaDataFile">The file contains meta data about the plugin</param>
     /// <param name="pluginFiles">The plugin files to add to the plugin package</param>
     /// <param name="configurationFiles">The configuration files to add to the plugin package</param>
-    public void CreatePlugin(string outputFile, 
-		NoisedFile pluginMetaDataFile,
-        IEnumerable<NoisedFile> pluginFiles, 
+    public void CreatePlugin(string outputFile,
+        NoisedFile pluginMetaDataFile,
+        IEnumerable<NoisedFile> pluginFiles,
         IEnumerable<NoisedFile> configurationFiles)
     {
         string tmpPath = CreateTmpDirectory();
         string contentPath = tmpPath + "plugins" + Path.DirectorySeparatorChar;
         string configPath = tmpPath + "etc" + Path.DirectorySeparatorChar;
-		//Copy meta dat file
-		FileInfo metaDataFile = new FileInfo(pluginMetaDataFile.FileSource);
-		File.Copy (metaDataFile.FullName, tmpPath + metaDataFile.Name);
+        //Copy meta dat file
+        FileInfo metaDataFile = new FileInfo(pluginMetaDataFile.FileSource);
+        File.Copy(metaDataFile.FullName, tmpPath + metaDataFile.Name);
 
 
         //Copy plugin files
         foreach (var runtimeFile in pluginFiles)
         {
             var fileInfo = new FileInfo(runtimeFile.FileSource);
-			string fullDirectory = contentPath + 
-								   runtimeFile.DestinationSubDirectory + 
-								   Path.DirectorySeparatorChar;
+            string fullDirectory = contentPath +
+                                   runtimeFile.DestinationSubDirectory +
+                                   Path.DirectorySeparatorChar;
             //Create the subdirectory if it was specified and does not exist
             if (!string.IsNullOrEmpty(fullDirectory) &&
                 !Directory.Exists(fullDirectory))
@@ -88,14 +88,14 @@ public class PluginPackager
             }
             File.Copy(fileInfo.FullName, fileDest);
         }
-		
+
         //Copy config files
         foreach (var configFile in configurationFiles)
         {
             var fileInfo = new FileInfo(configFile.FileSource);
-			string fullDirectory = configPath + 
-								   configFile.DestinationSubDirectory + 
-								   Path.DirectorySeparatorChar;
+            string fullDirectory = configPath +
+                                   configFile.DestinationSubDirectory +
+                                   Path.DirectorySeparatorChar;
             //Create the subdirectory if it was specified and does not exist
             if (!string.IsNullOrEmpty(fullDirectory) &&
                 !Directory.Exists(fullDirectory))

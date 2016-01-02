@@ -8,7 +8,7 @@ namespace Noised.Core.Config
         /// <summary>
         ///		Loads configuration properties
         /// </summary>
-		/// <param name="loader">The loader to read the configuration from</param>
+        /// <param name="loader">The loader to read the configuration from</param>
         void Load(IConfigurationLoader loader);
 
         /// <summary>
@@ -18,10 +18,10 @@ namespace Noised.Core.Config
         /// <param name="defaultValue">The default value to return if the property with the given name does not exist</param>
         string GetProperty(string property, string defaultValue = null);
 
-		/// <summary>
-		///		Count of known properties
-		/// </summary>
-		/// <returns>The amount of known configuration properties</returns>
-		int Count{get;}
+        /// <summary>
+        ///		Count of known properties
+        /// </summary>
+        /// <returns>The amount of known configuration properties</returns>
+        int Count { get; }
     };
 }
