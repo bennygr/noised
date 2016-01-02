@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Noised.Core.Media;
 namespace Noised.Core.Media
 {
@@ -14,17 +15,17 @@ namespace Noised.Core.Media
 		/// <summary>
 		///		The MediaItem 
 		/// </summary>
-		public MediaItem MediaItem{get; private set;}
-	
+		public IList<MediaItem> MediaItems{get; private set;}
+
 		/// <summary>
 		///		Constructor
 		/// </summary>
 		/// <param name="mediaSourceName">The name of the media source</param>
-		/// <param name="mediaItem">The MediaItem</param>
-		public MediaSourceSearchResult (string mediaSourceName, MediaItem mediaItem)
+		/// <param name="mediaItems">The MediaItems</param>
+		public MediaSourceSearchResult (string mediaSourceName, IList<MediaItem> mediaItems)
 		{
 			MediaSourceName = mediaSourceName;
-			MediaItem = mediaItem;
+			MediaItems = mediaItems;
 		}
 	};
 }

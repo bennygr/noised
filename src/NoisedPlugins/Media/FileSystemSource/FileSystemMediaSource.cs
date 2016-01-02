@@ -195,15 +195,16 @@ namespace Noised.Plugins.Media.FileSystemSource
 			}
         }
 
-        public IEnumerable<MediaSourceSearchResult> Search(string pattern)
+        public MediaSourceSearchResult Search(string pattern)
         {
-            //Just a test for now...
-            return new List<MediaSourceSearchResult>
-            {
-                new MediaSourceSearchResult(FILE_SYSTEM_MEDIA_SOURCE_NAME,
-                    new MediaItem(new Uri(@"file:C:\Users\sbingel.DATASEC2003\Downloads\irrKlang-32bit-1.5.0\irrKlang-1.5.0\media\ophelia.mp3"), null))
+			var ret = new List<MediaItem>();
+			using(var unitOfWork = new SqliteFileSystemUnitOfWork())
+			{
+				//Search for title
+				unitOfWork.MediaItemRepository.FindByTitle(pattern,ret);
+			}
 
-            };
+			return new MediaSourceSearchResult(FILE_SYSTEM_MEDIA_SOURCE_NAME,ret);
         }
 
         #endregion

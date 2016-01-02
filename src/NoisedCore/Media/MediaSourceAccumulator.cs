@@ -56,7 +56,7 @@ namespace Noised.Core.Media
             var ret = new List<MediaSourceSearchResult>();
             foreach (var source in pluginLoader.GetPlugins<IMediaSource>())
             {
-                ret.AddRange(source.Search(pattern));
+                ret.Add(source.Search(pattern));
             }
             return ret;
         }

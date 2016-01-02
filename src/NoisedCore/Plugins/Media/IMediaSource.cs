@@ -30,8 +30,8 @@ namespace Noised.Core.Plugins.Media
 		///		Retrieves media items by a search pattern
 		/// </summary>
 		/// <returns>
-		///		An enumeration of media items matching the given pattern
+		///		The resultset
 		/// </returns>
-		IEnumerable<MediaSourceSearchResult> Search(string pattern);
+		MediaSourceSearchResult Search(string pattern);
 	};
 }

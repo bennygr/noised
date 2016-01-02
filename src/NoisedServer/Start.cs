@@ -63,15 +63,17 @@ namespace Noised.Server
                 audioPlugin.SongFinished += 
 						(sender, mediaItem) => 
 						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
-				string testUri = @"file:///home/bgr/Musik/AFI/I Heard a Voice/AFI - 06 - The Days Of The Phoenix (Live Arena Long Beach CA).mp3";
-                var testItem = sources.Get(new Uri(testUri));
-                if (testItem == null)
-                    logger.Debug("NOT FOUND!!");
-                else
-                {
-                    logger.Debug(testItem.ToString());
-                    IocContainer.Get<IMediaManager>().Play(testItem);
-                }
+
+
+				var searchResults = sources.Search("Addiction");
+				foreach (var result in searchResults)
+				{
+					foreach(var match in result.MediaItems)
+					{
+						IocContainer.Get<IMediaManager>().Play(match);
+						Thread.Sleep(1000);
+					}
+				}
             }
             catch (Exception e)
             {
