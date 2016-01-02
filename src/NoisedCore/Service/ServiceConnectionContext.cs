@@ -89,7 +89,8 @@ namespace Noised.Core.Service
 							//Checking authentication if required for the command
 							if(IsAuthenticated || !command.RequiresAuthentication)
 							{
-								core.AddCommand(command);
+								//Synchronous command execution
+								core.ExecuteCommand(command);
 							}
 							else
 							{

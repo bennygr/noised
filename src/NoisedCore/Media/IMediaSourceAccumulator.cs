@@ -9,16 +9,23 @@ namespace Noised.Core.Media
 	public interface IMediaSourceAccumulator
 	{
 		/// <summary>
-		///		Retrieves the first MediaItem found by a unique uri
+		///		Refreshs all known MediaSources
 		/// </summary>
-		MediaItem GetItem(Uri uri);
+		void Refresh();
+
+		/// <summary>
+		///		Searches all known IMediaSources for the given URI
+		/// </summary>
+		/// <returns> The first found MediaItem for the given URI, or null if no such item was found </returns>
+		MediaItem Get(Uri uri);
 	
 		/// <summary>
 		///		Searches all known IMediaSource's for the given search pattern
 		/// </summary>
+		/// <param name="pattern">The search pattern</param>
 		/// <returns>
-		///		An enumeration of media items matching the given pattern
+		///		An enumeration of search results matching the given pattern
 		/// </returns>
-		IEnumerable<MediaItem> Search(string search);
+		IEnumerable<MediaSourceSearchResult> Search(string pattern);
 	};
 }

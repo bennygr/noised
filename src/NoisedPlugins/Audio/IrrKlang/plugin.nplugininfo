@@ -1,5 +1,9 @@
 {
 	"GUID": "3bfa8f10-08f5-49ea-b94a-f859e4bc4141",
 	"Version": "1.0.0",
-	"Name": "IrrKlang Audio Plugin"
+	"Name": "IrrKlang",
+	"Description": "Audio Plugin using irrKlang.NET4 Library for audio playback",
+	"Author": "sebingel",
+	"AuthorEmail": "sebingel+noisedcontact@googlemail.com",
+	"CreationDate": "01.10.2015"
 }

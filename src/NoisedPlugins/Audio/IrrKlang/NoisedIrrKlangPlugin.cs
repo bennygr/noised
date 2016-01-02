@@ -34,7 +34,7 @@ namespace Noised.Plugins.Audio.IrrKlang
 
             log.Debug("Extract IrrKlang Librabries");
             string exeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", string.Empty);
-            ExtractEmbeddedResource(exeDir, "Noised.Plugins.Audio.IrrKlang.Resources",
+            ExtractEmbeddedResource(exeDir, "IrrKlang.Resources",
                 new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
 
             log.Debug("Create IrrKlang SoundEngine");
@@ -48,81 +48,6 @@ namespace Noised.Plugins.Audio.IrrKlang
         /// </summary>
         public void Dispose()
         { }
-
-        #endregion
-
-        #region Implementation of IPlugin
-
-        public Guid Guid
-        {
-            get { return Guid.Parse("3bfa8f10-08f5-49ea-b94a-f859e4bc4141\n"); }
-        }
-
-        /// <summary>
-        ///		The name of the plugin
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return "IrrKlang Audio Plugin";
-            }
-        }
-
-        /// <summary>
-        ///		The description of the plugin
-        /// </summary>
-        public string Description
-        {
-            get
-            {
-                return "Audio Plugin using irrKlang.NET4 Library for audio playback";
-            }
-        }
-
-        /// <summary>
-        ///		The name of the author
-        /// </summary>
-        public string AuthorName
-        {
-            get
-            {
-                return "sebingel";
-            }
-        }
-
-        /// <summary>
-        ///		The contact of the author
-        /// </summary>
-        public string AuthorContact
-        {
-            get
-            {
-                return "sebingel+noisedcontact@googlemail.com";
-            }
-        }
-
-        /// <summary>
-        ///		The version of the plugin
-        /// </summary>
-        public Version Version
-        {
-            get
-            {
-                return new Version(1, 0, 0, 0);
-            }
-        }
-
-        /// <summary>
-        ///		The creation date of the plugin		
-        /// </summary>
-        public DateTime CreationDate
-        {
-            get
-            {
-                return new DateTime(2015, 10, 18);
-            }
-        }
 
         #endregion
 
@@ -275,7 +200,7 @@ namespace Noised.Plugins.Audio.IrrKlang
         {
             foreach (string file in files)
             {
-                log.Debug("Extraction of " + file + " ...");
+                log.Debug("Extracting of " + file + " ...");
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
                 {
                     string path = Path.Combine(outputDir, file);

@@ -140,64 +140,6 @@ namespace Noised.Plugins.Service.TcpService
 
 		#endregion
 		
-		#region IPlugin
-
-		public Guid Guid
-		{
-			get { return Guid.Parse("874daa40-7621-45d9-9f6b-8770887dff49"); }
-		}
-		
-		public String Name
-		{
-			get
-			{
-				return  "TcpServicePlugin";
-			}
-		}
-
-		public String Description
-		{
-			get
-			{
-				return  "The plugin provides a TCP/IP service for noised";
-			}
-		}
-		
-		public String AuthorName
-		{
-			get
-			{
-				return "Benjamin Grüdelbach";
-			}
-		}
-
-		public String AuthorContact
-		{
-			get
-			{
-				return "nocontact@availlable.de";
-			}
-		}
-
-		public Version Version
-		{
-			get
-			{
-				return new Version(1,0);
-			}
-		}
-
-		public DateTime CreationDate
-		{
-			get
-			{
-				return DateTime.Parse("01.03.2015");
-			}
-		}
-		
-		
-		#endregion
-
         #region IService
 
 		public event ServiceEventHandler ClientConnected;

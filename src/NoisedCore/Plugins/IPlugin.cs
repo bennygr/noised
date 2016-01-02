@@ -1,48 +1,25 @@
 using System;
+using Noised.Core.IOC;
 
 namespace Noised.Core.Plugins
 {
 	/// <summary>
-	///		A plugin for extending noised
+	///		A marker interface representing a plugin for extending noised
 	/// </summary>
-	public interface IPlugin : IDisposable
+	public interface IPlugin : IDisposable { };
+
+	/// <summary>
+	///		Contains useful extension method for IPlugin
+	/// </summary>
+	public static class IPluginExtension
 	{
 		/// <summary>
-		///		A unique and constant identifier of the plugin
+		///		Extension method to get meta data for a given plugin
 		/// </summary>
-		/// <remarks>
-		///		The returned GUID must always be the same for the plugin
-		/// </remarks>
-		Guid Guid{get;}
-
-		/// <summary>
-		///		The name of the plugin
-		/// </summary>
-		String Name{get;}
-
-		/// <summary>
-		///		The description of the plugin
-		/// </summary>
-		String Description{get;}
-
-		/// <summary>
-		///		The name of the author
-		/// </summary>
-		String AuthorName{get;}
-
-		/// <summary>
-		///		The contact of the author
-		/// </summary>
-		String AuthorContact{get;}
-
-		/// <summary>
-		///		The version of the plugin
-		/// </summary>
-		Version Version{get;}
-
-		/// <summary>
-		///		The creation date of the plugin		
-		/// </summary>
-		DateTime CreationDate{get;}
+		public static PluginMetaData GetMetaData(this IPlugin plugin)
+		{
+			var pluginLoader = IocContainer.Get<IPluginLoader>();
+			return pluginLoader.GetMetaData(plugin);
+		}
 	};
 }

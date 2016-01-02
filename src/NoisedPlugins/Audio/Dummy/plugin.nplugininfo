@@ -1,5 +1,8 @@
 {
 	"GUID": "7bf101aa-6994-411e-a7bf-ebede0e60cf6",
-	"Version": "1.0.0",
-	"Name": "Dummy Audio Plugin"
+	"Version": "0.0.0",
+	"Name": "Dummy",
+	"Description": "A dummy audio plugin just for testing purpose",
+	"Author": "noised core team",
+	"CreationDate": "01.01.2016"
 }

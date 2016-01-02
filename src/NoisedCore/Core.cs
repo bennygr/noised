@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Logging;
+using Noised.Core.IOC;
 
 namespace Noised.Core
 {
@@ -54,31 +54,39 @@ namespace Noised.Core
 
                 if (cmd != null)
                 {
-                    try
-                    {
-                        logging.Debug("Core is executing command " + cmd);
-                        cmd.ExecuteCommand();
-                    }
-                    catch (Exception e)
-                    {
-                        logging.Error(String.Format("Error while executing command: {0}",
-                                                    e.Message));
-                        try
-                        {
-                            cmd.Context.SendResponse(new ErrorResponse(e));
-                        }
-                        catch
-                        {
-                            logging.Error(String.Format("Error while sending error to sender: {0}",
-                                                        e.Message));
-                        }
-                    }
-                    logging.Debug("Executed: " + cmd);
+					ExecuteCommandInternal(cmd);
                 }
 
                 Thread.Sleep(1);
             }
             logging.Debug("noised core stopped");
+        }
+
+		/// <summary>
+		///		Internal method for command execution
+		/// </summary>
+        private void ExecuteCommandInternal(AbstractCommand command)
+        {
+            try
+            {
+                logging.Debug("Core is executing command " + command);
+                command.ExecuteCommand();
+            }
+            catch (Exception e)
+            {	
+                logging.Error(String.Format("Error while executing command: {0}",
+                        e.Message));
+                try
+                {
+                    command.Context.SendResponse(new ErrorResponse(e));
+                }
+                catch
+                {
+                    logging.Error(String.Format("Error while sending error to sender: {0}",
+                            e.Message));
+                }
+            }
+            logging.Debug("Executed: " + command);
         }
 
         #endregion
@@ -119,7 +127,12 @@ namespace Noised.Core
             }
         }
 
-        public void AddCommand(AbstractCommand command)
+		public void ExecuteCommand(AbstractCommand command)
+		{
+			ExecuteCommandInternal(command);
+		}
+
+        public void ExecuteCommandAsync(AbstractCommand command)
         {
             lock (commandQueue)
             {

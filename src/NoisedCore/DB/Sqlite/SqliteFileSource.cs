@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace Noised.Core.DB.Sqlite
 {
+	/// <summary>
+	///		A helper class defining a DB source 
+	/// </summary>
 	static class SqliteFileSource
 	{
 	    private const string NOISED_DB_FILE_NAME = "noised.db";

@@ -9,11 +9,6 @@ namespace Noised.Core.DB
 	public interface IUnitOfWork : IDisposable 
 	{
 		/// <summary>
-		///		Repository for accessing MediaItems
-		/// </summary>
-		IMediaItemRepository MediaItemRepository{get;}
-
-		/// <summary>
 		///		Repository for accesing PluginRegistration
 		/// </summary>
 		IPluginRepository PluginRepository{get;} 

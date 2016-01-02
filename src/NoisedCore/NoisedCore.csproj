@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -106,15 +105,10 @@
     <Compile Include="Plugins\IPluginInstaller.cs" />
     <Compile Include="Plugins\PluginInstaller.cs" />
     <Compile Include="DB\IUnitOfWork.cs" />
-    <Compile Include="DB\IMediaItemRepository.cs" />
     <Compile Include="DB\IDB.cs" />
-    <Compile Include="DB\Sqlite\SqliteMediaItemRepository.cs" />
     <Compile Include="DB\Sqlite\SqliteUnitOfWork.cs" />
     <Compile Include="DB\Sqlite\SqliteDB.cs" />
     <Compile Include="DB\Sqlite\SqliteFileSource.cs" />
-    <Compile Include="DB\Sqlite\SqliteConnectionFactory.cs" />
-    <Compile Include="DB\Sqlite\MediaItemsSql.cs" />
-    <Compile Include="DB\Sqlite\MetaDataSql.cs" />
     <Compile Include="DB\Sqlite\SqliteUtils.cs" />
     <Compile Include="Plugins\PluginFile.cs" />
     <Compile Include="DB\IPluginRepository.cs" />
@@ -122,6 +116,14 @@
     <Compile Include="DB\Sqlite\PluginFilesSql.cs" />
     <Compile Include="Plugins\PluginMetaData.cs" />
     <Compile Include="DB\Sqlite\PluginsSql.cs" />
+    <Compile Include="Crypto\IChecksum.cs" />
+    <Compile Include="Crypto\MD5Checksum.cs" />
+    <Compile Include="Crypto\Md5MediaItemChecksum.cs" />
+    <Compile Include="Media\MediaSourceSearchResult.cs" />
+    <Compile Include="DB\Sqlite\SqliteDBCreator.cs" />
+    <Compile Include="DB\Sqlite\SqliteCoreConnectionFactory.cs" />
+    <Compile Include="DB\Sqlite\ISqliteConnectionFactory.cs" />
+    <Compile Include="Media\Searchable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\Commands\CommandTemplate.txt" />
@@ -146,5 +148,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="etc\" />
+    <Folder Include="DB\Sqlite\" />
+    <Folder Include="Crypto\" />
+  </ItemGroup>
 </Project>

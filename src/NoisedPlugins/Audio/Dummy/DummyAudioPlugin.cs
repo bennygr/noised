@@ -31,64 +31,6 @@ namespace Noised.Plugins.Audio.Dummy
 		
 		#endregion
 
-		#region IPlugin
-
-		public Guid Guid 
-		{
-			get { return Guid.Parse("ab2b7e37-3ee6-4566-b7c4-0b9515e9ff6f"); }
-		}
-
-		public String Name
-		{
-			get
-			{
-				return "DummyAudioPlugin";
-			}
-		}
-
-		public String Description
-		{
-			get
-			{
-				return "Just a dummy audio plugin which does not " + 
-					   "play any sound(for testing purpose only)";
-			}
-		}
-
-		public String AuthorName
-		{
-			get
-			{
-				return "Benjamin Grüdelbach";
-			}
-		}
-
-		public String AuthorContact
-		{
-			get
-			{
-				return "nocontact@availlable.de";
-			}
-		}
-
-		public Version Version
-		{
-			get
-			{
-				return new Version(1,0);
-			}
-		}
-
-		public DateTime CreationDate
-		{
-			get
-			{
-				return DateTime.Parse("01.03.2015");
-			}
-		}
-		
-		#endregion
-		
         /// <summary>
         ///		Internal method to invoke the SongFinished event
         /// </summary>

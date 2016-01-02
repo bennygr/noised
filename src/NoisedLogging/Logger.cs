@@ -10,6 +10,7 @@ namespace Noised.Logging
     {
         Debug,
         Warning,
+        Info,
         Error
     }
 
@@ -29,7 +30,7 @@ namespace Noised.Logging
         {
             get
             {
-                lock(SyncObject)
+                lock (SyncObject)
                 {
                     return logLevel;
                 }
@@ -62,40 +63,33 @@ namespace Noised.Logging
             }
         }
 
-        /// <summary>
-        ///		Adds a logger to the logging system
-        /// </summary>
-        /// <param name="logger">the logger to add</param>
+        #region ILogging
+
         public void AddLogger(ILogger logger)
         {
             Loggers.Add(logger);
         }
-                
-        /// <summary>
-        ///		Writes a debug message to all registered loggers
-        /// </summary>
-        /// <param name="message">The message</param>
+		
         public void Debug(string message)
         {
             LogInternal(LogLevel.Debug, message);
         }
-
-        /// <summary>
-        ///		Writes a warning message to all registered logger
-        /// </summary>
-        /// <param name="message">The message</param>
-        public void Warning (string message)
+		
+        public void Warning(string message)
         {
             LogInternal(LogLevel.Warning, message);
         }
-
-        /// <summary>
-        ///		Writes an error message to all registered logger
-        /// </summary>
-        /// <param name="message">The message</param>        
+		
+        public void Info(string message)
+        {
+            LogInternal(LogLevel.Info, message);
+        }
+		
         public void Error(string message)
         {
             LogInternal(LogLevel.Error, message);
         }
+
+        #endregion
     }
 }

@@ -3,9 +3,11 @@ using Noised.Core.DB;
 
 namespace Noised.Core.DB.Sqlite
 {
+	/// <summary>
+	///		Sqlite implementation of IUnitOfWork
+	/// </summary>
     public class SqliteUnitOfWork : IUnitOfWork
     {
-		private IMediaItemRepository mediaItemRepository;
 		private IPluginRepository pluginRepository;
 		private readonly SqliteConnection connection; 
 		private readonly SqliteTransaction transaction; 
@@ -19,18 +21,6 @@ namespace Noised.Core.DB.Sqlite
 		}
 
         #region IUnitOfWork implementation
-
-		public IMediaItemRepository MediaItemRepository
-		{
-			get
-			{
-				if(mediaItemRepository == null)
-				{
-					mediaItemRepository = new SqliteMediaItemRepository(connection);
-				}
-				return mediaItemRepository;
-			}
-		}
 
 		public IPluginRepository PluginRepository
 		{

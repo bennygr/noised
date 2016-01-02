@@ -1,13 +1,9 @@
-using System;
-using System.Linq;
 using Noised.Core;
 using Noised.Core.Config;
 using Noised.Core.DB;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
-using Noised.Core.Plugins.Audio;
-using Noised.Core.Plugins.Media;
 using Noised.Core.Service;
 using Noised.Logging;
 
@@ -37,6 +33,7 @@ namespace Noised.Server
             pluginInstaller.InstallAll("./plugins");
 
             //loading plugins
+            logger.Info("Loading plugins:");
             var pluginLoader = IocContainer.Get<IPluginLoader>();
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
@@ -49,36 +46,36 @@ namespace Noised.Server
             var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
 
-            var mediaSource = pluginLoader.GetPlugin<IMediaSource>();
-            if (mediaSource != null)
-            {
-                try
-                {
-                    var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
-                    audioPlugin.SongFinished +=
-                        (sender, mediaItem) =>
-                        Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
-                    var resultList = mediaSource.Search("test");
-                    MediaItem test = resultList.First();
-                    Console.WriteLine(test.Protocol);
+            // Refreshin music
+            logger.Debug("Refreshing music...");
+            var sourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
+            sourceAccumulator.Refresh();
+            logger.Debug("Done refreshing music.");
 
-                    //IocContainer.Get<IMediaManager>().Play(test);
-                    //Thread.Sleep(5000);
-                    //IocContainer.Get<IMediaManager>().Pause();
-                    //Thread.Sleep(3000);
-                    //IocContainer.Get<IMediaManager>().Resume();
-                    //Thread.Sleep(3000);
-                    //IocContainer.Get<IMediaManager>().Stop();
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                }
-            }
-            else
-            {
-                logger.Error("No media source plugin found");
-            }
+            //Test
+            //var sources = IocContainer.Get<IMediaSourceAccumulator>();
+            //try
+            //{
+            //    var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
+            //    audioPlugin.SongFinished += 
+            //			(sender, mediaItem) => 
+            //			Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
+
+
+            //	var searchResults = sources.Search("Addiction");
+            //	foreach (var result in searchResults)
+            //	{
+            //		foreach(var match in result.MediaItems)
+            //		{
+            //			IocContainer.Get<IMediaManager>().Play(match);
+            //			Thread.Sleep(1000);
+            //		}
+            //	}
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Error(e.Message);
+            //}
             return 0;
         }
     }

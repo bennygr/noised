@@ -18,13 +18,18 @@ namespace Noised.Logging
 		void Debug(string message);
 
 		/// <summary>
-		///		Writes a warning message to all registered logger
+		///		Writes a warning message to all registered loggers
 		/// </summary>
 		/// <param name="message">The message</param>
 		void Warning (string message);
 
 		/// <summary>
-		///		Writes an error message to all registered logger
+		///		Writes a warning message to all reisterd loggers
+		/// </summary>
+		void Info(string message);
+
+		/// <summary>
+		///		Writes an error message to all registered loggers
 		/// </summary>
 		/// <param name="message">The message</param>        
 		void Error(string message);

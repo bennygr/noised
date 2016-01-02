@@ -29,5 +29,11 @@ namespace Noised.Core.Plugins
 		/// </summary>
 		/// <returns>Returns all loaded plugins of type T</returns>
 		T GetPlugin<T>();
+
+		/// <summary>
+		///		Gets the meta data for a given plugin
+		/// </summary>
+		/// <param name="plugin">The plugin to get the meta data for</param>
+		PluginMetaData GetMetaData(IPlugin plugin);
 	};
 }

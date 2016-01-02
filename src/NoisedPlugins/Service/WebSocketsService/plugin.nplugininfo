@@ -1,5 +1,8 @@
 {
 	"GUID": "70d8a72e-968a-451a-9e08-d19c57191766",
 	"Version": "1.0.0",
-	"Name": "Websocket Server Plugin"
+	"Name": "Websockets",
+	"Description": "Provides Noised functionality using Websockets",
+	"Author": "noised core team",
+	"CreationDate": "01.01.2016"
 }

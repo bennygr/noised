@@ -1,5 +1,8 @@
 {
 	"GUID": "2d8ae388-0020-486e-b606-3f06ec20699a",
 	"Version": "1.0.0",
-	"Name": "Filesystem media source"
+	"Name": "Filesystem source",
+	"Description": "Provides music from a local filesystem",
+	"Author": "noised core team",
+	"CreationDate": "01.01.2016"
 }

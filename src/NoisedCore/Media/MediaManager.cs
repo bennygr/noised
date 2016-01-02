@@ -64,13 +64,13 @@ namespace Noised.Core.Media
 				{
 					logger.Debug(String.Format("Stopping current audio playback " + 
 								               "through plugin {0}",
-												currentAudioOutput.Name));
+												currentAudioOutput.GetMetaData().Name));
 					currentAudioOutput.Stop();
 				}
 
 				//Setting current audio plugin and play the song
 				logger.Debug(String.Format("Using audio plugin {0} to play item {1}",
-								            audio.Name,
+								            audio.GetMetaData().Name,
 											item.Uri));
 				currentAudioOutput = audio;
 			}
