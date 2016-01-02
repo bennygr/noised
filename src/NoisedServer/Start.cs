@@ -49,36 +49,36 @@ namespace Noised.Server
             var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
 
-            //Test:
-            //Checking sources for new Music
+			// Refreshin music
             logger.Debug("Refreshing music...");
             var sourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
             sourceAccumulator.Refresh();
             logger.Debug("Done refreshing music.");
 			
-            var sources = IocContainer.Get<IMediaSourceAccumulator>();
-            try
-            {
-                var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
-                audioPlugin.SongFinished += 
-						(sender, mediaItem) => 
-						Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
+			//Test
+            //var sources = IocContainer.Get<IMediaSourceAccumulator>();
+            //try
+            //{
+            //    var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
+            //    audioPlugin.SongFinished += 
+			//			(sender, mediaItem) => 
+			//			Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
 
 
-				var searchResults = sources.Search("Addiction");
-				foreach (var result in searchResults)
-				{
-					foreach(var match in result.MediaItems)
-					{
-						IocContainer.Get<IMediaManager>().Play(match);
-						Thread.Sleep(1000);
-					}
-				}
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message);
-            }
+			//	var searchResults = sources.Search("Addiction");
+			//	foreach (var result in searchResults)
+			//	{
+			//		foreach(var match in result.MediaItems)
+			//		{
+			//			IocContainer.Get<IMediaManager>().Play(match);
+			//			Thread.Sleep(1000);
+			//		}
+			//	}
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Error(e.Message);
+            //}
             return 0;
         }
     }

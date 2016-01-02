@@ -23,8 +23,13 @@ namespace Noised.Core
 		void Stop();
 		
 		/// <summary>
-		///		Enqueues a command to be executed
+		///		Executes a command 
 		/// </summary>
-		void AddCommand(AbstractCommand command);
+		void ExecuteCommand(AbstractCommand command);
+		
+		/// <summary>
+		///		Executes a command asynchronous
+		/// </summary>
+		void ExecuteCommandAsync(AbstractCommand command);
 	};
 }
