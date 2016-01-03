@@ -85,7 +85,7 @@ namespace Noised.Plugins.FileSystemSource.DB
                 {
                     if (reader.HasRows)
                     {
-                        metaData = new MetaData(mediaItem);
+                        metaData = new MetaData();
                         reader.Read();
                         metaData.Album = reader["Album"] == DBNull.Value ? null : (string)reader["Album"]; 
                         metaData.BeatsPerMinute = 

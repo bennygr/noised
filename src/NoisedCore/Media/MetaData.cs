@@ -6,8 +6,6 @@ using Noised.Core.Media;
 /// </summary>
 public class MetaData
 {
-    public MediaItem MediaItem{get;set;}
-
 	/// <summary>
 	///		The title
 	/// </summary>
@@ -92,9 +90,4 @@ public class MetaData
 	///		Copyright information
 	/// </summary>
 	public string Copyright{get;set;}
-
-	public MetaData(MediaItem mediaItem)
-	{
-        this.MediaItem = mediaItem;
-	}
 };

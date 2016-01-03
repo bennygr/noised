@@ -41,7 +41,7 @@ namespace Noised.Plugins.Media.FileSystemSource
         {
             TagLib.File tagFile = TagLib.File.Create(file.FullName);
             var tag = tagFile.Tag;
-            return new MetaData(mediaItem)
+            return new MetaData()
             {
                 Album = tag.Album,
                 AlbumArtists = tag.AlbumArtists,

@@ -14,26 +14,25 @@ namespace Noised.Server
         public static int Main()
         {
             IocContainer.Build();
-
             ILogging logger = IocContainer.Get<ILogging>();
             logger.AddLogger(new ConsoleLogger());
-
             logger.Debug("Hello I am Noised - your friendly music player daemon");
-
-            //Loading configuration
-            var config = IocContainer.Get<IConfig>();
-            config.Load(IocContainer.Get<IConfigurationLoader>());
+			
 
             //Creating the DB or update if neccessary
             var db = IocContainer.Get<IDB>();
             db.CreateOrUpdate();
-
+			
             //installing new plugins
             var pluginInstaller = IocContainer.Get<IPluginInstaller>();
             pluginInstaller.InstallAll("./plugins");
+			
+            //Loading configuration
+            var config = IocContainer.Get<IConfig>();
+            config.Load(IocContainer.Get<IConfigurationLoader>());
 
             //loading plugins
-            logger.Info("Loading plugins:");
+			logger.Info("Loading plugins:");
             var pluginLoader = IocContainer.Get<IPluginLoader>();
             int pluginCount = pluginLoader.LoadPlugins("./plugins");
             logger.Debug(pluginCount + " plugins loaded ");
@@ -46,36 +45,13 @@ namespace Noised.Server
             var serviceConnectionManager = new ServiceConnectionManager();
             serviceConnectionManager.StartServices();
 
-            // Refreshin music
+			// Refreshin music
             logger.Debug("Refreshing music...");
             var sourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
             sourceAccumulator.Refresh();
             logger.Debug("Done refreshing music.");
-
-            //Test
-            //var sources = IocContainer.Get<IMediaSourceAccumulator>();
-            //try
-            //{
-            //    var audioPlugin = pluginLoader.GetPlugin<IAudioPlugin>();
-            //    audioPlugin.SongFinished += 
-            //			(sender, mediaItem) => 
-            //			Console.WriteLine("SONG HAS BEEN FINISHED. I WANT MORE MUSIC :-)");
-
-
-            //	var searchResults = sources.Search("Addiction");
-            //	foreach (var result in searchResults)
-            //	{
-            //		foreach(var match in result.MediaItems)
-            //		{
-            //			IocContainer.Get<IMediaManager>().Play(match);
-            //			Thread.Sleep(1000);
-            //		}
-            //	}
-            //}
-            //catch (Exception e)
-            //{
-            //    logger.Error(e.Message);
-            //}
+			
+            logger.Info("Noised has been started.");
             return 0;
         }
     }

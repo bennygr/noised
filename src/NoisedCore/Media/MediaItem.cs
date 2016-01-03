@@ -38,7 +38,7 @@ namespace Noised.Core.Media
 		{
 			Uri = uri;
 			Checksum = checksum;
-			MetaData = new MetaData(this);
+			MetaData = new MetaData();
 		}
 
 		/// <summary>
