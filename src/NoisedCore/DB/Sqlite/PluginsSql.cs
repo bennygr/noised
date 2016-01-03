@@ -9,18 +9,19 @@ namespace Noised.Core.DB.Sqlite
 														[Description] NVARCHAR(1000),
 														[Author] NVARCHAR(100),
 														[AuthorEmail] NVARCHAR(100),
-														[CreationDate] INTEGER);";
+														[CreationDate] INTEGER,
+														[Priority] INTEGER);";
 
 			internal static string GET_BY_GUID_STMT = @"SELECT GUID,Version,Name,
-														Description,Author,AuthorEmail,CreationDate	
+														Description,Author,AuthorEmail,CreationDate,Priority
 														FROM Plugins WHERE GUID=@Guid";
 
 			internal static string INSERT_REG_DATA_STMT = @"INSERT INTO Plugins 
 															(GUID,Version,Name,
-															 Description,Author,AuthorEmail,CreationDate)
+															 Description,Author,AuthorEmail,CreationDate,Priority)
 															VALUES
 															(@Guid,@Version,@Name,
-															 @Description,@Author,@AuthorEmail,@CreationDate);";
+															 @Description,@Author,@AuthorEmail,@CreationDate,@Priority);";
 
 			internal static string DELETE_BY_GUID_STMT = @"DELETE FROM Plugins WHERE GUID=@Guid;";
 

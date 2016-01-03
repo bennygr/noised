@@ -90,6 +90,7 @@ namespace Noised.Core.Service
 				catch(Exception e )
 				{
 					logging.Error("Error starting service " + service.GetMetaData().Name + ": " + e.Message);
+					logging.Debug (e.StackTrace);
 				}
 			}
 		}

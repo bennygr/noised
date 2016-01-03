@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Text.RegularExpressions;
 using Mono.Data.Sqlite;
 using Noised.Core.DB.Sqlite;
 using Noised.Core.Plugins;
@@ -31,6 +32,7 @@ namespace Noised.Core.DB.Sqlite
                 cmd.Parameters.Add(new SqliteParameter("@Description", pluginRegistration.Description));
                 cmd.Parameters.Add(new SqliteParameter("@Author", pluginRegistration.Author));
                 cmd.Parameters.Add(new SqliteParameter("@AuthorEmail", pluginRegistration.AuthorEmail));
+                cmd.Parameters.Add(new SqliteParameter("@Priority", pluginRegistration.Priority));
 				if(pluginRegistration.CreationDate.HasValue)
 					cmd.Parameters.Add(new SqliteParameter("@CreationDate", pluginRegistration.CreationDate.Value.Ticks));
 				else
@@ -92,6 +94,7 @@ namespace Noised.Core.DB.Sqlite
 							Description = reader["Description"] == DBNull.Value ? null: (string)reader["Description"],
 							Author = reader["Author"] == DBNull.Value ? null : (string)reader["Author"],
 							AuthorEmail = reader["AuthorEmail"] == DBNull.Value ? null :(string)reader["AuthorEmail"],
+							Priority = reader["Priority"] == DBNull.Value ? 0 : (long)reader["Priority"],
 							CreationDate = reader["CreationDate"] == DBNull.Value ? (DateTime?)null : new DateTime((long)reader["CreationDate"])
                         };
                     }
@@ -104,7 +107,7 @@ namespace Noised.Core.DB.Sqlite
         {
             using (var cmd = connection.CreateCommand())
             {
-                cmd.CommandText = PluginFilesSql.GET_GUID_FOR_FILE;
+                cmd.CommandText = PluginFilesSql.GET_GUID_FOR_FILE_STMT;
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.Add(new SqliteParameter("@File", file.FullName));
                 using (var reader = cmd.ExecuteReader())
@@ -119,9 +122,25 @@ namespace Noised.Core.DB.Sqlite
 			return null;
         }
 
-        public List<FileInfo> GetRegisteredFilesForPlugin(Guid guid)
+		public IList<FileInfo> GetFiles(string pattern=null)
         {
-            throw new NotImplementedException();
+			var ret = new List<FileInfo>();
+            using(var cmd = connection.CreateCommand())
+			{
+				cmd.CommandText = PluginFilesSql.GET_ALL_FILES_STMT;
+				using(var reader = cmd.ExecuteReader())
+				{
+					while(reader.Read())
+					{
+						var fileName = (string)reader["File"];
+						if(pattern == null || Regex.IsMatch(fileName,pattern))
+						{
+							ret.Add(new FileInfo(fileName));
+						}
+					}
+				}
+			}
+			return ret;
         }
 
         #endregion

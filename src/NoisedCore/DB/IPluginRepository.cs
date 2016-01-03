@@ -33,8 +33,9 @@ namespace Noised.Core.DB
 		PluginMetaData GetForFile(FileInfo file);
 
 		/// <summary>
-		///		Gets a list of files registered for the plugin
+		///		Gets all plugin files
 		/// </summary>
-		List<FileInfo> GetRegisteredFilesForPlugin(Guid guid);
+		/// <param name="pattern">A pattern to restriuct files, or null to get all files</param>
+		IList<FileInfo> GetFiles(string pattern=null);
 	};
 }

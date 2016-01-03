@@ -16,9 +16,8 @@ namespace Noised.Server
             IocContainer.Build();
             ILogging logger = IocContainer.Get<ILogging>();
             logger.AddLogger(new ConsoleLogger());
-            logger.Debug("Hello I am Noised - your friendly music player daemon");
+            logger.Info("Hello I am Noised - your friendly music player daemon");
 			
-
             //Creating the DB or update if neccessary
             var db = IocContainer.Get<IDB>();
             db.CreateOrUpdate();
@@ -34,8 +33,8 @@ namespace Noised.Server
             //loading plugins
 			logger.Info("Loading plugins:");
             var pluginLoader = IocContainer.Get<IPluginLoader>();
-            int pluginCount = pluginLoader.LoadPlugins("./plugins");
-            logger.Debug(pluginCount + " plugins loaded ");
+            int pluginCount = pluginLoader.LoadPlugins();
+            logger.Info(pluginCount + " plugins loaded ");
 
             //Add a factory and create a ping command
             var core = IocContainer.Get<ICore>();
@@ -46,10 +45,10 @@ namespace Noised.Server
             serviceConnectionManager.StartServices();
 
 			// Refreshin music
-            logger.Debug("Refreshing music...");
+            logger.Info("Refreshing music...");
             var sourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
             sourceAccumulator.Refresh();
-            logger.Debug("Done refreshing music.");
+            logger.Info("Done refreshing music.");
 			
             logger.Info("Noised has been started.");
             return 0;

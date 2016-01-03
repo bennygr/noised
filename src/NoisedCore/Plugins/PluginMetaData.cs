@@ -48,6 +48,11 @@ namespace Noised.Core.Plugins
 		}
 
 		/// <summary>
+		///		The priority of the plugin (higher value means higher priority)
+		/// </summary>
+		public long Priority{get;set;}
+
+		/// <summary>
 		///		Returns the Guid of the plugin as Guid object
 		/// </summary>
 		public Guid GetGuid()

@@ -7,10 +7,9 @@ namespace Noised.Core.Plugins
 	public interface IPluginLoader
 	{
 		/// <summary>
-		///		Loads all plugins from a local directory
+		///		Loads all known plugins
 		/// </summary>
-		/// <param name="localPluginPath">The path to the local directory</param>
-		int LoadPlugins(string localPluginPath);
+		int LoadPlugins();
 	
 		/// <summary>
 		///		Gets all plugins
@@ -22,13 +21,13 @@ namespace Noised.Core.Plugins
 		///		Gets all plugins of a certain type
 		/// </summary>
 		/// <returns>Returns all loaded plugins of type T</returns>
-		IEnumerable<T> GetPlugins<T>();
+		IEnumerable<T> GetPlugins<T>() where T : IPlugin;
 
 		/// <summary>
-		///		Gets the first plugins of a certain type
+		///		Gets the plugin with the highest priority of a certain type 
 		/// </summary>
 		/// <returns>Returns all loaded plugins of type T</returns>
-		T GetPlugin<T>();
+		T GetPlugin<T>() where T : IPlugin;
 
 		/// <summary>
 		///		Gets the meta data for a given plugin
