@@ -189,7 +189,7 @@ namespace Noised.Plugins.Media.FileSystemSource
 
         public MediaItem Get(Uri uri)
         {
-            this.core.Logging.Info(uri.ToString());
+            core.Logging.Info(uri.ToString());
             using (var unitOfWork = new SqliteFileSystemUnitOfWork())
             {
                 return unitOfWork.MediaItemRepository.GetByUri(uri);
@@ -202,9 +202,10 @@ namespace Noised.Plugins.Media.FileSystemSource
             using (var unitOfWork = new SqliteFileSystemUnitOfWork())
             {
                 //Search for title
+                unitOfWork.MediaItemRepository.FindByArtist(pattern, ret);
+				unitOfWork.MediaItemRepository.FindByAlbum(pattern,ret);
                 unitOfWork.MediaItemRepository.FindByTitle(pattern, ret);
             }
-
             return new MediaSourceSearchResult(FILE_SYSTEM_MEDIA_SOURCE_NAME, ret);
         }
 

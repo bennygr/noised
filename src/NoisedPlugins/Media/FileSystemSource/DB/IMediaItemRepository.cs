@@ -34,5 +34,21 @@ namespace Noised.Plugins.FileSystemSource.DB
 		/// <param name="ret">The result list to write found items to</param>
 		/// <returns>The count  of found items</returns>
 		int FindByTitle(string title,IList<MediaItem> ret);
+
+		/// <summary>
+		///		Searches for a MediaItem by artist
+		/// </summary>
+		/// <param name="artist">The artist of the item</param>
+		/// <param name="ret">The result list to write found items to</param>
+		/// <returns>The count  of found items</returns>
+		int FindByArtist(string artist,IList<MediaItem> ret);
+
+		/// <summary>
+		///		Searches for a MediaItem by Album
+		/// </summary>
+		/// <param name="album">The album of the item</param>
+		/// <param name="ret">The result list to write found items to</param>
+		/// <returns>The count  of found items</returns>
+		int FindByAlbum(string album,IList<MediaItem> ret);
     };
 }

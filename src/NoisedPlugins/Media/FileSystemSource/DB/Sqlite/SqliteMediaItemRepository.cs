@@ -274,6 +274,27 @@ namespace Noised.Plugins.FileSystemSource.DB
                 });
         }
 
+		public int FindByArtist(string artist,IList<MediaItem> ret)
+		{
+            return GetMediaItems(MediaItemsSql.FIND_BY_ARTIST_STMT,
+                ret,
+                new List<SqliteParameter>
+                {
+                    new SqliteParameter("@PATTERN", "%" + artist + "%")
+                });
+		}
+
+		public int FindByAlbum(string album,IList<MediaItem> ret)
+		{
+            return GetMediaItems(MediaItemsSql.FIND_BY_ALBUM_STMT,
+                ret,
+                new List<SqliteParameter>
+                {
+                    new SqliteParameter("@PATTERN", "%" + album + "%")
+                });
+		}
+
+
         #endregion
     };
 }
