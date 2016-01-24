@@ -25,8 +25,8 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-			var sources = IocContainer.Get<IMediaSourceAccumulator>();
-			var mediaItem = sources.Get(uri);
+            var sources = IocContainer.Get<IMediaSourceAccumulator>();
+            var mediaItem = sources.Get(uri);
             if (mediaItem != null)
             {
                 var mediaManager = IocContainer.Get<IMediaManager>();

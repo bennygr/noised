@@ -69,22 +69,22 @@ namespace Noised.Logging
         {
             Loggers.Add(logger);
         }
-		
+
         public void Debug(string message)
         {
             LogInternal(LogLevel.Debug, message);
         }
-		
+
         public void Warning(string message)
         {
             LogInternal(LogLevel.Warning, message);
         }
-		
+
         public void Info(string message)
         {
             LogInternal(LogLevel.Info, message);
         }
-		
+
         public void Error(string message)
         {
             LogInternal(LogLevel.Error, message);

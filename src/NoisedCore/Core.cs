@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Noised.Core.Commands;
-using Noised.Logging;
 using Noised.Core.IOC;
+using Noised.Logging;
 
 namespace Noised.Core
 {
@@ -54,7 +54,7 @@ namespace Noised.Core
 
                 if (cmd != null)
                 {
-					ExecuteCommandInternal(cmd);
+                    ExecuteCommandInternal(cmd);
                 }
 
                 Thread.Sleep(1);
@@ -62,9 +62,9 @@ namespace Noised.Core
             logging.Debug("noised core stopped");
         }
 
-		/// <summary>
-		///		Internal method for command execution
-		/// </summary>
+        /// <summary>
+        ///		Internal method for command execution
+        /// </summary>
         private void ExecuteCommandInternal(AbstractCommand command)
         {
             try
@@ -73,7 +73,7 @@ namespace Noised.Core
                 command.ExecuteCommand();
             }
             catch (Exception e)
-            {	
+            {
                 logging.Error(String.Format("Error while executing command: {0}",
                         e.Message));
                 try
@@ -127,10 +127,10 @@ namespace Noised.Core
             }
         }
 
-		public void ExecuteCommand(AbstractCommand command)
-		{
-			ExecuteCommandInternal(command);
-		}
+        public void ExecuteCommand(AbstractCommand command)
+        {
+            ExecuteCommandInternal(command);
+        }
 
         public void ExecuteCommandAsync(AbstractCommand command)
         {
