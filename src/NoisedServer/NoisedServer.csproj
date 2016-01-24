@@ -56,6 +56,10 @@
       <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
       <Name>NoisedLogging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NoisedPlugins\Commands\CoreCommands\CoreCommands.csproj">
+      <Project>{BF963A63-6D57-4A12-A24A-C82D296C4E3A}</Project>
+      <Name>CoreCommands</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
