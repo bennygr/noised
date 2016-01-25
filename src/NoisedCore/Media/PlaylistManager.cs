@@ -17,7 +17,21 @@ namespace Noised.Core.Media
             }
         }
 
-        public PlaylistManager()
+        internal Playlist LoadedPlaylist { get; private set; }
+
+        private static PlaylistManager instance;
+
+        public static PlaylistManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new PlaylistManager();
+                return instance;
+            }
+        }
+
+        private PlaylistManager()
         {
             playlists = new List<Playlist>();
         }
@@ -43,6 +57,11 @@ namespace Noised.Core.Media
         public Playlist FindPlaylists(string name)
         {
             return playlists.Find(x => x.Name == name);
+        }
+
+        public void LoadPlaylist(Playlist playlist)
+        {
+            LoadedPlaylist = playlist;
         }
     }
 }
