@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Noised.Core.Media
 {
     public class Playlist
     {
         private readonly List<MediaItem> items;
+
+        private MediaItem currentMediaItem;
 
         public string Name { get; private set; }
 
@@ -31,6 +34,17 @@ namespace Noised.Core.Media
         public void Add(MediaItem item)
         {
             items.Add(item);
+        }
+
+        public MediaItem GetNextItem()
+        {
+            if (currentMediaItem == null)
+            {
+                currentMediaItem = items.First();
+                return currentMediaItem;
+            }
+
+            return items.ElementAtOrDefault(items.IndexOf(currentMediaItem));
         }
     }
 }
