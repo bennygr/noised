@@ -2,14 +2,17 @@ using System;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 using Noised.Logging;
+
 namespace Noised.Core.Media
 {
     public class MediaManager : IMediaManager
     {
-        private static readonly object locker = new object();
-        private IPluginLoader pluginLoader;
+        private static readonly object Locker = new object();
+
+        private readonly IPluginLoader pluginLoader;
+        private readonly ILogging logger;
+
         private IAudioPlugin currentAudioOutput;
-        private ILogging logger;
 
         /// <summary>
         ///		Constructor
@@ -32,6 +35,7 @@ namespace Noised.Core.Media
                     if (item.Uri != null &&
                        item.Uri.ToString().StartsWith(protocol, StringComparison.Ordinal))
                     {
+                        audio.SongFinished += AudioSongFinished;
                         return audio;
                     }
                 }
@@ -48,10 +52,11 @@ namespace Noised.Core.Media
 
         public void Play(MediaItem item)
         {
-            lock (locker)
+            lock (Locker)
             {
                 // Getting an appropriat plugin for the MediaItem
                 IAudioPlugin audio = GetAudioOutputForItem(item);
+
                 if (audio == null)
                 {
                     throw new CoreException(
@@ -74,12 +79,27 @@ namespace Noised.Core.Media
                                             item.Uri));
                 currentAudioOutput = audio;
             }
+
             currentAudioOutput.Play(item);
+        }
+
+        private void AudioSongFinished(object sender, AudioEventArgs args)
+        {
+            if (Repeat)
+            {
+                Play(args.MediaItem);
+                return;
+            }
+
+            MediaItem nextItem = PlaylistManager.Instance.LoadedPlaylist.GetNextItem();
+
+            if (nextItem != null)
+                Play(nextItem);
         }
 
         public void Stop()
         {
-            lock (locker)
+            lock (Locker)
             {
                 if (currentAudioOutput != null)
                 {
@@ -91,7 +111,7 @@ namespace Noised.Core.Media
 
         public void Pause()
         {
-            lock (locker)
+            lock (Locker)
             {
                 if (currentAudioOutput != null)
                 {
@@ -102,7 +122,7 @@ namespace Noised.Core.Media
 
         public void Resume()
         {
-            lock (locker)
+            lock (Locker)
             {
                 if (currentAudioOutput != null)
                 {
