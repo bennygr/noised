@@ -2,7 +2,7 @@
 #------------------------------------------------------------------
 
 #A comma separated list of directories
-noised.plugins.media.filesystemsource.directories = /mnt/media/music,/home/bgr/Musik
+noised.plugins.media.filesystemsource.directories = /mnt/media/music,/home/bgr/Musik,C:\test\
 
 #A comma separated list of supported file types
 noised.plugins.media.filesystemsource.filetypes = mp3,flac
