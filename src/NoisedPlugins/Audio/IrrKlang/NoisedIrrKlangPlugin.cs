@@ -30,12 +30,18 @@ namespace Noised.Plugins.Audio.IrrKlang
         {
             log = pluginInitializer.Logging;
 
-            log.Debug("Initialize IrrKlang Plugin");
+            log.Debug("Initialize IrrKlang plugin");
 
-            log.Debug("Extract IrrKlang Librabries");
-            string exeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase).Replace("file:\\", string.Empty);
-            ExtractEmbeddedResource(exeDir, "IrrKlang.Resources",
-                new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
+            log.Debug("Extract IrrKlang librabries");
+            string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase);
+            if (directoryName != null)
+            {
+                string exeDir = directoryName.Replace("file:\\", string.Empty);
+                ExtractEmbeddedResource(exeDir, "IrrKlang.Resources",
+                    new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
+            }
+            else
+                log.Error("Unable to extract IrrKlang libraries: unable to locate assembly.");
 
             log.Debug("Create IrrKlang SoundEngine");
             engine = new ISoundEngine();
@@ -47,7 +53,10 @@ namespace Noised.Plugins.Audio.IrrKlang
         /// Führt anwendungsspezifische Aufgaben aus, die mit dem Freigeben, Zurückgeben oder Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
         /// </summary>
         public void Dispose()
-        { }
+        {
+            engine.Dispose();
+            currentPlayback.Dispose();
+        }
 
         #endregion
 
@@ -78,8 +87,7 @@ namespace Noised.Plugins.Audio.IrrKlang
         /// <param name="item">The item to play</param>
         public void Play(MediaItem item)
         {
-            log.Debug("Play -> " + item.Uri.AbsolutePath);
-            currentPlayback = engine.Play2D(item.Uri.AbsolutePath);
+            Play(item, 0);
         }
 
         /// <summary>
@@ -92,6 +100,7 @@ namespace Noised.Plugins.Audio.IrrKlang
             log.Debug("Play -> " + item.Uri.AbsolutePath + " at position " + pos);
             currentPlayback = engine.Play2D(item.Uri.AbsolutePath);
             currentPlayback.PlayPosition = Convert.ToUInt32(pos);
+            currentPlayback.setSoundStopEventReceiver(new SoundStopEventReceiver(InvokeOnSongFinished), item);
         }
 
         /// <summary>
@@ -221,6 +230,12 @@ namespace Noised.Plugins.Audio.IrrKlang
                     }
                 }
             }
+        }
+
+        protected virtual void InvokeOnSongFinished(AudioEventArgs args)
+        {
+            if (SongFinished != null)
+                SongFinished(this, args);
         }
     }
 }
