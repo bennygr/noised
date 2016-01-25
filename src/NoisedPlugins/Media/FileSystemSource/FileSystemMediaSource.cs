@@ -203,7 +203,7 @@ namespace Noised.Plugins.Media.FileSystemSource
             {
                 //Search for title
                 unitOfWork.MediaItemRepository.FindByArtist(pattern, ret);
-				unitOfWork.MediaItemRepository.FindByAlbum(pattern,ret);
+                unitOfWork.MediaItemRepository.FindByAlbum(pattern, ret);
                 unitOfWork.MediaItemRepository.FindByTitle(pattern, ret);
             }
             return new MediaSourceSearchResult(FILE_SYSTEM_MEDIA_SOURCE_NAME, ret);

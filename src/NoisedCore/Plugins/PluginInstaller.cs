@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
-using Noised.Logging;
 using Noised.Core.DB;
 using Noised.Core.IOC;
+using Noised.Logging;
 
 namespace Noised.Core.Plugins
 {
@@ -71,16 +71,16 @@ namespace Noised.Core.Plugins
             //Extract all nplugins file to the tmp directory and process them from there
             foreach (var file in files)
             {
-				try
-				{
-					IocContainer.Get<ILogging>().Debug(String.Format("Found new plugin {0}...", file));
-					Install(file);
-				}
-				catch(Exception e)
-				{
-					IocContainer.Get<ILogging>().Error(String.Format("Error while loading plugin {0}: {1}",file,e.Message));
-					IocContainer.Get<ILogging>().Debug(e.StackTrace);
-				}
+                try
+                {
+                    IocContainer.Get<ILogging>().Debug(String.Format("Found new plugin {0}...", file));
+                    Install(file);
+                }
+                catch (Exception e)
+                {
+                    IocContainer.Get<ILogging>().Error(String.Format("Error while loading plugin {0}: {1}", file, e.Message));
+                    IocContainer.Get<ILogging>().Debug(e.StackTrace);
+                }
             }
         }
 
@@ -109,7 +109,7 @@ namespace Noised.Core.Plugins
             if (isPluginInstalled && forceInstallation)
             {
                 logger.Debug(String.Format(
-                        "Plugin {0} has develop version of 0.0.0. Forcing Installation...", 
+                        "Plugin {0} has develop version of 0.0.0. Forcing Installation...",
                         pluginRegistrationData.Name));
             }
 
@@ -132,7 +132,7 @@ namespace Noised.Core.Plugins
                     //Install the plugin
                     //Installing plugin configuration  
                     var etcPath = new DirectoryInfo(tmpPluginDirectory + Path.DirectorySeparatorChar + "etc");
-                    string noisedEtcPath = 
+                    string noisedEtcPath =
                         Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
                         Path.DirectorySeparatorChar +
                         "etc";
@@ -149,7 +149,7 @@ namespace Noised.Core.Plugins
                     }
                     //Installing plugin files  
                     var pluginsPath = new DirectoryInfo(tmpPluginDirectory + Path.DirectorySeparatorChar + "plugins");
-                    string noisedPluginsPath = 
+                    string noisedPluginsPath =
                         Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
                         Path.DirectorySeparatorChar +
                         "plugins";

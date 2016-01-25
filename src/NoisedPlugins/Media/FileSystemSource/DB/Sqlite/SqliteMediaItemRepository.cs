@@ -17,7 +17,7 @@ namespace Noised.Plugins.FileSystemSource.DB
         /// <param name="connection">The connection to use</param>
         internal SqliteMediaItemRepository(SqliteConnection connection)
         {
-            this.connection = connection; 
+            this.connection = connection;
         }
 
         /// <summary>
@@ -87,25 +87,25 @@ namespace Noised.Plugins.FileSystemSource.DB
                     {
                         metaData = new MetaData();
                         reader.Read();
-                        metaData.Album = reader["Album"] == DBNull.Value ? null : (string)reader["Album"]; 
-                        metaData.BeatsPerMinute = 
-								reader["BeatsPerMinute"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["BeatsPerMinute"]);
+                        metaData.Album = reader["Album"] == DBNull.Value ? null : (string)reader["Album"];
+                        metaData.BeatsPerMinute =
+                                reader["BeatsPerMinute"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["BeatsPerMinute"]);
                         metaData.Comment = reader["Comment"] == DBNull.Value ? null : (string)reader["Comment"];
                         metaData.Conductor = reader["Conductor"] == DBNull.Value ? null : (string)reader["Conductor"];
                         metaData.Copyright = reader["Copyright"] == DBNull.Value ? null : (string)reader["Copyright"];
                         metaData.Disc =
-								reader["Disc"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["Disc"]);
-                        metaData.DiscCount = 
-								reader["DiscCount"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["DiscCount"]);
+                                reader["Disc"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["Disc"]);
+                        metaData.DiscCount =
+                                reader["DiscCount"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["DiscCount"]);
                         metaData.Grouping = reader["Grouping"] == DBNull.Value ? null : (string)reader["Grouping"];
                         metaData.Lyrics = reader["Lyrics"] == DBNull.Value ? null : (string)reader["Lyrics"];
                         metaData.Title = reader["Title"] == DBNull.Value ? null : (string)reader["Title"];
-                        metaData.TrackCount = 
-								reader["TrackCount"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["TrackCount"]);
-                        metaData.TrackNumber = 
-								reader["TrackNumber"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["TrackNumber"]);
+                        metaData.TrackCount =
+                                reader["TrackCount"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["TrackCount"]);
+                        metaData.TrackNumber =
+                                reader["TrackNumber"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["TrackNumber"]);
                         metaData.Year =
-								reader["Year"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["Year"]);
+                                reader["Year"] == DBNull.Value ? 0 : Convert.ToUInt32(reader["Year"]);
                     }
                 }
             }
@@ -240,7 +240,7 @@ namespace Noised.Plugins.FileSystemSource.DB
                 }
             }
         }
-		
+
         public void Delete(MediaItem item)
         {
             deleteData(MetaDataSql.DELETE_STMT, item);
@@ -274,25 +274,25 @@ namespace Noised.Plugins.FileSystemSource.DB
                 });
         }
 
-		public int FindByArtist(string artist,IList<MediaItem> ret)
-		{
+        public int FindByArtist(string artist, IList<MediaItem> ret)
+        {
             return GetMediaItems(MediaItemsSql.FIND_BY_ARTIST_STMT,
                 ret,
                 new List<SqliteParameter>
                 {
                     new SqliteParameter("@PATTERN", "%" + artist + "%")
                 });
-		}
+        }
 
-		public int FindByAlbum(string album,IList<MediaItem> ret)
-		{
+        public int FindByAlbum(string album, IList<MediaItem> ret)
+        {
             return GetMediaItems(MediaItemsSql.FIND_BY_ALBUM_STMT,
                 ret,
                 new List<SqliteParameter>
                 {
                     new SqliteParameter("@PATTERN", "%" + album + "%")
                 });
-		}
+        }
 
 
         #endregion
