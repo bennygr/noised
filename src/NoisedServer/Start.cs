@@ -1,4 +1,3 @@
-using System.Linq;
 using Noised.Core;
 using Noised.Core.Config;
 using Noised.Core.DB;
@@ -7,7 +6,6 @@ using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Service;
 using Noised.Logging;
-using Noised.Plugins.Commands.CoreCommands;
 
 namespace Noised.Server
 {
@@ -55,14 +53,10 @@ namespace Noised.Server
             logger.Info("Noised has been started.");
 
             // ---------- Testcode ----------
-            IocContainer.Get<IPlaylistManager>().AddPlaylist(IocContainer.Get<IPlaylistManager>().CreatePlaylist("testliste"));
-            sourceAccumulator.Search("%")
-                .ToList()
-                .ForEach(
-                    x => x.MediaItems.ToList().ForEach(y => IocContainer.Get<IPlaylistManager>().FindPlaylists("testliste").Add(y)));
+            //core.ExecuteCommandAsync(new CreatePlaylist(null, "testliste"));
+            //core.ExecuteCommandAsync(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test.mp3" }));
+            //Playlist p = IocContainer.Get<IPlaylistManager>().FindPlaylists("testliste");
 
-            core.ExecuteCommandAsync(new Play(null, @"C:\test\test2.mp3"));
-            
             return 0;
         }
     }
