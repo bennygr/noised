@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Noised.Core.Media
 {
-    public class PlaylistManager
+    public class PlaylistManager : IPlaylistManager
     {
         private readonly List<Playlist> playlists;
 
@@ -17,21 +17,9 @@ namespace Noised.Core.Media
             }
         }
 
-        internal Playlist LoadedPlaylist { get; private set; }
+        public Playlist LoadedPlaylist { get; private set; }
 
-        private static PlaylistManager instance;
-
-        public static PlaylistManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new PlaylistManager();
-                return instance;
-            }
-        }
-
-        private PlaylistManager()
+        public PlaylistManager()
         {
             playlists = new List<Playlist>();
         }

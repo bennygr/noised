@@ -1,4 +1,5 @@
 using System;
+using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 using Noised.Logging;
@@ -91,7 +92,7 @@ namespace Noised.Core.Media
                 return;
             }
 
-            Playlist playlist = PlaylistManager.Instance.LoadedPlaylist;
+            Playlist playlist = IocContainer.Get<IPlaylistManager>().LoadedPlaylist;
             if (playlist != null)
             {
                 MediaItem nextItem = playlist.GetNextItem();
