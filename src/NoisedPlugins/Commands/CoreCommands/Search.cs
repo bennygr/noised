@@ -12,7 +12,7 @@ namespace Noised.Plugins.Commands.CoreCommands
     /// </summary>
     public class Search : AbstractCommand
     {
-		private readonly string searchPattern;
+        private readonly string searchPattern;
 
         /// <summary>
         ///		Constructor
@@ -21,7 +21,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         public Search(ServiceConnectionContext context, String searchPattern)
             : base(context)
         {
-			this.searchPattern = searchPattern;
+            this.searchPattern = searchPattern;
         }
 
         #region implemented abstract members of AbstractCommand
@@ -30,10 +30,11 @@ namespace Noised.Plugins.Commands.CoreCommands
         {
             var sources = IocContainer.Get<IMediaSourceAccumulator>();
             var searchResults = sources.Search(searchPattern);
-			Context.SendResponse(new ResponseMetaData{
-						Name = "Noised.Commands.Core.Search",
-						Parameters = new List<Object>{searchResults}
-					});
+            Context.SendResponse(new ResponseMetaData
+            {
+                Name = "Noised.Commands.Core.Search",
+                Parameters = new List<Object> { searchResults }
+            });
         }
 
         #endregion
