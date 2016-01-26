@@ -91,10 +91,14 @@ namespace Noised.Core.Media
                 return;
             }
 
-            MediaItem nextItem = PlaylistManager.Instance.LoadedPlaylist.GetNextItem();
+            Playlist playlist = PlaylistManager.Instance.LoadedPlaylist;
+            if (playlist != null)
+            {
+                MediaItem nextItem = playlist.GetNextItem();
 
-            if (nextItem != null)
-                Play(nextItem);
+                if (nextItem != null)
+                    Play(nextItem);
+            }
         }
 
         public void Stop()
