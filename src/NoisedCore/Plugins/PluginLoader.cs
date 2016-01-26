@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Noised.Logging;
 using Noised.Core.DB;
 using Noised.Core.IOC;
+using Noised.Logging;
 
 namespace Noised.Core.Plugins
 {
@@ -18,7 +18,7 @@ namespace Noised.Core.Plugins
 
         private const String PLUGIN_TYPE_NAME = "Noised.Core.Plugins.IPlugin";
         private List<IPlugin> plugins = new List<IPlugin>();
-        private readonly Dictionary<IPlugin,PluginMetaData> metaDataStore = new Dictionary<IPlugin,PluginMetaData>();
+        private readonly Dictionary<IPlugin, PluginMetaData> metaDataStore = new Dictionary<IPlugin, PluginMetaData>();
 
         #endregion
 
@@ -26,7 +26,7 @@ namespace Noised.Core.Plugins
 
         public int LoadPlugins()
         {
-            var logger = IocContainer.Get<ILogging>();	
+            var logger = IocContainer.Get<ILogging>();
             using (var unitOfWork = IocContainer.Get<IUnitOfWork>())
             {
                 var files = unitOfWork.PluginRepository.GetFiles(".nplugin");
@@ -43,9 +43,9 @@ namespace Noised.Core.Plugins
                         Type pluginBaseType = Type.GetType(PLUGIN_TYPE_NAME);
                         pluginTypes = assembly.GetTypes().Where(pluginBaseType.IsAssignableFrom);
                         if (pluginTypes != null && pluginTypes.Any())
-                        {	
+                        {
                             //Plugin init data
-                            var pluginInitializer = 
+                            var pluginInitializer =
                                 new PluginInitializer
                                 {
                                     Logging = logger
@@ -57,7 +57,7 @@ namespace Noised.Core.Plugins
 
                             //Loading meta data
                             PluginMetaData metaData = null;
-                            metaData = unitOfWork.PluginRepository.GetForFile(file);	
+                            metaData = unitOfWork.PluginRepository.GetForFile(file);
                             if (metaData != null)
                             {
                                 metaDataStore.Add(plugin, metaData);
@@ -85,16 +85,16 @@ namespace Noised.Core.Plugins
                         IocContainer.Get<ILogging>().Error(e.Message);
                     }
                 }
-				plugins = plugins.OrderByDescending(p => p.GetMetaData().Priority).ToList();
+                plugins = plugins.OrderByDescending(p => p.GetMetaData().Priority).ToList();
                 return plugins.Count;
             }
         }
-		
+
         public IEnumerable<IPlugin> GetPlugins()
         {
             return plugins;
         }
-		
+
         public IEnumerable<T> GetPlugins<T>() where T : IPlugin
         {
             var concretPlugins = new List<T>();
@@ -107,10 +107,10 @@ namespace Noised.Core.Plugins
             }
             return concretPlugins;
         }
-		
+
         public T GetPlugin<T>() where T : IPlugin
         {
-			IPlugin plugin = GetPlugins<T>().OrderByDescending(p => p.GetMetaData().Priority).FirstOrDefault();
+            IPlugin plugin = GetPlugins<T>().OrderByDescending(p => p.GetMetaData().Priority).FirstOrDefault();
             if (plugin != null)
                 return (T)plugin;
             return default(T);
