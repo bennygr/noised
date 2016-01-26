@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Mono.Data.Sqlite;
 using Noised.Core.DB.Sqlite;
 using Noised.Core.Media;
+using Noised.Plugins.FileSystemSource.DB;
 
-namespace Noised.Plugins.FileSystemSource.DB
+namespace Noised.Plugins.Media.FileSystemSource.DB.Sqlite
 {
     class SqliteMediaItemRepository : IMediaItemRepository
     {
@@ -23,7 +25,7 @@ namespace Noised.Plugins.FileSystemSource.DB
         /// <summary>
         ///		Internal method for deleting data related to a MediaItem	
         /// </summary>
-        private void deleteData(string statement, MediaItem mediaItem)
+        private void DeleteData(string statement, MediaItem mediaItem)
         {
             using (var cmd = connection.CreateCommand())
             {
@@ -60,7 +62,8 @@ namespace Noised.Plugins.FileSystemSource.DB
                         mediaItem.Id = id;
                         //Reading metadata
                         mediaItem.MetaData = GetMetaData(mediaItem);
-                        ret.Add(mediaItem);
+                        if (ret.All(x => x.Checksum != mediaItem.Checksum))
+                            ret.Add(mediaItem);
                         count++;
                     }
                 }
@@ -113,19 +116,18 @@ namespace Noised.Plugins.FileSystemSource.DB
             if (metaData != null)
             {
                 //Further meta data from other tables
-                metaData.AlbumArtists = readStringList(MetaDataSql.SELECT_ALBUM_ARTISTS_STMT, "AlbumArtist", mediaItem);
-                metaData.Artists = readStringList(MetaDataSql.SELECT_ARTISTS_STMT, "Artist", mediaItem);
-                metaData.Composers = readStringList(MetaDataSql.SELECT_COMPOSER_STMT, "Composer", mediaItem);
-                metaData.Genres = readStringList(MetaDataSql.SELECT_GENRE_STMT, "Genre", mediaItem);
+                metaData.AlbumArtists = ReadStringList(MetaDataSql.SELECT_ALBUM_ARTISTS_STMT, "AlbumArtist", mediaItem);
+                metaData.Artists = ReadStringList(MetaDataSql.SELECT_ARTISTS_STMT, "Artist", mediaItem);
+                metaData.Composers = ReadStringList(MetaDataSql.SELECT_COMPOSER_STMT, "Composer", mediaItem);
+                metaData.Genres = ReadStringList(MetaDataSql.SELECT_GENRE_STMT, "Genre", mediaItem);
             }
             return metaData;
         }
 
-
         /// <summary>
         ///		Internal Method for reading a list of meta data for a given MediaItem
         /// </summary>
-        private List<string> readStringList(string statement, string columnName, MediaItem mediaItem)
+        private List<string> ReadStringList(string statement, string columnName, MediaItem mediaItem)
         {
             var ret = new List<string>();
             //List of ALbum-Artists
@@ -243,12 +245,12 @@ namespace Noised.Plugins.FileSystemSource.DB
 
         public void Delete(MediaItem item)
         {
-            deleteData(MetaDataSql.DELETE_STMT, item);
-            deleteData(MetaDataSql.DELETE_GENRE_STMT, item);
-            deleteData(MetaDataSql.DELETE_ARTISTS_STMT, item);
-            deleteData(MetaDataSql.DELETE_COMPOSER_STMT, item);
-            deleteData(MetaDataSql.DELETE_ALBUM_ARTISTS_STMT, item);
-            deleteData(MediaItemsSql.DELETE_STMT, item);
+            DeleteData(MetaDataSql.DELETE_STMT, item);
+            DeleteData(MetaDataSql.DELETE_GENRE_STMT, item);
+            DeleteData(MetaDataSql.DELETE_ARTISTS_STMT, item);
+            DeleteData(MetaDataSql.DELETE_COMPOSER_STMT, item);
+            DeleteData(MetaDataSql.DELETE_ALBUM_ARTISTS_STMT, item);
+            DeleteData(MediaItemsSql.DELETE_STMT, item);
         }
 
         public MediaItem GetByUri(Uri uri)
@@ -293,7 +295,6 @@ namespace Noised.Plugins.FileSystemSource.DB
                     new SqliteParameter("@PATTERN", "%" + album + "%")
                 });
         }
-
 
         #endregion
     };

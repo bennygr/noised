@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Noised.Core;
 using Noised.Core.Config;
@@ -56,10 +55,8 @@ namespace Noised.Server
             logger.Info("Noised has been started.");
 
             // ---------- Testcode ----------
-            IEnumerable<MediaSourceSearchResult> bla = sourceAccumulator.Search("*");
-
             PlaylistManager.Instance.AddPlaylist(PlaylistManager.Instance.CreatePlaylist("testliste"));
-            sourceAccumulator.Search("*")
+            sourceAccumulator.Search("%")
                 .ToList()
                 .ForEach(
                     x => x.MediaItems.ToList().ForEach(y => PlaylistManager.Instance.FindPlaylists("testliste").Add(y)));
