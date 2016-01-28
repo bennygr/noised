@@ -44,11 +44,13 @@
     <Compile Include="AddToPlaylist.cs" />
     <Compile Include="CoreCommandBundlePlugin.cs" />
     <Compile Include="CreatePlaylist.cs" />
+    <Compile Include="DeletePlaylist.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Pause.cs" />
     <Compile Include="Ping.cs" />
     <Compile Include="Play.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoveFromPlaylist.cs" />
     <Compile Include="Resume.cs" />
     <Compile Include="Stop.cs" />
     <Compile Include="Search.cs" />
