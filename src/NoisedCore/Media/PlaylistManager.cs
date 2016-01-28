@@ -51,5 +51,10 @@ namespace Noised.Core.Media
         {
             LoadedPlaylist = playlist;
         }
+
+        public void DeletePlaylist(Playlist playlist)
+        {
+            playlists.Remove(playlist);
+        }
     }
 }
