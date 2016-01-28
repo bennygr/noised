@@ -42,5 +42,11 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="playlist">Playlist to load</param>
         void LoadPlaylist(Playlist playlist);
+
+        /// <summary>
+        /// Deletes the given Playlist
+        /// </summary>
+        /// <param name="playlist">Playlist to delete</param>
+        void DeletePlaylist(Playlist playlist);
     }
 }
