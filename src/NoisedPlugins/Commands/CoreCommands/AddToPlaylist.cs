@@ -22,14 +22,35 @@ namespace Noised.Plugins.Commands.CoreCommands
         public AddToPlaylist(ServiceConnectionContext context, string playlistName, IList<string> mediaItemUris)
             : base(context)
         {
-            this.playlistName = playlistName;
-            this.mediaItemUris = mediaItemUris;
             if (context == null)
                 throw new ArgumentNullException("context");
+
             if (String.IsNullOrWhiteSpace(playlistName))
-                throw new ArgumentException("please provide a valid Playlist name", "playlistName");
-            if (mediaItemUris == null || !mediaItemUris.Any())
+            {
+                string message = "please provide a valid Playlist name";
+                Context.SendResponse(new ResponseMetaData
+                {
+                    Name = "Noised.Plugins.Commands.CoreCommands.AddToPlaylist",
+                    Parameters = new List<object> { message }
+                });
+
+                throw new ArgumentException(message, "playlistName");
+            }
+
+            if (mediaItemUris == null ||
+                !mediaItemUris.Any())
+            {
+                Context.SendResponse(new ResponseMetaData
+                {
+                    Name = "Noised.Plugins.Commands.CoreCommands.AddToPlaylist",
+                    Parameters = new List<object> { "please provide valid MediaItemUris" }
+                });
+
                 throw new ArgumentNullException("mediaItemUris");
+            }
+
+            this.playlistName = playlistName;
+            this.mediaItemUris = mediaItemUris;
         }
 
         #region Overrides of AbstractCommand
