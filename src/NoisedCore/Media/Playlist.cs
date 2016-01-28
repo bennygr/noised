@@ -46,5 +46,10 @@ namespace Noised.Core.Media
 
             return items.ElementAtOrDefault(items.IndexOf(currentMediaItem));
         }
+
+        public void Remove(MediaItem mediaItem)
+        {
+            items.Remove(items.Find(x => x.Uri == mediaItem.Uri));
+        }
     }
 }
