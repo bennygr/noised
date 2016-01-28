@@ -53,9 +53,11 @@ namespace Noised.Server
             logger.Info("Noised has been started.");
 
             // ---------- Testcode ----------
-            //core.ExecuteCommandAsync(new CreatePlaylist(null, "testliste"));
-            //core.ExecuteCommandAsync(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test.mp3" }));
+            //core.ExecuteCommand(new CreatePlaylist(null, "testliste"));
+            //core.ExecuteCommand(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test.mp3" }));
+            //core.ExecuteCommand(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test2.mp3" }));
             //Playlist p = IocContainer.Get<IPlaylistManager>().FindPlaylist("testliste");
+            //core.ExecuteCommand(new RemoveFromPlaylist(null, "testliste", new List<string> { @"C:\test\test.mp3" }));
 
             return 0;
         }
