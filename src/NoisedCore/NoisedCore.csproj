@@ -129,6 +129,7 @@
     <Compile Include="DB\Sqlite\SqliteCoreConnectionFactory.cs" />
     <Compile Include="DB\Sqlite\ISqliteConnectionFactory.cs" />
     <Compile Include="Media\Searchable.cs" />
+    <Compile Include="Service\IServiceConnectionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\Commands\CommandTemplate.txt" />
@@ -153,5 +154,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="etc\" />
+    <Folder Include="DB\Sqlite\" />
+    <Folder Include="Crypto\" />
+  </ItemGroup>
 </Project>
