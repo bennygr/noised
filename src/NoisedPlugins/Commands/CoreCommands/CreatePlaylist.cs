@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Media;
@@ -24,14 +23,13 @@ namespace Noised.Plugins.Commands.CoreCommands
 
             if (String.IsNullOrWhiteSpace(name))
             {
-                string message = "please provide a valid Playlist name";
-                Context.SendResponse(new ResponseMetaData
+                ArgumentException argumentException = new ArgumentException("please provide a valid Playlist name", "name");
+                Context.SendResponse(new ErrorResponse(argumentException)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.CreatePlaylist",
-                    Parameters = new List<object> { message }
+                    Name = "Noised.Plugins.Commands.CoreCommands.CreatePlaylist"
                 });
 
-                throw new ArgumentException(message, "name");
+                throw argumentException;
             }
 
             this.name = name;

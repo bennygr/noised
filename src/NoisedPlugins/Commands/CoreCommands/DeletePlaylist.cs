@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Media;
@@ -24,14 +23,13 @@ namespace Noised.Plugins.Commands.CoreCommands
 
             if (String.IsNullOrWhiteSpace(playlistName))
             {
-                string message = "please provide a valid Playlist name";
-                Context.SendResponse(new ResponseMetaData
+                ArgumentException argumentException = new ArgumentException("please provide a valid Playlist name", "playlistName");
+                Context.SendResponse(new ErrorResponse(argumentException)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.DeletePlaylist",
-                    Parameters = new List<object> { message }
+                    Name = "Noised.Plugins.Commands.CoreCommands.DeletePlaylist"
                 });
 
-                throw new ArgumentException(message, "playlistName");
+                throw argumentException;
             }
 
             this.playlistName = playlistName;
@@ -50,10 +48,9 @@ namespace Noised.Plugins.Commands.CoreCommands
 
             if (playlist == null)
             {
-                Context.SendResponse(new ResponseMetaData
+                Context.SendResponse(new ErrorResponse("Playlist " + playlistName + " not found")
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.DeletePlaylist",
-                    Parameters = new List<object> { "Playlist " + playlistName + " not found" }
+                    Name = "Noised.Plugins.Commands.CoreCommands.DeletePlaylist"
                 });
                 return;
             }

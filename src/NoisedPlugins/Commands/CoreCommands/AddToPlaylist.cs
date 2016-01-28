@@ -27,26 +27,27 @@ namespace Noised.Plugins.Commands.CoreCommands
 
             if (String.IsNullOrWhiteSpace(playlistName))
             {
-                string message = "please provide a valid Playlist name";
-                Context.SendResponse(new ResponseMetaData
+                ArgumentException argumentException = new ArgumentException("please provide a valid Playlist name", "playlistName");
+
+                Context.SendResponse(new ErrorResponse(argumentException)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.AddToPlaylist",
-                    Parameters = new List<object> { message }
+                    Name = "Noised.Plugins.Commands.CoreCommands.AddToPlaylist"
                 });
 
-                throw new ArgumentException(message, "playlistName");
+                throw argumentException;
             }
 
             if (mediaItemUris == null ||
                 !mediaItemUris.Any())
             {
-                Context.SendResponse(new ResponseMetaData
+                ArgumentNullException argumentNullException = new ArgumentNullException("mediaItemUris");
+
+                Context.SendResponse(new ErrorResponse(argumentNullException)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.AddToPlaylist",
-                    Parameters = new List<object> { "please provide valid MediaItemUris" }
+                    Name = "Noised.Plugins.Commands.CoreCommands.AddToPlaylist"
                 });
 
-                throw new ArgumentNullException("mediaItemUris");
+                throw argumentNullException;
             }
 
             this.playlistName = playlistName;
