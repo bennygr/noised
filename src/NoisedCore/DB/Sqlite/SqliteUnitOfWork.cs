@@ -1,38 +1,51 @@
 using Mono.Data.Sqlite;
-using Noised.Core.DB;
 
 namespace Noised.Core.DB.Sqlite
 {
-	/// <summary>
-	///		Sqlite implementation of IUnitOfWork
-	/// </summary>
+    /// <summary>
+    ///		Sqlite implementation of IUnitOfWork
+    /// </summary>
     public class SqliteUnitOfWork : IUnitOfWork
     {
-		private IPluginRepository pluginRepository;
-		private readonly SqliteConnection connection; 
-		private readonly SqliteTransaction transaction; 
+        private IPluginRepository pluginRepository;
+        private IPlaylistRepository playlistRepository;
+        private readonly SqliteConnection connection;
+        private readonly SqliteTransaction transaction;
 
-		public SqliteUnitOfWork()
-		{
-			var connectionString = "Data Source=" + SqliteFileSource.GetDBFileName();
-			connection = new SqliteConnection(connectionString);
-			connection.Open();
-			transaction = connection.BeginTransaction();
-		}
+        public SqliteUnitOfWork()
+        {
+            var connectionString = "Data Source=" + SqliteFileSource.GetDBFileName();
+            connection = new SqliteConnection(connectionString);
+            connection.Open();
+            transaction = connection.BeginTransaction();
+        }
 
         #region IUnitOfWork implementation
 
-		public IPluginRepository PluginRepository
-		{
-			get
-			{
-				if(pluginRepository == null)
-				{
-					pluginRepository = new SqlitePluginRepository(connection);
-				}
-				return pluginRepository;
-			}
-		}
+        public IPluginRepository PluginRepository
+        {
+            get
+            {
+                if (pluginRepository == null)
+                {
+                    pluginRepository = new SqlitePluginRepository(connection);
+                }
+                return pluginRepository;
+            }
+        }
+
+        /// <summary>
+        /// Repository for Playlists
+        /// </summary>
+        public IPlaylistRepository PlaylistRepository
+        {
+            get
+            {
+                if (playlistRepository == null)
+                    playlistRepository = new SqlitePlaylistRepository();
+                return playlistRepository;
+            }
+        }
 
         public void SaveChanges()
         {
@@ -45,10 +58,10 @@ namespace Noised.Core.DB.Sqlite
 
         public void Dispose()
         {
-			if(connection != null)
-			{
-				connection.Close();
-			}
+            if (connection != null)
+            {
+                connection.Close();
+            }
         }
 
         #endregion

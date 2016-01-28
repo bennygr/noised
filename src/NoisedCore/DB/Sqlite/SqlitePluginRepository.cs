@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
 using Mono.Data.Sqlite;
-using Noised.Core.DB.Sqlite;
 using Noised.Core.Plugins;
 
 namespace Noised.Core.DB.Sqlite
@@ -12,7 +11,7 @@ namespace Noised.Core.DB.Sqlite
     class SqlitePluginRepository : IPluginRepository
     {
         private SqliteConnection connection;
-	
+
         internal SqlitePluginRepository(SqliteConnection connection)
         {
             this.connection = connection;
@@ -33,10 +32,10 @@ namespace Noised.Core.DB.Sqlite
                 cmd.Parameters.Add(new SqliteParameter("@Author", pluginRegistration.Author));
                 cmd.Parameters.Add(new SqliteParameter("@AuthorEmail", pluginRegistration.AuthorEmail));
                 cmd.Parameters.Add(new SqliteParameter("@Priority", pluginRegistration.Priority));
-				if(pluginRegistration.CreationDate.HasValue)
-					cmd.Parameters.Add(new SqliteParameter("@CreationDate", pluginRegistration.CreationDate.Value.Ticks));
-				else
-					cmd.Parameters.Add(new SqliteParameter("@CreationDate", null));
+                if (pluginRegistration.CreationDate.HasValue)
+                    cmd.Parameters.Add(new SqliteParameter("@CreationDate", pluginRegistration.CreationDate.Value.Ticks));
+                else
+                    cmd.Parameters.Add(new SqliteParameter("@CreationDate", null));
                 cmd.ExecuteNonQuery();
             }
 
@@ -73,7 +72,7 @@ namespace Noised.Core.DB.Sqlite
                 cmd.ExecuteNonQuery();
             }
         }
-	
+
         public PluginMetaData GetByGuid(Guid guid)
         {
             using (var cmd = connection.CreateCommand())
@@ -91,11 +90,11 @@ namespace Noised.Core.DB.Sqlite
                             Name = (string)reader["Name"],
                             Guid = (string)reader["GUID"],
                             Version = (string)reader["Version"],
-							Description = reader["Description"] == DBNull.Value ? null: (string)reader["Description"],
-							Author = reader["Author"] == DBNull.Value ? null : (string)reader["Author"],
-							AuthorEmail = reader["AuthorEmail"] == DBNull.Value ? null :(string)reader["AuthorEmail"],
-							Priority = reader["Priority"] == DBNull.Value ? 0 : (long)reader["Priority"],
-							CreationDate = reader["CreationDate"] == DBNull.Value ? (DateTime?)null : new DateTime((long)reader["CreationDate"])
+                            Description = reader["Description"] == DBNull.Value ? null : (string)reader["Description"],
+                            Author = reader["Author"] == DBNull.Value ? null : (string)reader["Author"],
+                            AuthorEmail = reader["AuthorEmail"] == DBNull.Value ? null : (string)reader["AuthorEmail"],
+                            Priority = reader["Priority"] == DBNull.Value ? 0 : (long)reader["Priority"],
+                            CreationDate = reader["CreationDate"] == DBNull.Value ? (DateTime?)null : new DateTime((long)reader["CreationDate"])
                         };
                     }
                     return null;
@@ -114,33 +113,33 @@ namespace Noised.Core.DB.Sqlite
                 {
                     if (reader.HasRows)
                     {
-						var guidString = (string)reader["GUID"];
-						return GetByGuid(Guid.Parse(guidString));
+                        var guidString = (string)reader["GUID"];
+                        return GetByGuid(Guid.Parse(guidString));
                     }
                 }
             }
-			return null;
+            return null;
         }
 
-		public IList<FileInfo> GetFiles(string pattern=null)
+        public IList<FileInfo> GetFiles(string pattern = null)
         {
-			var ret = new List<FileInfo>();
-            using(var cmd = connection.CreateCommand())
-			{
-				cmd.CommandText = PluginFilesSql.GET_ALL_FILES_STMT;
-				using(var reader = cmd.ExecuteReader())
-				{
-					while(reader.Read())
-					{
-						var fileName = (string)reader["File"];
-						if(pattern == null || Regex.IsMatch(fileName,pattern))
-						{
-							ret.Add(new FileInfo(fileName));
-						}
-					}
-				}
-			}
-			return ret;
+            var ret = new List<FileInfo>();
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = PluginFilesSql.GET_ALL_FILES_STMT;
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var fileName = (string)reader["File"];
+                        if (pattern == null || Regex.IsMatch(fileName, pattern))
+                        {
+                            ret.Add(new FileInfo(fileName));
+                        }
+                    }
+                }
+            }
+            return ret;
         }
 
         #endregion
