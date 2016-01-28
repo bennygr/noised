@@ -42,7 +42,7 @@ namespace Noised.Plugins.Commands.CoreCommands
             foreach (string mediaItemUri in mediaItemUris)
             {
                 IocContainer.Get<IPlaylistManager>()
-                    .FindPlaylists(playlistName)
+                    .FindPlaylist(playlistName)
                     .Add(IocContainer.Get<IMediaSourceAccumulator>().Get(new Uri(mediaItemUri)));
             }
         }

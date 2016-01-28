@@ -42,7 +42,7 @@ namespace Noised.Core.Media
             playlists.Add(playlist);
         }
 
-        public Playlist FindPlaylists(string name)
+        public Playlist FindPlaylist(string name)
         {
             return playlists.Find(x => x.Name == name);
         }

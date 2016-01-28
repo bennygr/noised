@@ -55,7 +55,7 @@ namespace Noised.Server
             // ---------- Testcode ----------
             //core.ExecuteCommandAsync(new CreatePlaylist(null, "testliste"));
             //core.ExecuteCommandAsync(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test.mp3" }));
-            //Playlist p = IocContainer.Get<IPlaylistManager>().FindPlaylists("testliste");
+            //Playlist p = IocContainer.Get<IPlaylistManager>().FindPlaylist("testliste");
 
             return 0;
         }

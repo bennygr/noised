@@ -35,7 +35,7 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="name">Name of the desired Playlist</param>
         /// <returns>The Playlist with the given name</returns>
-        Playlist FindPlaylists(string name);
+        Playlist FindPlaylist(string name);
 
         /// <summary>
         /// Loads a Playlist
