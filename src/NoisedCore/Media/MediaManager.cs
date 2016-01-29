@@ -14,6 +14,7 @@ namespace Noised.Core.Media
 		private IPluginLoader pluginLoader;
 		private IAudioPlugin currentAudioOutput;
 		private ILogging logger;
+		private MediaItem currentMediaItem;
 
 		/// <summary>
 		///		Constructor
@@ -24,6 +25,19 @@ namespace Noised.Core.Media
 		{
 			this.logger = logger;
 			this.pluginLoader = pluginLoader;
+			foreach (IAudioPlugin audio in pluginLoader.GetPlugins<IAudioPlugin>())
+			{
+				audio.SongFinished += OnSongFinished;
+			}
+		}
+
+		private void OnSongFinished (Object sender, AudioEventArgs args)
+		{
+			lock(locker)
+			{
+				logger.Info("Finished playing " + args.MediaItem.Uri);
+				currentMediaItem = null;
+			}
 		}
 
 		private IAudioPlugin GetAudioOutputForItem(MediaItem item)
@@ -46,6 +60,17 @@ namespace Noised.Core.Media
 
 		#region IMediaManager
 		
+		public MediaItem CurrentMediaItem
+		{
+			get
+			{
+				lock(locker)
+				{
+					return currentMediaItem;
+				}
+			}
+		}
+
 		public bool Shuffle {get;set;}
 		
 		public bool Repeat {get;set;}
@@ -77,6 +102,7 @@ namespace Noised.Core.Media
 								            audio.GetMetaData().Name,
 											item.Uri));
 				currentAudioOutput = audio;
+				currentMediaItem = item;	
 			}
 			currentAudioOutput.Play(item);
             var broadcastMessage =
@@ -84,7 +110,6 @@ namespace Noised.Core.Media
                 {
                     Name = "Noised.Commands.Core.Play",
 					Parameters = new List<Object>{item}
-					
                 };
 			IocContainer.Get<IServiceConnectionManager>().SendBroadcast(broadcastMessage);
 		}

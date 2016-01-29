@@ -6,6 +6,11 @@ namespace Noised.Core.Media
 	public interface IMediaManager
 	{
 		/// <summary>
+		///		The current playback item or null if no item is playbacked
+		/// </summary>
+		MediaItem CurrentMediaItem{get;}
+
+		/// <summary>
 		///		Shuffle mode 
 		/// </summary>
 		bool Shuffle {get;set;}
