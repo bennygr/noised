@@ -21,7 +21,6 @@ namespace Noised.Core.Service
         private ICore core;
         private List<ServiceConnectionContext> connections;
         private readonly Object locker = new Object();
-		private string x;
 
         #endregion
 
@@ -35,7 +34,6 @@ namespace Noised.Core.Service
             this.logging = IocContainer.Get<ILogging>();
             this.core = IocContainer.Get<ICore>();
             this.connections = new List<ServiceConnectionContext>();
-			this.x = System.DateTime.Now.ToString();
         }
 
         #endregion
@@ -54,7 +52,7 @@ namespace Noised.Core.Service
                         eventArgs.Connection,
                         IocContainer.Get<IProtocol>()));
             }
-            logging.Debug(String.Format("A new client connected. {0} clients connected" + x, connections.Count));
+            logging.Debug(String.Format("A new client connected. {0} clients connected.", connections.Count));
         }
 
         /// <summary>
@@ -66,7 +64,7 @@ namespace Noised.Core.Service
             {
                 connections.RemoveAll(c => c.Connection == eventArgs.Connection);
             }
-            logging.Debug(String.Format("A client disconnected. {0} clients connected" +x , connections.Count));
+            logging.Debug(String.Format("A client disconnected. {0} clients connected.", connections.Count));
         }
 
         #endregion
@@ -115,11 +113,8 @@ namespace Noised.Core.Service
                 {
                     activeConnections = connections;
                 }
-                IocContainer.Get<ILogging>().Debug("Broadcast " + response + x);
-                logging.Debug(String.Format("Broadcast to  {0} clients", activeConnections.Count));
                 foreach (var connection in activeConnections)
                 {
-                    IocContainer.Get<ILogging>().Debug("Broadcast for " + connection);
                     connection.SendResponse(response);
                 }
             }
