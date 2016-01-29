@@ -94,7 +94,6 @@
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\IrrKlang.nplugin" />
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\irrKlang.NET4.dll" />
-      <PluginRuntimeFiles Include=".\bin\$(Configuration)\IrrKlang.pdb" />
     </ItemGroup>
     <CreatePluginPackage Name="IrrKlang" PluginRuntimeFiles="@(PluginRuntimeFiles)">
     </CreatePluginPackage>
