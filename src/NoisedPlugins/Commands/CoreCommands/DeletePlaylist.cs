@@ -1,4 +1,5 @@
 ﻿using System;
+using Noised.Core;
 using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Media;
@@ -23,7 +24,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
             if (String.IsNullOrWhiteSpace(playlistName))
             {
-                ArgumentException argumentException = new ArgumentException("please provide a valid Playlist name", "playlistName");
+                ArgumentException argumentException = new ArgumentException(strings.NoValidPlaylistName, "playlistName");
                 Context.SendResponse(new ErrorResponse(argumentException)
                 {
                     Name = "Noised.Plugins.Commands.CoreCommands.DeletePlaylist"
