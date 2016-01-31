@@ -48,5 +48,11 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="playlist">Playlist to delete</param>
         void DeletePlaylist(Playlist playlist);
+
+        /// <summary>
+        /// Saves a Playlist to the configured medium
+        /// </summary>
+        /// <param name="playlist"></param>
+        void SavePlaylist(Playlist playlist);
     }
 }

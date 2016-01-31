@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using Mono.Data.Sqlite;
+using Noised.Core.IOC;
 using Noised.Core.Media;
 
 namespace Noised.Core.DB.Sqlite
@@ -7,12 +10,17 @@ namespace Noised.Core.DB.Sqlite
     internal class SqlitePlaylistRepository : IPlaylistRepository
     {
         private readonly SqliteConnection connection;
+        private readonly IUnitOfWork unitOfWork;
 
-        public SqlitePlaylistRepository(SqliteConnection connection)
+        public SqlitePlaylistRepository(SqliteConnection connection, IUnitOfWork unitOfWork)
         {
             if (connection == null)
                 throw new ArgumentNullException("connection");
+            if (unitOfWork == null)
+                throw new ArgumentNullException("unitOfWork");
+
             this.connection = connection;
+            this.unitOfWork = unitOfWork;
         }
 
         #region Implementation of IPlaylistRepository
@@ -21,26 +29,80 @@ namespace Noised.Core.DB.Sqlite
         {
             if (playlist == null)
                 throw new ArgumentNullException("playlist");
-        }
 
-        public Playlist ReadPlaylist(string name)
-        {
-            if (String.IsNullOrWhiteSpace(name))
-                throw new ArgumentException(strings.NoValidPlaylistName);
+            foreach (MediaItem mediaItem in playlist.Items)
+            {
+                using (SqliteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = PlaylistSql.InsertPlaylistStatement;
+                    cmd.CommandType = CommandType.Text;
 
-            return null;
+                    cmd.Parameters.Add(new SqliteParameter("@Name", playlist.Name));
+                    cmd.Parameters.Add(new SqliteParameter("@MediaItemUri", mediaItem.Uri));
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            unitOfWork.SaveChanges();
         }
 
         public void UpdatePlaylist(Playlist playlist)
         {
             if (playlist == null)
                 throw new ArgumentNullException("playlist");
+
+            DeletePlaylist(playlist);
+            CreatePlaylist(playlist);
         }
 
         public void DeletePlaylist(Playlist playlist)
         {
             if (playlist == null)
                 throw new ArgumentNullException("playlist");
+
+            using (SqliteCommand cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = PlaylistSql.DeletePlaylistStatement;
+                cmd.CommandType = CommandType.Text;
+
+                cmd.Parameters.Add(new SqliteParameter("@Name", playlist.Name));
+
+                cmd.ExecuteNonQuery();
+            }
+
+            unitOfWork.SaveChanges();
+        }
+
+        public List<Playlist> GetAllPlaylists()
+        {
+            DataTable playlistTable = new DataTable();
+
+            using (SqliteCommand cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = PlaylistSql.SelectAllPlaylists;
+                cmd.CommandType = CommandType.Text;
+
+                playlistTable.Load(cmd.ExecuteReader());
+            }
+
+            List<Playlist> playlists = new List<Playlist>();
+            Playlist p;
+            IMediaSourceAccumulator mediaSourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
+            foreach (DataRow row in playlistTable.Rows)
+            {
+                p = playlists.Find(x => x.Name == row["Name"].ToString());
+
+                if (p == null)
+                {
+                    p = new Playlist(row["Name"].ToString());
+                    playlists.Add(p);
+                }
+
+                p.Add(mediaSourceAccumulator.Get(new Uri(row["MediaItemUri"].ToString())));
+            }
+
+            return playlists;
         }
 
         #endregion

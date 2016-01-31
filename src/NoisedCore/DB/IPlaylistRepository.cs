@@ -1,4 +1,5 @@
-﻿using Noised.Core.Media;
+﻿using System.Collections.Generic;
+using Noised.Core.Media;
 
 namespace Noised.Core.DB
 {
@@ -6,10 +7,10 @@ namespace Noised.Core.DB
     {
         void CreatePlaylist(Playlist playlist);
 
-        Playlist ReadPlaylist(string name);
-
         void UpdatePlaylist(Playlist playlist);
 
         void DeletePlaylist(Playlist playlist);
+
+        List<Playlist> GetAllPlaylists();
     }
 }

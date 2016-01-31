@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Noised.Core.DB;
+using Noised.Core.IOC;
 
 namespace Noised.Core.Media
 {
     public class PlaylistManager : IPlaylistManager
     {
         private readonly List<Playlist> playlists;
+        private readonly IPlaylistRepository playlistRepository;
 
         public ReadOnlyCollection<Playlist> Playlists
         {
@@ -21,13 +24,14 @@ namespace Noised.Core.Media
 
         public PlaylistManager()
         {
-            playlists = new List<Playlist>();
+            playlistRepository = IocContainer.Get<IUnitOfWork>().PlaylistRepository;
+            playlists = playlistRepository.GetAllPlaylists();
         }
 
         public Playlist CreatePlaylist(string name)
         {
             if (String.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Please provide a valid (non empty) name for the playlist.", "name");
+                throw new ArgumentException(strings.NoValidPlaylistName, "name");
 
             return new Playlist(name);
         }
@@ -39,6 +43,7 @@ namespace Noised.Core.Media
             if (playlists.Any(x => x.Name == playlist.Name))
                 throw new PlaylistAlreadyExistsException("A Playlist with this name already exists.");
 
+            playlistRepository.CreatePlaylist(playlist);
             playlists.Add(playlist);
         }
 
@@ -55,6 +60,16 @@ namespace Noised.Core.Media
         public void DeletePlaylist(Playlist playlist)
         {
             playlists.Remove(playlist);
+            playlistRepository.DeletePlaylist(playlist);
+        }
+
+        /// <summary>
+        /// Saves a Playlist to the configured medium
+        /// </summary>
+        /// <param name="playlist"></param>
+        public void SavePlaylist(Playlist playlist)
+        {
+            playlistRepository.UpdatePlaylist(playlist);
         }
     }
 }

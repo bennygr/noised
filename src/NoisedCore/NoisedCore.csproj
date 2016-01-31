@@ -72,6 +72,7 @@
     <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\ResponseMetaData.cs" />
     <Compile Include="DB\IPlaylistRepository.cs" />
+    <Compile Include="DB\Sqlite\PlaylistSql.cs" />
     <Compile Include="DB\Sqlite\SqlitePlaylistRepository.cs" />
     <Compile Include="IOC\IocContainer.cs" />
     <Compile Include="Media\IMediaManager.cs" />
