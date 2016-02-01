@@ -64,9 +64,10 @@ namespace Noised.Plugins.Commands.CoreCommands
         {
             foreach (string mediaItemUri in mediaItemUris)
             {
-                IocContainer.Get<IPlaylistManager>()
-                    .FindPlaylist(playlistName)
-                    .Add(IocContainer.Get<IMediaSourceAccumulator>().Get(new Uri(mediaItemUri)));
+                IPlaylistManager playlistManager = IocContainer.Get<IPlaylistManager>();
+                Playlist playlist = playlistManager.FindPlaylist(playlistName);
+                playlist.Add(IocContainer.Get<IMediaSourceAccumulator>().Get(new Uri(mediaItemUri)));
+                playlistManager.SavePlaylist(playlist);
             }
         }
 
