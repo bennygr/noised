@@ -1,3 +1,4 @@
+using System;
 using Noised.Core;
 using Noised.Core.Config;
 using Noised.Core.DB;
@@ -53,6 +54,11 @@ namespace Noised.Server
             logger.Info("Noised has been started.");
 
             // ---------- Testcode ----------
+            Playlist p = IocContainer.Get<IPlaylistManager>().CreatePlaylist("testliste");
+            IocContainer.Get<IPlaylistManager>().AddPlaylist(p);
+            p.Add(IocContainer.Get<IMediaSourceAccumulator>().Get(new Uri(@"C:\test\test.mp3")));
+            IocContainer.Get<IPlaylistManager>().SavePlaylist(p);
+
             //core.ExecuteCommand(new CreatePlaylist(null, "testliste"));
             //core.ExecuteCommand(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test.mp3" }));
             //core.ExecuteCommand(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test2.mp3" }));
