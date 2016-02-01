@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using Mono.Data.Sqlite;
+using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 
@@ -10,17 +11,13 @@ namespace Noised.Core.DB.Sqlite
     internal class SqlitePlaylistRepository : IPlaylistRepository
     {
         private readonly SqliteConnection connection;
-        private readonly IUnitOfWork unitOfWork;
 
-        public SqlitePlaylistRepository(SqliteConnection connection, IUnitOfWork unitOfWork)
+        public SqlitePlaylistRepository(SqliteConnection connection)
         {
             if (connection == null)
                 throw new ArgumentNullException("connection");
-            if (unitOfWork == null)
-                throw new ArgumentNullException("unitOfWork");
 
             this.connection = connection;
-            this.unitOfWork = unitOfWork;
         }
 
         #region Implementation of IPlaylistRepository
@@ -43,8 +40,6 @@ namespace Noised.Core.DB.Sqlite
                     cmd.ExecuteNonQuery();
                 }
             }
-
-            unitOfWork.SaveChanges();
         }
 
         public void UpdatePlaylist(Playlist playlist)
@@ -70,8 +65,6 @@ namespace Noised.Core.DB.Sqlite
 
                 cmd.ExecuteNonQuery();
             }
-
-            unitOfWork.SaveChanges();
         }
 
         public List<Playlist> GetAllPlaylists()

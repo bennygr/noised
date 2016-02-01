@@ -42,7 +42,7 @@ namespace Noised.Core.DB.Sqlite
             get
             {
                 if (playlistRepository == null)
-                    playlistRepository = new SqlitePlaylistRepository(connection, this);
+                    playlistRepository = new SqlitePlaylistRepository(connection);
                 return playlistRepository;
             }
         }
