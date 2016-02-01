@@ -8,6 +8,7 @@ using Noised.Core.DB;
 using Noised.Core.DB.Sqlite;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
+using Noised.Core.Service;
 using Noised.Core.Service.Protocols;
 using Noised.Core.Service.Protocols.JSON;
 using Noised.Logging;
@@ -46,6 +47,9 @@ namespace Noised.Core.IOC
             builder.Register<IUnitOfWork, SqliteUnitOfWork>();
             //The core
             builder.Register<ICore, Core>().
+				ControlledBy<SingletonLifecycle>();
+			//Connection handling
+			builder.Register<IServiceConnectionManager,ServiceConnectionManager>().
                 ControlledBy<SingletonLifecycle>();
             //Plugins
             builder.Register<IPluginInstaller, PluginInstaller>();

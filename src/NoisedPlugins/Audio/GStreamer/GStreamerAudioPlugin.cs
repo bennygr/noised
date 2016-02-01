@@ -53,11 +53,14 @@ namespace Noised.Plugins.Audio.GStreamer
 
         #region Methods
 
-        private void Callback()
+		/// <summary>
+		///		Internal Callback method
+		/// </summary>
+		/// <remarks> !! NEEDS TO BE STATIC !! </remarks>
+        private static void Callback()
         {
             try
             {
-				//FIXME
                 //For some strange reason the "this" reference is NULL when get called from the
                 //native code. Workaround saving this as static 
                 plugin.OnSongFinished(plugin.currentItem);

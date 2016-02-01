@@ -27,5 +27,10 @@ namespace Noised.Core.Commands
 		///		Parameters of the response
 		/// </summary>
 		public List<Object> Parameters{get;set;}
+
+		public override string ToString() 
+		{
+			return Name;
+		}
 	};
 }

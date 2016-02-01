@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace Noised.Logging
 {
@@ -40,6 +41,8 @@ namespace Noised.Logging
             Console.WriteLine(DateTime.Now.ToShortTimeString() + 
 							  ":" + 
 							  DateTime.Now.Second.ToString("00") + 
+							  " " + 
+							  "["  + Thread.CurrentThread.ManagedThreadId + "]" +
 							  " " + 
 							  fullHeader +
                               message);
