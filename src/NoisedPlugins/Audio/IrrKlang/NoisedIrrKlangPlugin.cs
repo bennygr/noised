@@ -37,7 +37,6 @@ namespace Noised.Plugins.Audio.IrrKlang
             if (directoryName != null)
             {
                 string exeDir = directoryName.Replace("file:\\", string.Empty);
-                //ExtractEmbeddedResource(exeDir, "IrrKlang.Resources", new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
                 ExtractEmbeddedResource(exeDir, "Noised.Plugins.Audio.IrrKlang.Resources", new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
             }
             else
