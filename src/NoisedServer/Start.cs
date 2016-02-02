@@ -6,7 +6,6 @@ using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Service;
 using Noised.Logging;
-using Noised.Plugins.Commands.CoreCommands;
 
 namespace Noised.Server
 {
