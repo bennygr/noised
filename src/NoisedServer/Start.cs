@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Noised.Core;
 using Noised.Core.Config;
 using Noised.Core.DB;
@@ -53,14 +52,6 @@ namespace Noised.Server
             logger.Info("Done refreshing music.");
 
             logger.Info("Noised has been started.");
-
-            // ---------- Testcode ----------
-            core.ExecuteCommand(new CreatePlaylist(null, "testliste"));
-            core.ExecuteCommand(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test.mp3" }));
-            core.ExecuteCommand(new AddToPlaylist(null, "testliste", new List<string> { @"C:\test\test2.mp3" }));
-            Playlist p = IocContainer.Get<IPlaylistManager>().FindPlaylist("testliste");
-            core.ExecuteCommand(new RemoveFromPlaylist(null, "testliste", new List<string> { @"C:\test\test.mp3" }));
-            core.ExecuteCommand(new DeletePlaylist(null, "testliste"));
 
             return 0;
         }
