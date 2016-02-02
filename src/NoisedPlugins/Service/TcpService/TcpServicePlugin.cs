@@ -1,17 +1,16 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Collections.Generic;
-using Noised.Logging;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Service;
 using Noised.Core.Service;
+using Noised.Logging;
 
 namespace Noised.Plugins.Service.TcpService
 {
     /// <summary>
-	///		Service handling incoming connections over TCP/IP
+    ///		Service handling incoming connections over TCP/IP
     /// </summary>
     public class TcpServicePlugin : IService
     {
@@ -24,57 +23,57 @@ namespace Noised.Plugins.Service.TcpService
         private readonly List<TcpClient> clients = new List<TcpClient>();
         private readonly int maxConnections;
         private IPAddress listeningAddress = IPAddress.Any;
-		private ILogging logging;
+        private ILogging logging;
 
         #endregion
 
-		#region Constructor
-		
-		/// <summary>
-		///		Constructor
-		/// </summary>
-		/// <param name="initalizer">initalizting data</param>        
-		public TcpServicePlugin(PluginInitializer initalizer)
-		{
-			this.logging = initalizer.Logging;
-		    this.port = 1337;
-		    this.maxConnections = 100;                     
-		    isRunning = false;            
-		}
-		
-		#endregion
+        #region Constructor
 
-		#region Methods
-		
-		/// <summary>
-		///		Inkoves the ClientConnected event
-		/// </summary>
+        /// <summary>
+        ///		Constructor
+        /// </summary>
+        /// <param name="initalizer">initalizting data</param>        
+        public TcpServicePlugin(PluginInitializer initalizer)
+        {
+            this.logging = initalizer.Logging;
+            this.port = 1337;
+            this.maxConnections = 100;
+            isRunning = false;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///		Inkoves the ClientConnected event
+        /// </summary>
         private void InvokeOnClientConnected(ServiceEventArgs eventargs)
         {
             ServiceEventHandler handler = ClientConnected;
             if (handler != null) handler(this, eventargs);
         }
 
-		/// <summary>
-		///		Invokes the ClientDisconnected event
-		/// </summary>
+        /// <summary>
+        ///		Invokes the ClientDisconnected event
+        /// </summary>
         private void InvokeOnClientDisconnected(ServiceEventArgs eventargs)
         {
             ServiceEventHandler handler = ClientDisconnected;
             if (handler != null) handler(this, eventargs);
         }
-		
-		/// <summary>
+
+        /// <summary>
         ///		Internal method which listens for connection requests and starts new communication threads.
-		/// </summary>
+        /// </summary>
         private void Run()
         {
-			logging.Debug("Listening for incoming connections");
+            logging.Debug("Listening for incoming connections");
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
 
-                if(maxConnections > 0 &&
+                if (maxConnections > 0 &&
                    clients.Count >= maxConnections)
                 {
                     client.Client.Close();
@@ -82,8 +81,8 @@ namespace Noised.Plugins.Service.TcpService
                     continue;
                 }
 
-                TcpConnection connection = new TcpConnection(client,this);
-                InvokeOnClientConnected(new ServiceEventArgs(connection,data: null));
+                TcpConnection connection = new TcpConnection(client, this);
+                InvokeOnClientConnected(new ServiceEventArgs(connection, data: null));
                 connection.Closed += OnConnectionClosed;
                 AddConnection(connection);
                 connection.Start();
@@ -95,13 +94,13 @@ namespace Noised.Plugins.Service.TcpService
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="args">parameters</param>
-		private void OnConnectionClosed(object sender, ServiceEventArgs eventArgs)
+        private void OnConnectionClosed(object sender, ServiceEventArgs eventArgs)
         {
             IServiceConnection connection = (IServiceConnection)sender;
             RemoveClient((TcpConnection)connection);
-            InvokeOnClientDisconnected(new ServiceEventArgs(connection,data: null));
+            InvokeOnClientDisconnected(new ServiceEventArgs(connection, data: null));
         }
-		
+
         /// <summary>
         ///		Internal method to add a client connection to the list of known connections
         /// </summary>
@@ -109,12 +108,12 @@ namespace Noised.Plugins.Service.TcpService
         private void AddConnection(TcpConnection connection)
         {
             lock (clients)
-            {                
+            {
                 clients.Add(connection.Client);
-                logging.Debug("Client " + 
-									 connection.Id + 
-									 " connected " + 
-									 ((IPEndPoint)connection.Client.Client.RemoteEndPoint).Address);
+                logging.Debug("Client " +
+                                     connection.Id +
+                                     " connected " +
+                                     ((IPEndPoint)connection.Client.Client.RemoteEndPoint).Address);
             }
         }
 
@@ -131,19 +130,19 @@ namespace Noised.Plugins.Service.TcpService
             }
         }
 
-		#endregion
+        #endregion
 
 
-		#region IDisposable
+        #region IDisposable
 
-		public void Dispose(){}
+        public void Dispose() { }
 
-		#endregion
-		
+        #endregion
+
         #region IService
 
-		public event ServiceEventHandler ClientConnected;
-		public event ServiceEventHandler ClientDisconnected;
+        public event ServiceEventHandler ClientConnected;
+        public event ServiceEventHandler ClientDisconnected;
 
         public bool IsRunning
         {
@@ -152,14 +151,14 @@ namespace Noised.Plugins.Service.TcpService
 
         public void Start()
         {
-            listener = new TcpListener(listeningAddress, this.port);             
-            listener.Start();            
+            listener = new TcpListener(listeningAddress, this.port);
+            listener.Start();
             mainThread = new Thread(Run);
             mainThread.IsBackground = true;
             mainThread.Start();
             isRunning = true;
         }
-		
+
         public void Stop()
         {
             mainThread.Abort();

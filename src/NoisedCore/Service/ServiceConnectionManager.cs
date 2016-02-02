@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Noised.Logging;
 using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Service;
 using Noised.Core.Service.Protocols;
+using Noised.Logging;
 
 namespace Noised.Core.Service
 {
@@ -120,8 +120,8 @@ namespace Noised.Core.Service
             }
             catch (Exception e)
             {
-				logging.Error(e.Message);
-				throw;
+                logging.Error(e.Message);
+                throw;
             }
         }
 

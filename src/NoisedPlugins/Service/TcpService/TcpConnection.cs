@@ -1,8 +1,7 @@
-﻿using System;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Threading;
-using Noised.Core.Service;
 using Noised.Core.Plugins.Service;
+using Noised.Core.Service;
 
 namespace Noised.Plugins.Service.TcpService
 {
@@ -11,7 +10,7 @@ namespace Noised.Plugins.Service.TcpService
     /// </summary>
     public class TcpConnection : IServiceConnection
     {
-        #region Statics 
+        #region Statics
 
         private static readonly object IdLock = new object();
         private static int idCounter;
@@ -26,9 +25,9 @@ namespace Noised.Plugins.Service.TcpService
         private readonly Thread readerThread;
         private readonly Thread writerThread;
         private readonly TcpClient client;
-		private readonly TcpServicePlugin service;
+        private readonly TcpServicePlugin service;
         private bool running;
-                
+
         #endregion
 
         #region Properties
@@ -63,15 +62,15 @@ namespace Noised.Plugins.Service.TcpService
         ///		Constructor
         /// </summary>
         /// <param name="client">TCP endpoint of the connected client</param>
-		/// <param name="service">The service related to this connection</param>
-        internal TcpConnection(TcpClient client,TcpServicePlugin service)
+        /// <param name="service">The service related to this connection</param>
+        internal TcpConnection(TcpClient client, TcpServicePlugin service)
         {
-            lock(IdLock)
+            lock (IdLock)
             {
                 id = idCounter++;
             }
             this.client = client;
-			this.service = service;
+            this.service = service;
             socketReader = new TcpSocketReader(client.Client);
             socketWriter = new TcpSocketWriter(client.Client);
             readerThread = new Thread(Read);
@@ -84,12 +83,12 @@ namespace Noised.Plugins.Service.TcpService
 
         #region Methods
 
-		/// <summary>
-		///		Internal method wait for incoming data to read from the socket
-		/// </summary>
+        /// <summary>
+        ///		Internal method wait for incoming data to read from the socket
+        /// </summary>
         private void Read()
         {
-            while(running)
+            while (running)
             {
                 byte[] bytes = socketReader.ReadNext();
                 if (bytes != null)
@@ -103,9 +102,9 @@ namespace Noised.Plugins.Service.TcpService
             }
         }
 
-		/// <summary>
-		///		Internal method to send data to the connected client
-		/// </summary>
+        /// <summary>
+        ///		Internal method to send data to the connected client
+        /// </summary>
         private void Write()
         {
             while (running)
@@ -121,24 +120,24 @@ namespace Noised.Plugins.Service.TcpService
             }
         }
 
-		/// <summary>
-		///		Internal method to invoke the DataReceived event
-		/// </summary>
+        /// <summary>
+        ///		Internal method to invoke the DataReceived event
+        /// </summary>
         private void InvokeOnDataReceived(byte[] bytesRed)
         {
             ServiceEventHandler handler = DataReceived;
-            if (handler != null) handler(this, new ServiceEventArgs(this,bytesRed));
+            if (handler != null) handler(this, new ServiceEventArgs(this, bytesRed));
         }
 
-		/// <summary>
-		///		Internal method to invoke the closed event
-		/// </summary>
+        /// <summary>
+        ///		Internal method to invoke the closed event
+        /// </summary>
         private void InvokeOnClose()
         {
             ServiceEventHandler handler = Closed;
             if (handler != null) handler(this, new ServiceEventArgs(this, data: null));
         }
-        
+
         /// <summary>
         ///		Internal method to start reading and writing from/to the socket
         /// </summary>
@@ -156,17 +155,17 @@ namespace Noised.Plugins.Service.TcpService
         public event ServiceEventHandler DataReceived;
         public event ServiceEventHandler Closed;
 
-		public IService Service
-		{
-			get
-			{
-				return this.service;
-			}
-		}
+        public IService Service
+        {
+            get
+            {
+                return this.service;
+            }
+        }
 
         public void Send(byte[] bytes)
         {
-            socketWriter.AddToQueue(bytes);            
+            socketWriter.AddToQueue(bytes);
         }
 
         public void Close()
