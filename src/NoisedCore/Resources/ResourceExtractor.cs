@@ -18,24 +18,24 @@ namespace Noised.Core.Resources
         {
             ILogging log = IocContainer.Get<ILogging>();
 
-            foreach(string file in files)
+            foreach (string file in files)
             {
                 log.Debug("Extracting of " + file + " ...");
 
-                using(Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
+                using (Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
                 {
                     string path = Path.Combine(outputDir, file);
                     log.Debug("... into " + path);
 
-                    if(File.Exists(path))
+                    if (File.Exists(path))
                     {
                         log.Debug(path + " already exists. Skipping extraction.");
                         continue;
                     }
 
-                    using(FileStream fileStream = new FileStream(path, FileMode.Create))
+                    using (FileStream fileStream = new FileStream(path, FileMode.Create))
                     {
-                        for(int i = 0; i < stream.Length; i++)
+                        for (int i = 0; i < stream.Length; i++)
                             fileStream.WriteByte((byte)stream.ReadByte());
                         fileStream.Close();
                         log.Debug("Extraction completed.");
