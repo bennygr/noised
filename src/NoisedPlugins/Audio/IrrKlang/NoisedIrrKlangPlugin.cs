@@ -6,6 +6,7 @@ using IrrKlang;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
+using Noised.Core.Resources;
 using Noised.Logging;
 
 namespace Noised.Plugins.Audio.IrrKlang
@@ -37,7 +38,7 @@ namespace Noised.Plugins.Audio.IrrKlang
             if (directoryName != null)
             {
                 string exeDir = directoryName.Replace("file:\\", string.Empty);
-                ExtractEmbeddedResource(exeDir, "Noised.Plugins.Audio.IrrKlang.Resources", new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
+                ResourceExtractor.ExtractEmbeddedResource(exeDir, "Noised.Plugins.Audio.IrrKlang.Resources", new List<string> { "ikpFlac.dll", "ikpMP3.dll" });
             }
             else
                 log.Error("Unable to extract IrrKlang libraries: unable to locate assembly.");
@@ -197,39 +198,6 @@ namespace Noised.Plugins.Audio.IrrKlang
         }
 
         #endregion
-
-        /// <summary>
-        /// Extracts Embedded Resources to a certain location
-        /// </summary>
-        /// <param name="outputDir">Destination Path</param>
-        /// <param name="resourceLocation">Location of Resources in the Assembly</param>
-        /// <param name="files">List of Names of Files to extract</param>
-        private void ExtractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
-        {
-            foreach (string file in files)
-            {
-                log.Debug("Extracting of " + file + " ...");
-                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
-                {
-                    string path = Path.Combine(outputDir, file);
-                    log.Debug("... into " + path);
-
-                    if (File.Exists(path))
-                    {
-                        log.Debug(path + " already exists. Skipping extraction.");
-                        continue;
-                    }
-
-                    using (FileStream fileStream = new FileStream(path, FileMode.Create))
-                    {
-                        for (int i = 0; i < stream.Length; i++)
-                            fileStream.WriteByte((byte)stream.ReadByte());
-                        fileStream.Close();
-                        log.Debug("Extraction completed.");
-                    }
-                }
-            }
-        }
 
         protected virtual void InvokeOnSongFinished(AudioEventArgs args)
         {
