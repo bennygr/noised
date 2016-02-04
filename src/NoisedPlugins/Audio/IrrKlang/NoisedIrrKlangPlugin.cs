@@ -97,8 +97,8 @@ namespace Noised.Plugins.Audio.IrrKlang
         /// <param name="pos">The position from which to play playback in milliseconds</param>
         public void Play(MediaItem item, int pos)
         {
-            log.Debug("Play -> " + item.Uri.AbsolutePath + " at position " + pos);
-            currentPlayback = engine.Play2D(item.Uri.AbsolutePath);
+            log.Debug("Play -> " + item.Uri.LocalPath + " at position " + pos);
+            currentPlayback = engine.Play2D(item.Uri.LocalPath);
             currentPlayback.PlayPosition = Convert.ToUInt32(pos);
             currentPlayback.setSoundStopEventReceiver(new SoundStopEventReceiver(InvokeOnSongFinished), item);
         }
