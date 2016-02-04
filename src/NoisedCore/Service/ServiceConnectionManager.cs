@@ -108,6 +108,7 @@ namespace Noised.Core.Service
         {
             try
             {
+				logging.Debug("Sending broadcast response " + response);
                 List<ServiceConnectionContext> activeConnections;
                 lock (locker)
                 {
