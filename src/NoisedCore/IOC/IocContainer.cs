@@ -66,9 +66,10 @@ namespace Noised.Core.IOC
                 ControlledBy<SingletonLifecycle>();
             //Crypto
             builder.Register<IChecksum, MD5Checksum>();
-
             // PlaylistManager
             builder.Register<IPlaylistManager, PlaylistManager>().ControlledBy<SingletonLifecycle>();
+			//Queue
+			builder.Register<IQueue,Queue>().ControlledBy<SingletonLifecycle>();
 
             container = builder.Build();
         }

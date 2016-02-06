@@ -12,9 +12,10 @@ namespace Noised.Core.Media
     public class MediaManager : IMediaManager
     {
         private static readonly object locker = new object();
-        private IPluginLoader pluginLoader;
+        private readonly IPluginLoader pluginLoader;
+        private readonly IQueue queue;
+        private readonly ILogging logger;
         private IAudioPlugin currentAudioOutput;
-        private ILogging logger;
         private MediaItem currentMediaItem;
 
         /// <summary>
@@ -22,10 +23,12 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="pluginLoader">Pluginloader</param>
         /// <param name="logger">The logger</param>
-        public MediaManager(ILogging logger, IPluginLoader pluginLoader)
+        /// <param name="queue">The queue</param>
+        public MediaManager(ILogging logger, IPluginLoader pluginLoader,IQueue queue)
         {
             this.logger = logger;
             this.pluginLoader = pluginLoader;
+            this.queue = queue;
             foreach (IAudioPlugin audio in pluginLoader.GetPlugins<IAudioPlugin>())
             {
                 audio.SongFinished += OnSongFinished;
@@ -34,11 +37,19 @@ namespace Noised.Core.Media
 
         private void OnSongFinished(Object sender, AudioEventArgs args)
         {
+			Listable<MediaItem> nextItem;
+			logger.Info("Finished playing " + args.MediaItem.Uri);
+			nextItem = queue.Dequeue();
+
             lock (locker)
             {
-                logger.Info("Finished playing " + args.MediaItem.Uri);
                 currentMediaItem = null;
             }
+
+			if(nextItem != null)
+			{
+				Play(nextItem.Item);
+			}
         }
 
         private IAudioPlugin GetAudioOutputForItem(MediaItem item)

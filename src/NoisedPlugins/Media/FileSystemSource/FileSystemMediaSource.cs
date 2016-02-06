@@ -189,7 +189,6 @@ namespace Noised.Plugins.Media.FileSystemSource
 
         public MediaItem Get(Uri uri)
         {
-            core.Logging.Info(uri.ToString());
             using (var unitOfWork = new SqliteFileSystemUnitOfWork())
             {
                 return unitOfWork.MediaItemRepository.GetByUri(uri);
