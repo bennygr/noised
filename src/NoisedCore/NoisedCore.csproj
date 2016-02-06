@@ -147,6 +147,7 @@
     <Compile Include="Media\Queue.cs" />
     <Compile Include="Media\ClearQueue.cs" />
     <Compile Include="Media\Listable.cs" />
+    <Compile Include="Commands\ProcessQueueCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\Commands\CommandTemplate.txt" />

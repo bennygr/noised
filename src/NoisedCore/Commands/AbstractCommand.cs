@@ -1,5 +1,3 @@
-using System;
-using Noised.Core.IOC;
 using Noised.Core.Service;
 namespace Noised.Core.Commands
 {
