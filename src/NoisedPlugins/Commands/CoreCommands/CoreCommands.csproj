@@ -56,6 +56,7 @@
     <Compile Include="GetCurrentMediaItem.cs" />
     <Compile Include="Enqueue.cs" />
     <Compile Include="RemoveFromQueue.cs" />
+    <Compile Include="Next.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">

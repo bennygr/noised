@@ -39,5 +39,10 @@ namespace Noised.Core.Media
 		///		Resumes playback
 		/// </summary>
 		void Resume();
+
+		/// <summary>
+		///		Processes next music from queue or current playlist
+		/// </summary>
+		void ProcessNext();
 	}
 }

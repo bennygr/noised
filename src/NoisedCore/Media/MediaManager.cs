@@ -42,7 +42,7 @@ namespace Noised.Core.Media
             {
                 currentMediaItem = null;
             }
-			this.core.ExecuteCommandAsync(new ProcessQueueCommand());
+			ProcessNext();
         }
 
         private IAudioPlugin GetAudioOutputForItem(MediaItem item)
@@ -200,6 +200,11 @@ namespace Noised.Core.Media
                 BroadcastMessage(broadcastMessage);
             }
         }
+
+		public void ProcessNext()
+		{
+			core.ExecuteCommandAsync(new ProcessNextMusicCommand());
+		}
 
         #endregion
     };

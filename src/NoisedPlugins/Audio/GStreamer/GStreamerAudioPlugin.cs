@@ -142,7 +142,7 @@ namespace Noised.Plugins.Audio.GStreamer
 
         public void Play(MediaItem item)
         {
-            Console.WriteLine("Playing a song..." + item.Uri);
+			logging.Info("Playing song using GStreamer " + item.Uri);
             if (gStreamerAccess.AbsIsPlaying() ||
                gStreamerAccess.AbsIsPaused())
             {

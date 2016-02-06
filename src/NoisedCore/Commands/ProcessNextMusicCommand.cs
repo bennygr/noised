@@ -4,9 +4,9 @@ using Noised.Core.Media;
 
 namespace Noised.Core.Commands
 {
-    class ProcessQueueCommand : AbstractCommand
+    class ProcessNextMusicCommand : AbstractCommand
     {
-        internal ProcessQueueCommand()
+        internal ProcessNextMusicCommand()
             : base(null)
         {
         }
@@ -15,12 +15,19 @@ namespace Noised.Core.Commands
 
         protected override void Execute()
         {
+			var mediaManager = IocContainer.Get<IMediaManager>();
             var queue = IocContainer.Get<IQueue>();
+			//Checking queue for new music 
+			//TODO: look at the current playlist
             Listable<MediaItem> nextItem = queue.Dequeue();
             if (nextItem != null)
             {
-                IocContainer.Get<IMediaManager>().Play(nextItem.Item);
+                mediaManager.Play(nextItem.Item);
             }
+			else
+			{
+                mediaManager.Stop();
+			}
         }
 
         #endregion
