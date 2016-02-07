@@ -96,10 +96,6 @@ namespace Noised.Plugins.Media.FileSystemSource
                     {
                         logger.Debug(String.Format("Updated existing MediaItem {0}", file.FullName));
                     }
-                    else
-                    {
-                        logger.Debug(String.Format("Added new MediaItem {0}", file.FullName));
-                    }
                 }
             }
         }
@@ -189,7 +185,6 @@ namespace Noised.Plugins.Media.FileSystemSource
 
         public MediaItem Get(Uri uri)
         {
-            core.Logging.Info(uri.ToString());
             using (var unitOfWork = new SqliteFileSystemUnitOfWork())
             {
                 return unitOfWork.MediaItemRepository.GetByUri(uri);

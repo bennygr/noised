@@ -12,9 +12,10 @@ namespace Noised.Core.Media
     public class MediaManager : IMediaManager
     {
         private static readonly object locker = new object();
-        private IPluginLoader pluginLoader;
+        private readonly IPluginLoader pluginLoader;
+        private readonly ILogging logger;
+        private readonly ICore core;
         private IAudioPlugin currentAudioOutput;
-        private ILogging logger;
         private MediaItem currentMediaItem;
 
         /// <summary>
@@ -22,10 +23,12 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="pluginLoader">Pluginloader</param>
         /// <param name="logger">The logger</param>
-        public MediaManager(ILogging logger, IPluginLoader pluginLoader)
+        /// <param name="core">The core</param>
+        public MediaManager(ILogging logger, IPluginLoader pluginLoader,ICore core)
         {
             this.logger = logger;
             this.pluginLoader = pluginLoader;
+            this.core = core;
             foreach (IAudioPlugin audio in pluginLoader.GetPlugins<IAudioPlugin>())
             {
                 audio.SongFinished += OnSongFinished;
@@ -34,11 +37,12 @@ namespace Noised.Core.Media
 
         private void OnSongFinished(Object sender, AudioEventArgs args)
         {
+			logger.Info("Finished playing " + args.MediaItem.Uri);
             lock (locker)
             {
-                logger.Info("Finished playing " + args.MediaItem.Uri);
                 currentMediaItem = null;
             }
+			ProcessNext();
         }
 
         private IAudioPlugin GetAudioOutputForItem(MediaItem item)
@@ -196,6 +200,11 @@ namespace Noised.Core.Media
                 BroadcastMessage(broadcastMessage);
             }
         }
+
+		public void ProcessNext()
+		{
+			core.ExecuteCommandAsync(new ProcessNextMusicCommand());
+		}
 
         #endregion
     };
