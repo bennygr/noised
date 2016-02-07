@@ -45,6 +45,7 @@ namespace Noised.Plugins.Audio.IrrKlang
 
             log.Debug("Create IrrKlang SoundEngine");
             engine = new ISoundEngine();
+            engine.AddFileFactory(new IrrKlangPluginFileFactory());
         }
 
         #region Implementation of IDisposable
@@ -76,7 +77,9 @@ namespace Noised.Plugins.Audio.IrrKlang
             {
                 return new List<string>
                 {
-                    "file://"
+                    "file://",
+                    "http://",
+                    "https://"
                 };
             }
         }
@@ -97,8 +100,9 @@ namespace Noised.Plugins.Audio.IrrKlang
         /// <param name="pos">The position from which to play playback in milliseconds</param>
         public void Play(MediaItem item, int pos)
         {
-            log.Debug("Play -> " + item.Uri.LocalPath + " at position " + pos);
-            currentPlayback = engine.Play2D(item.Uri.LocalPath);
+            log.Debug("Play -> " + item.Uri + " at position " + pos);
+
+            currentPlayback = engine.Play2D(item.Uri.ToString());
             currentPlayback.PlayPosition = Convert.ToUInt32(pos);
             currentPlayback.setSoundStopEventReceiver(new SoundStopEventReceiver(InvokeOnSongFinished), item);
         }
