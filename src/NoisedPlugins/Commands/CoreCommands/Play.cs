@@ -32,6 +32,15 @@ namespace Noised.Plugins.Commands.CoreCommands
                 var mediaManager = IocContainer.Get<IMediaManager>();
                 mediaManager.Play(mediaItem);
             }
+            else
+            {
+                Context.SendResponse(
+                    new ErrorResponse(
+                        new MediaItemNotFoundException("Sorry. We have no info about a MediaItem at \"" + uri + "\""))
+                    {
+                        Name = "Noised.Plugins.Commands.CoreCommands.Play"
+                    });
+            }
         }
 
         #endregion
