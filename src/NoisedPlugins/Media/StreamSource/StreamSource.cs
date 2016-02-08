@@ -7,12 +7,16 @@ using Noised.Core.Plugins.Media;
 
 namespace Noised.Plugins.Media.StreamSource
 {
+    /// <summary>
+    /// Class to store Streams as a source for MediaItems
+    /// </summary>
     public class StreamSource : IMediaSource
     {
         private readonly List<string> streamUris;
 
         public StreamSource(PluginInitializer initalizer)
         {
+            // Mock a stream
             streamUris = new List<string> { "http://mp3channels.webradio.antenne.de/rockantenne" };
         }
 
@@ -43,7 +47,9 @@ namespace Noised.Plugins.Media.StreamSource
         ///		Initializes and/or refreshs the media source
         /// </summary>
         public void Refresh()
-        { }
+        {
+            // No refreshing yet. We only have a mock via the constructor.
+        }
 
         /// <summary>
         ///		Gets the media item for the given URI
@@ -52,6 +58,7 @@ namespace Noised.Plugins.Media.StreamSource
         /// <returns>The MediaItem for the given Uri, or null if no such MediaItem was found</returns> 
         public MediaItem Get(Uri uri)
         {
+            // If we have any Uri pointing to the desired stream we create a new MediaItem with it.
             if (streamUris.Any(x => x == uri.AbsoluteUri))
                 return new MediaItem(uri, String.Empty);
 
@@ -66,6 +73,7 @@ namespace Noised.Plugins.Media.StreamSource
         /// </returns>
         public MediaSourceSearchResult Search(string pattern)
         {
+            // Searching in the List of Uris. Subject to change dependent on the final implementation.
             List<MediaItem> items = new List<MediaItem>();
 
             foreach (string streamUri in streamUris)
