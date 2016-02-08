@@ -1,0 +1,8 @@
+﻿{
+    "GUID": "f1d34e8b-1850-4f4d-aed1-339b36878bfd",
+    "Version": "1.0.0",
+    "Name": "StreamSource",
+    "Description": "Provides links to streams, i.e. Webradio",
+    "Author": "noised core team",
+    "CreationDate": "08.02.2016"
+}
