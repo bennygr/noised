@@ -34,11 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StreamSource.cs" />
@@ -48,6 +43,10 @@
     <ProjectReference Include="..\..\..\NoisedCore\NoisedCore.csproj">
       <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
       <Name>NoisedCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\NoisedLogging\NoisedLogging.csproj">
+      <Project>{89e504e4-0ee9-4f62-8077-8c874836bf55}</Project>
+      <Name>NoisedLogging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\NoisedPluginsSDK\NoisedPluginsSDK.csproj">
       <Project>{f27de48b-4389-4a05-bed5-05f919b45899}</Project>
@@ -67,12 +66,18 @@
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\StreamSource.nplugin" />
     </ItemGroup>
-    <CreatePluginPackage Name="StreamSource" PluginRuntimeFiles="@(PluginRuntimeFiles)">
+    <ItemGroup>
+      <PluginConfigurationFiles Include=".\bin\$(Configuration)\etc\noised.plugins.media.streamsource.nconfig" />
+    </ItemGroup>
+    <CreatePluginPackage Name="StreamSource" PluginRuntimeFiles="@(PluginRuntimeFiles)" PluginConfigurationFiles="@(PluginConfigurationFiles)">
     </CreatePluginPackage>
     <Copy SourceFiles="$(TargetDir)\..\StreamSource.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\StreamSource.npluginz" />
-  </Target>  
+  </Target>
   <ItemGroup>
     <None Include="plugin.nplugininfo">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="etc\noised.plugins.media.streamsource.nconfig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

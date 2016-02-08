@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using Noised.Core.Config;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Media;
@@ -12,12 +15,16 @@ namespace Noised.Plugins.Media.StreamSource
     /// </summary>
     public class StreamSource : IMediaSource
     {
+        private readonly PluginInitializer initalizer;
         private readonly List<string> streamUris;
 
         public StreamSource(PluginInitializer initalizer)
         {
-            // Mock a stream
-            streamUris = new List<string> { "http://mp3channels.webradio.antenne.de/rockantenne" };
+            if (initalizer == null)
+                throw new ArgumentNullException("initalizer");
+
+            this.initalizer = initalizer;
+            streamUris = new List<string>();
         }
 
         #region Implementation of IDisposable
@@ -48,7 +55,34 @@ namespace Noised.Plugins.Media.StreamSource
         /// </summary>
         public void Refresh()
         {
-            // No refreshing yet. We only have a mock via the constructor.
+            string configValue = initalizer.Get<IConfig>().GetProperty("noised.plugins.media.filesystemsource.streams");
+
+            if (String.IsNullOrWhiteSpace(configValue))
+            {
+                initalizer.Logging.Debug("No Streamsources found. Skipping refresh of streams.");
+                return;
+            }
+
+            string[] files = configValue.Split(',');
+
+            StringBuilder streamString = new StringBuilder();
+            foreach (string file in files)
+            {
+                initalizer.Logging.Debug("Refreshing from file \"" + file + "\"");
+
+                if (!File.Exists(file))
+                {
+                    initalizer.Logging.Debug("File does not exist! Skipping file.");
+                    continue;
+                }
+
+                streamString.Append(File.ReadAllText(file));
+            }
+
+            foreach (string singleStreamString in streamString.ToString().Split(','))
+                streamUris.Add(singleStreamString);
+
+            initalizer.Logging.Debug(streamUris.Count + " stream(s) added");
         }
 
         /// <summary>
@@ -58,7 +92,7 @@ namespace Noised.Plugins.Media.StreamSource
         /// <returns>The MediaItem for the given Uri, or null if no such MediaItem was found</returns> 
         public MediaItem Get(Uri uri)
         {
-            // If we have any Uri pointing to the desired stream we create a new MediaItem with it.
+            // If we have a Uri pointing to the desired stream we create a new MediaItem with it.
             if (streamUris.Any(x => x == uri.AbsoluteUri))
                 return new MediaItem(uri, String.Empty);
 
@@ -73,7 +107,7 @@ namespace Noised.Plugins.Media.StreamSource
         /// </returns>
         public MediaSourceSearchResult Search(string pattern)
         {
-            // Searching in the List of Uris. Subject to change dependent on the final implementation.
+            // Searching in the List of Uris
             List<MediaItem> items = new List<MediaItem>();
 
             foreach (string streamUri in streamUris)

@@ -1,0 +1,5 @@
+﻿#Configuration file for the noised stream source plugin
+#------------------------------------------------------------------
+
+#A comma separated list of files in which stream adresses are stored
+noised.plugins.media.filesystemsource.streams = C:\test\streams.txt
