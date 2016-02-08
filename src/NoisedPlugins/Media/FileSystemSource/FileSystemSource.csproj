@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <UsingTask AssemblyFile="$(OutputPath)\NoisedPluginsSDK.dll" TaskName="CreatePluginPackage" />
@@ -98,7 +99,8 @@
     <ItemGroup>
       <PluginConfigurationFiles Include=".\bin\$(Configuration)\etc\noised.plugins.media.filesystemsource.nconfig" />
     </ItemGroup>
-    <CreatePluginPackage Name="FileSystemSource" PluginRuntimeFiles="@(PluginRuntimeFiles)" PluginConfigurationFiles="@(PluginConfigurationFiles)"></CreatePluginPackage>
+    <CreatePluginPackage Name="FileSystemSource" PluginRuntimeFiles="@(PluginRuntimeFiles)" PluginConfigurationFiles="@(PluginConfigurationFiles)">
+    </CreatePluginPackage>
     <Copy SourceFiles="$(TargetDir)\..\FileSystemSource.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\FileSystemSource.npluginz" />
   </Target>
   <ItemGroup>
@@ -108,10 +110,6 @@
     <None Include="etc\noised.plugins.media.filesystemsource.nconfig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DB\" />
-    <Folder Include="DB\Sqlite\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
