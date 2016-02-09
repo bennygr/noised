@@ -33,23 +33,28 @@ namespace Noised.Core.Media
 
         public void Add(MediaItem item)
         {
-            items.Add(item);
+            lock (this)
+                items.Add(item);
         }
 
         public MediaItem GetNextItem()
         {
-            if (currentMediaItem == null)
+            lock (this)
             {
-                currentMediaItem = items.First();
-                return currentMediaItem;
-            }
+                if (currentMediaItem == null)
+                {
+                    currentMediaItem = items.First();
+                    return currentMediaItem;
+                }
 
-            return items.ElementAtOrDefault(items.IndexOf(currentMediaItem));
+                return items.ElementAtOrDefault(items.IndexOf(currentMediaItem) + 1);
+            }
         }
 
         public void Remove(MediaItem mediaItem)
         {
-            items.Remove(items.Find(x => x.Uri == mediaItem.Uri));
+            lock (this)
+                items.Remove(items.Find(x => x.Uri == mediaItem.Uri));
         }
     }
 }
