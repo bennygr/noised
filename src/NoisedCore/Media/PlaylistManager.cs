@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Noised.Core.DB;
-using Noised.Core.IOC;
 
 namespace Noised.Core.Media
 {
     public class PlaylistManager : IPlaylistManager
     {
-        private readonly List<Playlist> playlists;
+        private List<Playlist> playlists;
+        private IUnitOfWork uow;
 
         public ReadOnlyCollection<Playlist> Playlists
         {
@@ -20,12 +20,6 @@ namespace Noised.Core.Media
         }
 
         public Playlist LoadedPlaylist { get; private set; }
-
-        public PlaylistManager()
-        {
-            using (IUnitOfWork unitOfWork = IocContainer.Get<IUnitOfWork>())
-                playlists = unitOfWork.PlaylistRepository.GetAllPlaylists();
-        }
 
         public Playlist CreatePlaylist(string name)
         {
@@ -45,10 +39,10 @@ namespace Noised.Core.Media
                 if (playlists.Any(x => x.Name == playlist.Name))
                     throw new PlaylistAlreadyExistsException("A Playlist with this name already exists.");
 
-                using (IUnitOfWork unitOfWork = IocContainer.Get<IUnitOfWork>())
+                //using (uow)
                 {
-                    unitOfWork.PlaylistRepository.CreatePlaylist(playlist);
-                    unitOfWork.SaveChanges();
+                    uow.PlaylistRepository.CreatePlaylist(playlist);
+                    uow.SaveChanges();
                 }
 
                 playlists.Add(playlist);
@@ -73,10 +67,10 @@ namespace Noised.Core.Media
             lock (playlists)
             {
                 playlists.Remove(playlist);
-                using (IUnitOfWork unitOfWork = IocContainer.Get<IUnitOfWork>())
+                //using (uow)
                 {
-                    unitOfWork.PlaylistRepository.DeletePlaylist(playlist);
-                    unitOfWork.SaveChanges();
+                    uow.PlaylistRepository.DeletePlaylist(playlist);
+                    uow.SaveChanges();
                 }
             }
         }
@@ -89,12 +83,23 @@ namespace Noised.Core.Media
         {
             lock (this)
             {
-                using (IUnitOfWork unitOfWork = IocContainer.Get<IUnitOfWork>())
+                //using (uow)
                 {
-                    unitOfWork.PlaylistRepository.UpdatePlaylist(playlist);
-                    unitOfWork.SaveChanges();
+                    uow.PlaylistRepository.UpdatePlaylist(playlist);
+                    uow.SaveChanges();
                 }
             }
+        }
+
+        public void SetUnitOfWork(IUnitOfWork unitOfWork)
+        {
+            uow = unitOfWork;
+        }
+
+        public void RefreshPlaylists()
+        {
+            //using(uow)
+                playlists = uow.PlaylistRepository.GetAllPlaylists();
         }
     }
 }

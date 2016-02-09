@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Noised.Core.DB;
 
 namespace Noised.Core.Media
 {
@@ -54,5 +55,17 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="playlist"></param>
         void SavePlaylist(Playlist playlist);
+
+        /// <summary>
+        /// Sets the Database access
+        /// </summary>
+        /// <param name="unitOfWork"></param>
+        void SetUnitOfWork(IUnitOfWork unitOfWork);
+
+        /// <summary>
+        /// Refreshs the Playlists
+        /// </summary>
+        /// <remarks>Must be called before any other method</remarks>
+        void RefreshPlaylists();
     }
 }
