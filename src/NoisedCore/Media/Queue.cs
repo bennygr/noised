@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Noised.Core.Media
 {
@@ -68,6 +69,14 @@ namespace Noised.Core.Media
 				return item;
 			}
         }
+
+		public ReadOnlyCollection<Listable<MediaItem>> GetContent()
+		{
+			lock(queue)
+			{
+				return queue.AsReadOnly();
+			}
+		}
 
 		public void Remove(long listID)
 		{
