@@ -13,7 +13,7 @@ namespace Noised.Core.DB.Sqlite
         /// <summary>
         /// Gets a value that determines if the system runs a linux OS
         /// </summary>
-        public static bool IsLinux
+        private static bool IsLinux
         {
             get
             {
@@ -36,11 +36,11 @@ namespace Noised.Core.DB.Sqlite
 
         public void CreateOrUpdate()
         {
-            if(!IsLinux)
+            if (!IsLinux)
             {
                 // If this code is executed on a non UNIX System (Windows) the Windows sqlite3.dll is extracted into the apllication folder
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().CodeBase);
-                if(directoryName != null)
+                if (directoryName != null)
                 {
                     string exeDir = directoryName.Replace("file:\\", string.Empty);
                     ResourceExtractor.ExtractEmbeddedResource(exeDir, "Noised.Core.Resources", new List<string> { "sqlite3.dll" });
