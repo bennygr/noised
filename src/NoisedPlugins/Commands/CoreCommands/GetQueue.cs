@@ -3,7 +3,6 @@ using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
-using Noised.Logging;
 
 namespace Noised.Plugins.Commands.CoreCommands
 {
@@ -29,7 +28,7 @@ namespace Noised.Plugins.Commands.CoreCommands
             Context.SendResponse(new ResponseMetaData
             {
                 Name = "Noised.Commands.Core.GetQueue",
-                Parameters = new List<object>(queue.GetContent())
+                Parameters = new List<object>(queue.GetContent().GetMediaItems())
             });
         }
 
