@@ -20,9 +20,9 @@ namespace Noised.Core.Resources
 
             foreach (string file in files)
             {
-                log.Debug("Extracting of " + file + " ...");
+                log.Debug("Extraction of \"" + file + "\" ...");
 
-                using (Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
+                using (Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resourceLocation + "." + file))
                 {
                     string path = Path.Combine(outputDir, file);
                     log.Debug("... into " + path);
