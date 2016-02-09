@@ -80,7 +80,8 @@ namespace Noised.Plugins.Media.StreamSource
             }
 
             foreach (string singleStreamString in streamString.ToString().Split(','))
-                streamUris.Add(singleStreamString);
+                if(!String.IsNullOrWhiteSpace(singleStreamString))
+                    streamUris.Add(singleStreamString);
 
             initalizer.Logging.Debug(streamUris.Count + " stream(s) added");
         }
