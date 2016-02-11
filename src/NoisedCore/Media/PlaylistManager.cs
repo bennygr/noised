@@ -9,7 +9,7 @@ namespace Noised.Core.Media
     public class PlaylistManager : IPlaylistManager
     {
         private List<Playlist> playlists;
-        private IUnitOfWork uow;
+        private IDbFactory dbFactory;
 
         public ReadOnlyCollection<Playlist> Playlists
         {
@@ -39,7 +39,7 @@ namespace Noised.Core.Media
                 if (playlists.Any(x => x.Name == playlist.Name))
                     throw new PlaylistAlreadyExistsException("A Playlist with this name already exists.");
 
-                //using (uow)
+                using (IUnitOfWork uow = DbFactory.GetUnitOfWork())
                 {
                     uow.PlaylistRepository.CreatePlaylist(playlist);
                     uow.SaveChanges();
@@ -67,7 +67,7 @@ namespace Noised.Core.Media
             lock (playlists)
             {
                 playlists.Remove(playlist);
-                //using (uow)
+                using (IUnitOfWork uow = DbFactory.GetUnitOfWork())
                 {
                     uow.PlaylistRepository.DeletePlaylist(playlist);
                     uow.SaveChanges();
@@ -83,7 +83,7 @@ namespace Noised.Core.Media
         {
             lock (this)
             {
-                //using (uow)
+                using (IUnitOfWork uow = DbFactory.GetUnitOfWork())
                 {
                     uow.PlaylistRepository.UpdatePlaylist(playlist);
                     uow.SaveChanges();
@@ -91,15 +91,28 @@ namespace Noised.Core.Media
             }
         }
 
-        public void SetUnitOfWork(IUnitOfWork unitOfWork)
+        public IDbFactory DbFactory
         {
-            uow = unitOfWork;
+            private get
+            {
+                if (dbFactory == null)
+                    throw new PlaylistManagerException("You need to set the DbFactory Property first!");
+
+                return dbFactory;
+            }
+            set
+            {
+                dbFactory = value;
+            }
         }
 
         public void RefreshPlaylists()
         {
-            //using(uow)
-                playlists = uow.PlaylistRepository.GetAllPlaylists();
+            lock (this)
+            {
+                using (IUnitOfWork uow = DbFactory.GetUnitOfWork())
+                    playlists = uow.PlaylistRepository.GetAllPlaylists();
+            }
         }
     }
 }

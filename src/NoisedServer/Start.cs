@@ -52,7 +52,7 @@ namespace Noised.Server
 
             // Initializing Playlistmanager
             logger.Info("Initializing Playlistmanager");
-            IocContainer.Get<IPlaylistManager>().SetUnitOfWork(IocContainer.Get<IUnitOfWork>());
+            IocContainer.Get<IPlaylistManager>().DbFactory = IocContainer.Get<IDbFactory>();
             IocContainer.Get<IPlaylistManager>().RefreshPlaylists();
             logger.Info("Done initializing Playlistmanager");
 

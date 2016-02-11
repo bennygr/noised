@@ -57,15 +57,14 @@ namespace Noised.Core.Media
         void SavePlaylist(Playlist playlist);
 
         /// <summary>
-        /// Sets the Database access
+        /// Sets the IDbFactory
         /// </summary>
-        /// <param name="unitOfWork"></param>
-        void SetUnitOfWork(IUnitOfWork unitOfWork);
+        IDbFactory DbFactory { set; }
 
         /// <summary>
         /// Refreshs the Playlists
         /// </summary>
-        /// <remarks>Must be called before any other method</remarks>
+        /// <remarks>Must be called before any other method but after the IDbFactory was set</remarks>
         void RefreshPlaylists();
     }
 }
