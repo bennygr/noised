@@ -21,6 +21,11 @@ namespace Noised.Core.Media
 
         public Playlist LoadedPlaylist { get; private set; }
 
+        public PlaylistManager(IDbFactory dbFactory)
+        {
+            DbFactory = dbFactory;
+        }
+
         public Playlist CreatePlaylist(string name)
         {
             if (String.IsNullOrWhiteSpace(name))
