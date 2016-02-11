@@ -75,7 +75,7 @@
     <Compile Include="DB\IDbFactory.cs" />
     <Compile Include="DB\IPlaylistRepository.cs" />
     <Compile Include="DB\Sqlite\PlaylistSql.cs" />
-    <Compile Include="DB\Sqlite\SqliteDbFactory.cs" />
+    <Compile Include="DB\DbFactory.cs" />
     <Compile Include="DB\Sqlite\SqlitePlaylistRepository.cs" />
     <Compile Include="IOC\IocContainer.cs" />
     <Compile Include="Media\IMediaManager.cs" />

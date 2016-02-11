@@ -1,8 +1,8 @@
 ﻿using Noised.Core.IOC;
 
-namespace Noised.Core.DB.Sqlite
+namespace Noised.Core.DB
 {
-    internal class SqliteDbFactory : IDbFactory
+    internal class DbFactory : IDbFactory
     {
         #region Implementation of IDbFactory
 

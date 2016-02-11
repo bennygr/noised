@@ -47,7 +47,7 @@ namespace Noised.Core.IOC
             //DB
             builder.Register<IDB, SqliteDB>();
             builder.Register<IUnitOfWork, SqliteUnitOfWork>();
-            builder.Register<IDbFactory, SqliteDbFactory>();
+            builder.Register<IDbFactory, DbFactory>();
 
             //The core
             builder.Register<ICore, Core>().
