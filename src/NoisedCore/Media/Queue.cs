@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Noised.Core.Commands;
+using Noised.Core.Service;
 
 namespace Noised.Core.Media
 {
@@ -10,6 +12,12 @@ namespace Noised.Core.Media
     public class Queue : IQueue
     {
 		private readonly List<Listable<MediaItem>> queue = new List<Listable<MediaItem>>();
+        private readonly IServiceConnectionManager connectionManager;
+
+		public Queue(IServiceConnectionManager connectionManager)
+		{
+            this.connectionManager = connectionManager;
+		}
 
 		private void AssertItemNotInQueue(Listable<MediaItem> item)
 		{
@@ -19,10 +27,19 @@ namespace Noised.Core.Media
 			}
 		}
 
-		private void EnqueueInternal(Listable<MediaItem> item)
+		private List<Listable<MediaItem>> EnqueueInternal(Listable<MediaItem> item)
 		{
 			AssertItemNotInQueue(item);
 			queue.Add(item);
+			return queue;
+		}
+
+		private void OnQueueChanged(IEnumerable<Listable<MediaItem>> newContent)
+		{
+			connectionManager.SendBroadcast(new ResponseMetaData {
+                Name = "Noised.Commands.Core.GetQueue",
+                Parameters = new List<object>(newContent.GetMediaItems())
+            });
 		}
 
         #region IQueue implementation
@@ -40,34 +57,46 @@ namespace Noised.Core.Media
 
         public void Enqueue(Listable<MediaItem> mediaItem)
         {
+			IEnumerable<Listable<MediaItem>> newContent;
 			lock(queue)
 			{
-				EnqueueInternal(mediaItem);
+				newContent = EnqueueInternal(mediaItem);
 			}
+			OnQueueChanged(newContent);
         }
 
 		public void Enqueue(IEnumerable<Listable<MediaItem>> mediaItems)
 		{
+			IEnumerable<Listable<MediaItem>> newContent = null;
 			lock(queue)
 			{
 				foreach(Listable<MediaItem> mediaItem in mediaItems)
 				{
-					EnqueueInternal(mediaItem);
+					newContent = EnqueueInternal(mediaItem);
 				}
 			}
+			OnQueueChanged(newContent);
 		}
 
         public Listable<MediaItem> Dequeue()
         {
+			IEnumerable<Listable<MediaItem>> newContent = null;
+			Listable<MediaItem> item;
             lock(queue)
 			{
-				var item = queue.Count > 0 ? queue[0] : null;
+				item = queue.Count > 0 ? queue[0] : null;
 				if(item != null)
 				{
 					queue.RemoveAt(0);
+					newContent = queue;
 				}
-				return item;
 			}
+
+			if(newContent != null)
+			{
+				OnQueueChanged(newContent);
+			}
+			return item;
         }
 
 		public ReadOnlyCollection<Listable<MediaItem>> GetContent()
@@ -80,9 +109,18 @@ namespace Noised.Core.Media
 
 		public void Remove(long listID)
 		{
+			IEnumerable<Listable<MediaItem>> newContent = null;
 			lock(queue)
 			{
-				queue.RemoveAll(m => m.ItemID == listID);
+				if(queue.RemoveAll(m => m.ItemID == listID) > 0)
+				{
+					newContent = queue;
+				}
+			}
+
+			if(newContent != null)
+			{
+				OnQueueChanged(queue);
 			}
 		}
 
@@ -92,6 +130,7 @@ namespace Noised.Core.Media
 			{
 				queue.Clear();
 			}
+			OnQueueChanged(new List<Listable<MediaItem>>());
         }
 
         #endregion
