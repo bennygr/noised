@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Noised.Core.DB;
 
 namespace Noised.Core.Media
 {
@@ -54,5 +55,16 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="playlist"></param>
         void SavePlaylist(Playlist playlist);
+
+        /// <summary>
+        /// Sets the IDbFactory
+        /// </summary>
+        IDbFactory DbFactory { set; }
+
+        /// <summary>
+        /// Refreshs the Playlists
+        /// </summary>
+        /// <remarks>Must be called before any other method but after the IDbFactory was set</remarks>
+        void RefreshPlaylists();
     }
 }

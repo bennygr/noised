@@ -50,6 +50,11 @@ namespace Noised.Server
             sourceAccumulator.Refresh();
             logger.Info("Done refreshing music.");
 
+            // Initializing Playlistmanager
+            logger.Info("Initializing Playlistmanager");
+            IocContainer.Get<IPlaylistManager>().RefreshPlaylists();
+            logger.Info("Done initializing Playlistmanager");
+
             logger.Info("Noised has been started.");
 
             return 0;
