@@ -72,8 +72,10 @@
     <Compile Include="Commands\ErrorResponse.cs" />
     <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\ResponseMetaData.cs" />
+    <Compile Include="DB\IDbFactory.cs" />
     <Compile Include="DB\IPlaylistRepository.cs" />
     <Compile Include="DB\Sqlite\PlaylistSql.cs" />
+    <Compile Include="DB\Sqlite\SqliteDbFactory.cs" />
     <Compile Include="DB\Sqlite\SqlitePlaylistRepository.cs" />
     <Compile Include="IOC\IocContainer.cs" />
     <Compile Include="Media\IMediaManager.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Media\Playlist.cs" />
     <Compile Include="Media\PlaylistAlreadyExistsException.cs" />
     <Compile Include="Media\PlaylistManager.cs" />
+    <Compile Include="Media\PlaylistManagerException.cs" />
     <Compile Include="Plugins\Audio\IAudioPlugin.cs" />
     <Compile Include="Plugins\Commands\ICommandBundle.cs" />
     <Compile Include="Plugins\IPlugin.cs" />
