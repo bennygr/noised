@@ -21,7 +21,7 @@ namespace Noised.Core.Media
             }
         }
 
-        internal Playlist(string name)
+        public Playlist(string name)
         {
             if (String.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Please provide a valid (non empty) name for the playlist.", "name");
