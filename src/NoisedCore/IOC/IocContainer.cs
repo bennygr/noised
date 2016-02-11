@@ -38,38 +38,49 @@ namespace Noised.Core.IOC
             //Logging
             builder.Register<ILogging, Logger>().
                 ControlledBy<SingletonLifecycle>();
+
             //Configuration
             builder.Register<IConfigurationLoader, FilesystemConfigurationLoader>();
             builder.Register<IConfig, Config.Config>().
                 ControlledBy<SingletonLifecycle>();
+
             //DB
             builder.Register<IDB, SqliteDB>();
             builder.Register<IUnitOfWork, SqliteUnitOfWork>();
+            builder.Register<IDbFactory, SqliteDbFactory>();
+
             //The core
             builder.Register<ICore, Core>().
-				ControlledBy<SingletonLifecycle>();
-			//Connection handling
-			builder.Register<IServiceConnectionManager,ServiceConnectionManager>().
                 ControlledBy<SingletonLifecycle>();
+
+            //Connection handling
+            builder.Register<IServiceConnectionManager, ServiceConnectionManager>().
+                ControlledBy<SingletonLifecycle>();
+
             //Plugins
             builder.Register<IPluginInstaller, PluginInstaller>();
             builder.Register<IPluginLoader, PluginLoader>().
                 ControlledBy<SingletonLifecycle>();
+
             //Protocol
             builder.Register<IProtocol, JSONProtocol>();
             builder.Register<ICommandFactory, CommandFactory>().
                 ControlledBy<SingletonLifecycle>();
+
             //Media
             builder.Register<IMediaSourceAccumulator, MediaSourceAccumulator>().
                 ControlledBy<SingletonLifecycle>();
             builder.Register<IMediaManager, MediaManager>().
                 ControlledBy<SingletonLifecycle>();
+
             //Crypto
             builder.Register<IChecksum, MD5Checksum>();
+
             // PlaylistManager
             builder.Register<IPlaylistManager, PlaylistManager>().ControlledBy<SingletonLifecycle>();
-			//Queue
-			builder.Register<IQueue,Queue>().ControlledBy<SingletonLifecycle>();
+
+            //Queue
+            builder.Register<IQueue, Queue>().ControlledBy<SingletonLifecycle>();
 
             container = builder.Build();
         }
