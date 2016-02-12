@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Noised.Logging;
 using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 using Noised.Core.Service;
+using Noised.Logging;
 
 namespace Noised.Core.Media
 {
@@ -24,7 +24,7 @@ namespace Noised.Core.Media
         /// <param name="pluginLoader">Pluginloader</param>
         /// <param name="logger">The logger</param>
         /// <param name="core">The core</param>
-        public MediaManager(ILogging logger, IPluginLoader pluginLoader,ICore core)
+        public MediaManager(ILogging logger, IPluginLoader pluginLoader, ICore core)
         {
             this.logger = logger;
             this.pluginLoader = pluginLoader;
@@ -37,18 +37,18 @@ namespace Noised.Core.Media
 
         private void OnSongFinished(Object sender, AudioEventArgs args)
         {
-			logger.Info("Finished playing " + args.MediaItem.Uri);
+            logger.Info("Finished playing " + args.MediaItem.Uri);
             lock (locker)
             {
                 currentMediaItem = null;
             }
-			ProcessNext();
+            ProcessNext();
         }
 
         private IAudioPlugin GetAudioOutputForItem(MediaItem item)
         {
-            foreach (IAudioPlugin audio in 
-					pluginLoader.GetPlugins<IAudioPlugin>())
+            foreach (IAudioPlugin audio in
+                    pluginLoader.GetPlugins<IAudioPlugin>())
             {
                 foreach (string protocol in audio.SupportedProtocols)
                 {
@@ -82,9 +82,9 @@ namespace Noised.Core.Media
         }
 
         public bool Shuffle { get; set; }
-		
+
         public bool Repeat { get; set; }
-		
+
         public void Play(MediaItem item)
         {
             lock (locker)
@@ -112,7 +112,7 @@ namespace Noised.Core.Media
                         audio.GetMetaData().Name,
                         item.Uri));
                 currentAudioOutput = audio;
-                currentMediaItem = item;	
+                currentMediaItem = item;
             }
             currentAudioOutput.Play(item);
             var broadcastMessage = new ResponseMetaData
@@ -128,7 +128,7 @@ namespace Noised.Core.Media
 
         public void Stop()
         {
-            ResponseMetaData broadcastMessage = null;	
+            ResponseMetaData broadcastMessage = null;
             lock (locker)
             {
                 if (currentAudioOutput != null)
@@ -143,7 +143,7 @@ namespace Noised.Core.Media
                         }
                     };
                 }
-				currentMediaItem = null;
+                currentMediaItem = null;
                 currentAudioOutput = null;
             }
 
@@ -155,7 +155,7 @@ namespace Noised.Core.Media
 
         public void Pause()
         {
-            ResponseMetaData broadcastMessage = null;	
+            ResponseMetaData broadcastMessage = null;
             lock (locker)
             {
                 if (currentAudioOutput != null)
@@ -179,7 +179,7 @@ namespace Noised.Core.Media
 
         public void Resume()
         {
-            ResponseMetaData broadcastMessage = null;	
+            ResponseMetaData broadcastMessage = null;
             lock (locker)
             {
                 if (currentAudioOutput != null)
@@ -201,10 +201,10 @@ namespace Noised.Core.Media
             }
         }
 
-		public void ProcessNext()
-		{
-			core.ExecuteCommandAsync(new ProcessNextMusicCommand());
-		}
+        public void ProcessNext()
+        {
+            core.ExecuteCommandAsync(new ProcessNextMusicCommand());
+        }
 
         #endregion
     };

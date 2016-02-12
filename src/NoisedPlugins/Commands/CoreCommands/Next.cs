@@ -20,7 +20,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-			IocContainer.Get<IMediaManager>().ProcessNext();
+            IocContainer.Get<IMediaManager>().ProcessNext();
         }
 
         #endregion
