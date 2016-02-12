@@ -21,9 +21,9 @@ namespace Noised.Core.Media
 
         private void AssertItemNotInQueue(Listable<MediaItem> item)
         {
-            if (queue.Find(i => i.ItemID == item.ItemID) != null)
+            if (queue.Find(i => i.ListId == item.ListId) != null)
             {
-                throw new ArgumentException(String.Format("An item with an ID of {0} already exists in the queue.", item.ItemID));
+                throw new ArgumentException(String.Format("An item with an ID of {0} already exists in the queue.", item.ListId));
             }
         }
 
@@ -39,7 +39,7 @@ namespace Noised.Core.Media
             connectionManager.SendBroadcast(new ResponseMetaData
             {
                 Name = "Noised.Commands.Core.GetQueue",
-                Parameters = new List<object>(newContent.GetMediaItems())
+                Parameters = new List<object>(newContent)
             });
         }
 
@@ -113,7 +113,7 @@ namespace Noised.Core.Media
             IEnumerable<Listable<MediaItem>> newContent = null;
             lock (queue)
             {
-                if (queue.RemoveAll(m => m.ItemID == listID) > 0)
+                if (queue.RemoveAll(m => m.ListId == listID) > 0)
                 {
                     newContent = queue;
                 }

@@ -74,7 +74,7 @@ namespace NoisedTests.Core.Media
             queue.Enqueue(testItem2);
             queue.Count.ShouldEqual(2);
 
-            queue.Remove(testItem.ItemID);
+            queue.Remove(testItem.ListId);
 
             //The first item in the queue should now be the 2nd created
             var dequeuedItem = queue.Dequeue();
