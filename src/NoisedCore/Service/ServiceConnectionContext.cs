@@ -9,8 +9,8 @@ namespace Noised.Core.Service
 	/// <summary>
 	///		A handle which wrapps a IServiceConnection at a higher level
 	/// </summary>
-	public class ServiceConnectionContext
-	{
+	public class ServiceConnectionContext : IServiceConnectionContext
+    {
 		#region Fields
 		
 		private CommandDataBuffer commandBuffer;
