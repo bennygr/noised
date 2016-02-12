@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Noised.Core;
+using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
@@ -21,9 +22,11 @@ namespace NoisedTests.Commands
         [Test]
         public void SetShuffleStatusTest()
         {
+            Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
+
             IocContainer.Get<IMediaManager>().Shuffle.ShouldBeFalse();
-            
-            IocContainer.Get<ICore>().ExecuteCommand(new SetShuffleStatus(new Mock<IServiceConnectionContext>().Object, true));
+
+            IocContainer.Get<ICore>().ExecuteCommand(new SetShuffleStatus(serviceConnectionMock.Object, true));
 
             IocContainer.Get<IMediaManager>().Shuffle.ShouldBeTrue();
         }
@@ -31,7 +34,19 @@ namespace NoisedTests.Commands
         [Test]
         public void GetShuffleStatusTest()
         {
-            
+            ResponseMetaData responseMetaData = new ResponseMetaData();
+            Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
+            serviceConnectionMock.Setup(x => x.SendResponse(It.IsAny<ResponseMetaData>())).Callback((ResponseMetaData r) => responseMetaData = r);
+
+            IocContainer.Get<ICore>().ExecuteCommand(new GetShuffleStatus(serviceConnectionMock.Object));
+
+            responseMetaData.Parameters[0].ShouldEqual(false);
+
+            IocContainer.Get<ICore>().ExecuteCommand(new SetShuffleStatus(serviceConnectionMock.Object, true));
+
+            IocContainer.Get<ICore>().ExecuteCommand(new GetShuffleStatus(serviceConnectionMock.Object));
+
+            responseMetaData.Parameters[0].ShouldEqual(true);
         }
     }
 }

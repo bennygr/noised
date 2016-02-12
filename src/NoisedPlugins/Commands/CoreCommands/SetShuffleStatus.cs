@@ -7,7 +7,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 {
     public class SetShuffleStatus : AbstractCommand
     {
-        private bool shuffleStatus;
+        private readonly bool shuffleStatus;
 
         public SetShuffleStatus(IServiceConnectionContext context, bool shuffleStatus):base(context)
         {
