@@ -42,6 +42,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ShuffleStatusTest.cs" />
     <Compile Include="Media\PlaylistTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Config\ConfigTests.cs" />
@@ -52,6 +53,10 @@
     <ProjectReference Include="..\NoisedCore\NoisedCore.csproj">
       <Project>{8785A9C8-505A-4069-8620-72F5228C6A51}</Project>
       <Name>NoisedCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NoisedPlugins\Commands\CoreCommands\CoreCommands.csproj">
+      <Project>{bf963a63-6d57-4a12-a24a-c82d296c4e3a}</Project>
+      <Name>CoreCommands</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
