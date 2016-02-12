@@ -48,6 +48,7 @@
     <Compile Include="DeletePlaylist.cs" />
     <Compile Include="GetPlaylist.cs" />
     <Compile Include="GetPlaylists.cs" />
+    <Compile Include="GetShuffleStatus.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Pause.cs" />
     <Compile Include="Ping.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoveFromPlaylist.cs" />
     <Compile Include="Resume.cs" />
+    <Compile Include="SetShuffleStatus.cs" />
     <Compile Include="Stop.cs" />
     <Compile Include="Search.cs" />
     <Compile Include="GetCurrentMediaItem.cs" />
