@@ -110,8 +110,8 @@ namespace Noised.Core.Media
         {
             lock (this)
             {
-                items.Remove(items.Find(x => x.ItemID == mediaItem.ItemID));
-                notYetPlayed.Remove(notYetPlayed.Find(x => x.ItemID == mediaItem.ItemID));
+                items.Remove(items.Find(x => x.ListId == mediaItem.ListId));
+                notYetPlayed.Remove(notYetPlayed.Find(x => x.ListId == mediaItem.ListId));
             }
         }
 

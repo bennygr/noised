@@ -8,14 +8,14 @@ namespace  Noised.Plugins.Commands.CoreCommands
 {
     public class RemoveFromQueue : AbstractCommand
     {
-        private readonly IList<long> listIDs;
+        private readonly IList<object> listIDs;
 
         /// <summary>
         ///		Constructor
         /// </summary>
         /// <param name="context">The command's context</param>
         /// <param name="listIDs">A list of listIDs of the items to remove from the queue</param>
-        public RemoveFromQueue(ServiceConnectionContext context, IList<long> listIDs)
+        public RemoveFromQueue(ServiceConnectionContext context, IList<object> listIDs)
             : base(context)
         {
             this.listIDs = listIDs;
@@ -26,9 +26,9 @@ namespace  Noised.Plugins.Commands.CoreCommands
         protected override void Execute()
         {
 			var queue = IocContainer.Get<IQueue>();
-            foreach(long id in listIDs)
+            foreach(var id in listIDs)
 			{
-				queue.Remove(id);
+				queue.Remove((long)id);
 			}
         }
 

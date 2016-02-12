@@ -74,7 +74,7 @@ namespace Noised.Core.Media
         /// <summary>
         ///		The ID of the wrapped item
         /// </summary>
-        public long ItemID
+        public long ListId
         {
             get
             {

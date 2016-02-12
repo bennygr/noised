@@ -28,7 +28,7 @@ namespace Noised.Plugins.Commands.CoreCommands
             Context.SendResponse(new ResponseMetaData
             {
                 Name = "Noised.Commands.Core.GetQueue",
-                Parameters = new List<object>(queue.GetContent().GetMediaItems())
+                Parameters = new List<object>(queue.GetContent())
             });
         }
 
