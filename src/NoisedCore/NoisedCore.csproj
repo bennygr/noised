@@ -110,6 +110,7 @@
     <Compile Include="Resources\ResourceExtractor.cs" />
     <Compile Include="Service\CommandDataBuffer.cs" />
     <Compile Include="Service\IServiceConnection.cs" />
+    <Compile Include="Service\IServiceConnectionContext.cs" />
     <Compile Include="Service\Protocols\IProtocol.cs" />
     <Compile Include="Service\Protocols\JSON\JSONProtocol.cs" />
     <Compile Include="Service\ServiceConnectionContext.cs" />
