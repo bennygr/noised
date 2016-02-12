@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <UsingTask AssemblyFile="$(OutputPath)\NoisedPluginsSDK.dll" TaskName="CreatePluginPackage" />
@@ -45,6 +46,8 @@
     <Compile Include="CoreCommandBundlePlugin.cs" />
     <Compile Include="CreatePlaylist.cs" />
     <Compile Include="DeletePlaylist.cs" />
+    <Compile Include="GetPlaylist.cs" />
+    <Compile Include="GetPlaylists.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Pause.cs" />
     <Compile Include="Ping.cs" />
@@ -86,7 +89,8 @@
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\CoreCommands.nplugin" />
     </ItemGroup>
-    <CreatePluginPackage Name="CoreCommands" PluginRuntimeFiles="@(PluginRuntimeFiles)"></CreatePluginPackage>
+    <CreatePluginPackage Name="CoreCommands" PluginRuntimeFiles="@(PluginRuntimeFiles)">
+    </CreatePluginPackage>
     <Copy SourceFiles="$(TargetDir)\..\CoreCommands.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\CoreCommands.npluginz" SkipUnchangedFiles="true" />
   </Target>
   <ItemGroup>
