@@ -6,11 +6,17 @@ using Noised.Core.DB;
 
 namespace Noised.Core.Media
 {
+    /// <summary>
+    /// Manages all the Playlists
+    /// </summary>
     public class PlaylistManager : IPlaylistManager
     {
         private List<Playlist> playlists;
         private IDbFactory dbFactory;
 
+        /// <summary>
+        /// Gets all the Playlists
+        /// </summary>
         public ReadOnlyCollection<Playlist> Playlists
         {
             get
@@ -19,13 +25,26 @@ namespace Noised.Core.Media
             }
         }
 
+        /// <summary>
+        /// Gets the currently loaded Playlist
+        /// </summary>
         public Playlist LoadedPlaylist { get; private set; }
 
+        /// <summary>
+        /// Manages all the Playlists
+        /// </summary>
+        /// <param name="dbFactory">A Factory for creating instances of IUnitOfWork to access the Database</param>
         public PlaylistManager(IDbFactory dbFactory)
         {
             DbFactory = dbFactory;
+            playlists = new List<Playlist>();
         }
 
+        /// <summary>
+        /// Creates a Playlist
+        /// </summary>
+        /// <param name="name">Name of the Playlist to create</param>
+        /// <returns>The created Playlist</returns>
         public Playlist CreatePlaylist(string name)
         {
             if (String.IsNullOrWhiteSpace(name))
@@ -34,6 +53,10 @@ namespace Noised.Core.Media
             return new Playlist(name);
         }
 
+        /// <summary>
+        /// Adds a Playlist to the Playlistmanager
+        /// </summary>
+        /// <param name="playlist"></param>
         public void AddPlaylist(Playlist playlist)
         {
             if (playlist == null)
@@ -54,19 +77,34 @@ namespace Noised.Core.Media
             }
         }
 
+        /// <summary>
+        /// Searches and return a Playlist by name
+        /// </summary>
+        /// <param name="name">The name of the playlist</param>
+        /// <returns>The Playlist with the given name or null</returns>
         public Playlist FindPlaylist(string name)
         {
             lock (playlists)
-            {
                 return playlists.Find(x => x.Name == name);
+        }
+
+        /// <summary>
+        /// Loads a Playlist
+        /// </summary>
+        /// <param name="playlist">The Playlist to load</param>
+        public void LoadPlaylist(Playlist playlist)
+        {
+            lock (playlists)
+            {
+                playlist.ResetAlreadyPlayedItems();
+                LoadedPlaylist = playlist;
             }
         }
 
-        public void LoadPlaylist(Playlist playlist)
-        {
-            LoadedPlaylist = playlist;
-        }
-
+        /// <summary>
+        /// Deletes a Playlist
+        /// </summary>
+        /// <param name="playlist">Playlist to delete</param>
         public void DeletePlaylist(Playlist playlist)
         {
             lock (playlists)
@@ -86,7 +124,7 @@ namespace Noised.Core.Media
         /// <param name="playlist"></param>
         public void SavePlaylist(Playlist playlist)
         {
-            lock (this)
+            lock (playlists)
             {
                 using (IUnitOfWork uow = DbFactory.GetUnitOfWork())
                 {
@@ -96,6 +134,9 @@ namespace Noised.Core.Media
             }
         }
 
+        /// <summary>
+        /// Sets a Factory for creating instances of IUnitOfWork to access the Database
+        /// </summary>
         public IDbFactory DbFactory
         {
             private get
@@ -111,12 +152,15 @@ namespace Noised.Core.Media
             }
         }
 
+        /// <summary>
+        /// Loads all Playlists
+        /// </summary>
         public void RefreshPlaylists()
         {
-            lock (this)
+            lock (playlists)
             {
                 using (IUnitOfWork uow = DbFactory.GetUnitOfWork())
-                    playlists = uow.PlaylistRepository.GetAllPlaylists();
+                    playlists = uow.PlaylistRepository.AllPlaylists.ToList();
             }
         }
     }
