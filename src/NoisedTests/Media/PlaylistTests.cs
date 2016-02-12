@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Moq;
 using Noised.Core.DB;
+using Noised.Core.IOC;
 using Noised.Core.Media;
 using NUnit.Framework;
 using Should;
@@ -15,10 +16,12 @@ namespace NoisedTests.Media
 
         [SetUp]
         public void PlaylistTestsSetup()
-        {            
+        {
+            IocContainer.Build();
+
             Mock<IPlaylistRepository> mockPlaylistRepository = new Mock<IPlaylistRepository>();
-            mockPlaylistRepository.Setup(x => x.GetAllPlaylists()).Returns(new List<Playlist>());
-            
+            mockPlaylistRepository.Setup(x => x.AllPlaylists).Returns(new List<Playlist>());
+
             Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
             mockUnitOfWork.Setup(x => x.PlaylistRepository).Returns(mockPlaylistRepository.Object);
 
@@ -111,6 +114,65 @@ namespace NoisedTests.Media
         public void SavePlaylistTest()
         {
             pman.SavePlaylist(pman.CreatePlaylist("testlist"));
+        }
+
+        [Test]
+        public void AddToPlaylistTest()
+        {
+            Playlist p = pman.CreatePlaylist("testlist");
+
+            p.Items.Count.ShouldEqual(0);
+            p.NextItem.ShouldBeNull();
+
+            Listable<MediaItem> lmi = new Listable<MediaItem>(new MediaItem(new Uri("http://validuri.io"), String.Empty));
+            p.Add(lmi);
+
+            p.Items.Count.ShouldEqual(1);
+            p.NextItem.ShouldEqual(lmi);
+        }
+
+        [Test]
+        public void RemoveFromPlaylistTest()
+        {
+            Playlist p = pman.CreatePlaylist("testlist");
+
+            p.Items.Count.ShouldEqual(0);
+            p.NextItem.ShouldBeNull();
+
+            Listable<MediaItem> lmi = new Listable<MediaItem>(new MediaItem(new Uri("http://validuri.io"), String.Empty));
+            p.Add(lmi);
+
+            p.Items.Count.ShouldEqual(1);
+            p.NextItem.ShouldNotBeNull();
+
+            p.Remove(lmi);
+
+            p.Items.Count.ShouldEqual(0);
+            p.NextItem.ShouldBeNull();
+        }
+
+        [Test]
+        public void NextMediaItemTest()
+        {
+            Playlist p = pman.CreatePlaylist("testlist");
+
+            p.Items.Count.ShouldEqual(0);
+            p.NextItem.ShouldBeNull();
+
+            Listable<MediaItem> lmi1 = new Listable<MediaItem>(new MediaItem(new Uri("http://validuri.io"), String.Empty));
+            Listable<MediaItem> lmi2 = new Listable<MediaItem>(new MediaItem(new Uri("http://validuri.io"), String.Empty));
+            p.Add(lmi1);
+            p.Add(lmi2);
+
+            p.NextItem.ShouldEqual(lmi1);
+            p.NextItem.ShouldEqual(lmi2);
+            p.NextItem.ShouldBeNull();
+
+            p.ResetAlreadyPlayedItems();
+
+            p.NextItem.ShouldEqual(lmi1);
+            p.NextItem.ShouldEqual(lmi2);
+            p.NextItem.ShouldBeNull();
         }
     }
 }
