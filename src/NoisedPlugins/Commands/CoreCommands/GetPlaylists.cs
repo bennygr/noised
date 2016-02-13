@@ -29,7 +29,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         {
             Context.SendResponse(new ResponseMetaData
             {
-                Name = "Noised.Plugins.Commands.CoreCommands.GetPlaylists",
+                Name = "Noised.Commands.Core.GetPlaylists",
                 Parameters = new List<object>(IocContainer.Get<IPlaylistManager>().Playlists)
             });
         }

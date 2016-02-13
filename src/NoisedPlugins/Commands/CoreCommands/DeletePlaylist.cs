@@ -27,7 +27,7 @@ namespace Noised.Plugins.Commands.CoreCommands
                 ArgumentException argumentException = new ArgumentException(strings.NoValidPlaylistName, "playlistName");
                 Context.SendResponse(new ErrorResponse(argumentException)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.DeletePlaylist"
+					Name = "Noised.Commands.Core.Delete",
                 });
 
                 throw argumentException;

@@ -32,7 +32,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
                 Context.SendResponse(new ErrorResponse(argumentException)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.AddToPlaylist"
+					Name = "Noised.Commands.Core.AddToPlaylist",
                 });
 
                 throw argumentException;
@@ -45,7 +45,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
                 Context.SendResponse(new ErrorResponse(argumentNullException)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.AddToPlaylist"
+					Name = "Noised.Commands.Core.AddToPlaylist",
                 });
 
                 throw argumentNullException;

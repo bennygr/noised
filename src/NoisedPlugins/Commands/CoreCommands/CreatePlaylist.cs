@@ -27,7 +27,7 @@ namespace Noised.Plugins.Commands.CoreCommands
                 ArgumentException argumentException = new ArgumentException(strings.NoValidPlaylistName, "name");
                 Context.SendResponse(new ErrorResponse(argumentException)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.CreatePlaylist"
+                    Name = "Noised.Commands.Core.CreatePlaylist"
                 });
 
                 throw argumentException;

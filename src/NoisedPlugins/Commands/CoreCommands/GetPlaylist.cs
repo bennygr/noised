@@ -41,7 +41,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
             Context.SendResponse(new ResponseMetaData
             {
-                Name = "Noised.Plugins.Commands.CoreCommands.GetPlaylists",
+                Name = "Noised.Commands.Core.GetPlaylist",
                 Parameters = new List<object> { p }
             });
         }
