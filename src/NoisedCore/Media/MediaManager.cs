@@ -16,6 +16,7 @@ namespace Noised.Core.Media
         private readonly ILogging logger;
         private readonly ICore core;
         private IAudioPlugin currentAudioOutput;
+        private readonly IServiceConnectionManager connectionManager;
         private MediaItem currentMediaItem;
 		private volatile bool shuffle;
 		private volatile bool repeat;
@@ -26,11 +27,15 @@ namespace Noised.Core.Media
         /// <param name="pluginLoader">Pluginloader</param>
         /// <param name="logger">The logger</param>
         /// <param name="core">The core</param>
-        public MediaManager(ILogging logger, IPluginLoader pluginLoader, ICore core)
+        public MediaManager(ILogging logger, 
+							IPluginLoader pluginLoader, 
+							ICore core,
+							IServiceConnectionManager connectionManager)
         {
             this.logger = logger;
             this.pluginLoader = pluginLoader;
             this.core = core;
+            this.connectionManager = connectionManager;
             foreach (IAudioPlugin audio in pluginLoader.GetPlugins<IAudioPlugin>())
             {
                 audio.SongFinished += OnSongFinished;
@@ -67,7 +72,7 @@ namespace Noised.Core.Media
 
         private void BroadcastMessage(ResponseMetaData message)
         {
-            IocContainer.Get<IServiceConnectionManager>().SendBroadcast(message);
+            connectionManager.SendBroadcast(message);
         }
 
         #region IMediaManager
