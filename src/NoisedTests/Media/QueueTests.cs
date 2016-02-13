@@ -109,5 +109,19 @@ namespace NoisedTests.Core.Media
             queue.Clear();
             queue.Count.ShouldEqual(0);
         }
+
+		[Test]
+		public void ShouldRemoveAnItem()
+		{
+			var item1 = CreateTestItem();
+			var item2 = CreateTestItem();
+			queue.Enqueue(item1);
+			queue.Enqueue(item2);
+			queue.Count.ShouldEqual(2);
+			queue.Remove(item1.ListId);
+			queue.Count.ShouldEqual(1);
+			var itemInQueue = queue.Dequeue();
+			itemInQueue.ListId.ShouldEqual(item2.ListId);
+		}
     };
 }
