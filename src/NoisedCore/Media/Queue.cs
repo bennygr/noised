@@ -56,14 +56,9 @@ namespace Noised.Core.Media
             }
         }
 
-        public void Enqueue(Listable<MediaItem> mediaItem)
+        public void Enqueue(params Listable<MediaItem>[] mediaItems)
         {
-            IEnumerable<Listable<MediaItem>> newContent;
-            lock (queue)
-            {
-                newContent = EnqueueInternal(mediaItem);
-            }
-            OnQueueChanged(newContent);
+			Enqueue(new List<Listable<MediaItem>>(mediaItems));
         }
 
         public void Enqueue(IEnumerable<Listable<MediaItem>> mediaItems)

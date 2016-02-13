@@ -14,9 +14,9 @@ namespace Noised.Core.Media
         int Count { get; }
 
         /// <summary>
-        ///		Adds a new MediaItem to the queue
+        ///		Adds new MediaItems to the queue
         /// </summary>
-        void Enqueue(Listable<MediaItem> mediaItem);
+        void Enqueue(params Listable<MediaItem>[] mediaItems);
 
         /// <summary>
         ///		Adds a bunch of MediaItems to the queue
