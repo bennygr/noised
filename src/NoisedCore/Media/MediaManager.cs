@@ -27,6 +27,7 @@ namespace Noised.Core.Media
         /// <param name="pluginLoader">Pluginloader</param>
         /// <param name="logger">The logger</param>
         /// <param name="core">The core</param>
+		/// <param name="connectionManager">The connection manager</param>
         public MediaManager(ILogging logger, 
 							IPluginLoader pluginLoader, 
 							ICore core,
