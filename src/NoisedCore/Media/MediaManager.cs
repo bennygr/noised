@@ -17,6 +17,8 @@ namespace Noised.Core.Media
         private readonly ICore core;
         private IAudioPlugin currentAudioOutput;
         private MediaItem currentMediaItem;
+		private volatile bool shuffle;
+		private volatile bool repeat;
 
         /// <summary>
         ///		Constructor
@@ -81,9 +83,30 @@ namespace Noised.Core.Media
             }
         }
 
-        public bool Shuffle { get; set; }
+        public bool Shuffle 
+		{ 
+			get
+			{
+				return shuffle;
+			}
 
-        public bool Repeat { get; set; }
+			set
+			{
+				shuffle = value;
+			}
+		}
+
+        public bool Repeat
+        {
+            get
+            {
+                return repeat;
+            }
+            set
+            {
+                repeat = value;
+            }
+        }
 
         public void Play(MediaItem item)
         {
