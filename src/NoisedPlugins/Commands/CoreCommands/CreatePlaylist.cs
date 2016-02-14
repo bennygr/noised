@@ -16,7 +16,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         ///  </summary>
         ///  <param name="context">The command's context</param>
         /// <param name="name">Name of the playlist</param>
-        public CreatePlaylist(ServiceConnectionContext context, string name)
+        public CreatePlaylist(IServiceConnectionContext context, string name)
             : base(context)
         {
             if (context == null)

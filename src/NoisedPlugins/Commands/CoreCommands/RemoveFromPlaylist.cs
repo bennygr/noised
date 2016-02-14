@@ -20,7 +20,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         ///  <param name="context">The command's context</param>
         /// <param name="playlistName">Name of the Playlist from which the Items should be removed</param>
         /// <param name="mediaItemUris">List of Uris of MediaItems that should be removed</param>
-        public RemoveFromPlaylist(ServiceConnectionContext context, string playlistName, IList<string> mediaItemUris)
+        public RemoveFromPlaylist(IServiceConnectionContext context, string playlistName, IList<string> mediaItemUris)
             : base(context)
         {
             if (context == null)

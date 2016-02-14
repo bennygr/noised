@@ -20,7 +20,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         ///  <param name="context">The command's context</param>
         /// <param name="playlistName">Name of the Playlist to which the Items should be added</param>
         /// <param name="mediaItemUris">List of Uris of MediaItems that should be added</param>
-        public AddToPlaylist(ServiceConnectionContext context, string playlistName, List<Object> mediaItemUris)
+        public AddToPlaylist(IServiceConnectionContext context, string playlistName, List<Object> mediaItemUris)
             : base(context)
         {
             if (context == null)
@@ -32,7 +32,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
                 Context.SendResponse(new ErrorResponse(argumentException)
                 {
-					Name = "Noised.Commands.Core.AddToPlaylist",
+                    Name = "Noised.Commands.Core.AddToPlaylist",
                 });
 
                 throw argumentException;
@@ -45,7 +45,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
                 Context.SendResponse(new ErrorResponse(argumentNullException)
                 {
-					Name = "Noised.Commands.Core.AddToPlaylist",
+                    Name = "Noised.Commands.Core.AddToPlaylist",
                 });
 
                 throw argumentNullException;

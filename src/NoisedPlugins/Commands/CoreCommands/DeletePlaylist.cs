@@ -16,7 +16,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         ///  </summary>
         ///  <param name="context">The command's context</param>
         /// <param name="playlistName">Name of the Playlist that should be deleted</param>
-        public DeletePlaylist(ServiceConnectionContext context, string playlistName)
+        public DeletePlaylist(IServiceConnectionContext context, string playlistName)
             : base(context)
         {
             if (context == null)
@@ -27,7 +27,7 @@ namespace Noised.Plugins.Commands.CoreCommands
                 ArgumentException argumentException = new ArgumentException(strings.NoValidPlaylistName, "playlistName");
                 Context.SendResponse(new ErrorResponse(argumentException)
                 {
-					Name = "Noised.Commands.Core.Delete",
+                    Name = "Noised.Commands.Core.DeletePlaylist",
                 });
 
                 throw argumentException;
