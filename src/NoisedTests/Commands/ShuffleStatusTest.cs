@@ -13,7 +13,7 @@ namespace NoisedTests.Commands
     [TestFixture]
     public class ShuffleStatusTest
     {
-        [SetUp]
+        [TestFixtureSetUp]
         public void ShuffleStatusTestSetUp()
         {
             IocContainer.Build();
@@ -23,6 +23,8 @@ namespace NoisedTests.Commands
         public void SetShuffleStatusTest()
         {
             Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
+
+            IocContainer.Get<ICore>().ExecuteCommand(new SetShuffleStatus(serviceConnectionMock.Object, false));
 
             IocContainer.Get<IMediaManager>().Shuffle.ShouldBeFalse();
 

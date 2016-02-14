@@ -42,6 +42,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\PlaylistCommandsTests.cs" />
     <Compile Include="Commands\ShuffleStatusTest.cs" />
     <Compile Include="Media\PlaylistTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

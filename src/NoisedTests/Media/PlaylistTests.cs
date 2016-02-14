@@ -14,11 +14,15 @@ namespace NoisedTests.Media
     {
         private IPlaylistManager pman;
 
+        [TestFixtureSetUp]
+        public void PlaylistTestFixtureSetup()
+        {
+            IocContainer.Build();
+        }
+
         [SetUp]
         public void PlaylistTestsSetup()
         {
-            IocContainer.Build();
-
             Mock<IPlaylistRepository> mockPlaylistRepository = new Mock<IPlaylistRepository>();
             mockPlaylistRepository.Setup(x => x.AllPlaylists).Returns(new List<Playlist>());
 
