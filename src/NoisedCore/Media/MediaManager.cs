@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Audio;
 using Noised.Core.Service;
@@ -18,8 +17,9 @@ namespace Noised.Core.Media
         private IAudioPlugin currentAudioOutput;
         private readonly IServiceConnectionManager connectionManager;
         private MediaItem currentMediaItem;
-		private volatile bool shuffle;
-		private volatile bool repeat;
+        private volatile bool shuffle;
+        private volatile bool repeat;
+        private int volume;
 
         /// <summary>
         ///		Constructor
@@ -27,11 +27,11 @@ namespace Noised.Core.Media
         /// <param name="pluginLoader">Pluginloader</param>
         /// <param name="logger">The logger</param>
         /// <param name="core">The core</param>
-		/// <param name="connectionManager">The connection manager</param>
-        public MediaManager(ILogging logger, 
-							IPluginLoader pluginLoader, 
-							ICore core,
-							IServiceConnectionManager connectionManager)
+        /// <param name="connectionManager">The connection manager</param>
+        public MediaManager(ILogging logger,
+                            IPluginLoader pluginLoader,
+                            ICore core,
+                            IServiceConnectionManager connectionManager)
         {
             this.logger = logger;
             this.pluginLoader = pluginLoader;
@@ -89,18 +89,18 @@ namespace Noised.Core.Media
             }
         }
 
-        public bool Shuffle 
-		{ 
-			get
-			{
-				return shuffle;
-			}
+        public bool Shuffle
+        {
+            get
+            {
+                return shuffle;
+            }
 
-			set
-			{
-				shuffle = value;
-			}
-		}
+            set
+            {
+                shuffle = value;
+            }
+        }
 
         public bool Repeat
         {
@@ -141,9 +141,12 @@ namespace Noised.Core.Media
                         audio.GetMetaData().Name,
                         item.Uri));
                 currentAudioOutput = audio;
+                currentAudioOutput.Volume = volume;
                 currentMediaItem = item;
             }
+
             currentAudioOutput.Play(item);
+
             var broadcastMessage = new ResponseMetaData
             {
                 Name = "Noised.Commands.Core.Play",
@@ -233,6 +236,30 @@ namespace Noised.Core.Media
         public void ProcessNext()
         {
             core.ExecuteCommandAsync(new ProcessNextMusicCommand());
+        }
+
+        public int Volume
+        {
+            get
+            {
+                lock (locker)
+                    return volume;
+            }
+            set
+            {
+                lock (locker)
+                {
+                    if (value <= 100 && value > 0)
+                        volume = value;
+                    else if (value < 0)
+                        volume = 0;
+                    else if (value > 100)
+                        volume = 100;
+
+                    if (currentAudioOutput != null)
+                        currentAudioOutput.Volume = value;
+                }
+            }
         }
 
         #endregion
