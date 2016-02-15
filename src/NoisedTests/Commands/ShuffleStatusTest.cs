@@ -40,13 +40,13 @@ namespace NoisedTests.Commands
             Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
             serviceConnectionMock.Setup(x => x.SendResponse(It.IsAny<ResponseMetaData>())).Callback((ResponseMetaData r) => responseMetaData = r);
 
-            IocContainer.Get<ICore>().ExecuteCommand(new GetShuffleStatus(serviceConnectionMock.Object));
+            new GetShuffleStatus(serviceConnectionMock.Object).ExecuteCommand();
 
             responseMetaData.Parameters[0].ShouldEqual(false);
 
-            IocContainer.Get<ICore>().ExecuteCommand(new SetShuffleStatus(serviceConnectionMock.Object, true));
+            IocContainer.Get<IMediaManager>().Shuffle = true;
 
-            IocContainer.Get<ICore>().ExecuteCommand(new GetShuffleStatus(serviceConnectionMock.Object));
+            new GetShuffleStatus(serviceConnectionMock.Object).ExecuteCommand();
 
             responseMetaData.Parameters[0].ShouldEqual(true);
         }
