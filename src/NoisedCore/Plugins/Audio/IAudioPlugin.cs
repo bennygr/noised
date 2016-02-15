@@ -4,80 +4,80 @@ using Noised.Core.Media;
 
 namespace Noised.Core.Plugins.Audio
 {
-	public delegate void AudioEventHandler(Object sender, AudioEventArgs args);
-	public class AudioEventArgs : EventArgs
-	{
-		public MediaItem MediaItem {get;set;}
-	};
+    public delegate void AudioEventHandler(Object sender, AudioEventArgs args);
+    public class AudioEventArgs : EventArgs
+    {
+        public MediaItem MediaItem { get; set; }
+    };
 
-	/// <summary>
-	///		A plugin for audio output
-	/// </summary>
-	public interface IAudioPlugin : IPlugin
-	{
-		/// <summary>
-		///		Invoked if a playback finished 
-		/// </summary>
-		/// <remarks>
-		///		Finished because the playback reached the end, 
-		///		not stopped by an action
-		///	</remarks>
-		event AudioEventHandler SongFinished;
+    /// <summary>
+    ///		A plugin for audio output
+    /// </summary>
+    public interface IAudioPlugin : IPlugin
+    {
+        /// <summary>
+        ///		Invoked if a playback finished 
+        /// </summary>
+        /// <remarks>
+        ///		Finished because the playback reached the end, 
+        ///		not stopped by an action
+        ///	</remarks>
+        event AudioEventHandler SongFinished;
 
-		/// <summary>
-		///		A list of supported protocols to play
-		/// </summary>
-		/// <remarks>
-		///		For example file://, spotify://, etc
-		/// </remarks>
-		IEnumerable<string> SupportedProtocols{get;}
+        /// <summary>
+        ///		A list of supported protocols to play
+        /// </summary>
+        /// <remarks>
+        ///		For example file://, spotify://, etc
+        /// </remarks>
+        IEnumerable<string> SupportedProtocols { get; }
 
-		/// <summary>
-		///		Plays the specified item 
-		/// </summary>
-		/// <param name="item">The item to play</param>
-		void Play(MediaItem item);
+        /// <summary>
+        ///		Plays the specified item 
+        /// </summary>
+        /// <param name="item">The item to play</param>
+        void Play(MediaItem item);
 
-		/// <summary>
-		///		Play the specified item from a certain position
-		/// </summary>
-		/// <param name="item">The item to play</param>
-		/// <param name="pos">The position from which to play playback in milliseconds</param>
-		void Play(MediaItem item, int pos);
+        /// <summary>
+        ///		Play the specified item from a certain position
+        /// </summary>
+        /// <param name="item">The item to play</param>
+        /// <param name="pos">The position from which to play playback in milliseconds</param>
+        void Play(MediaItem item, int pos);
 
-		/// <summary>
-		///		Stops the playback
-		/// </summary>
-		void Stop();
+        /// <summary>
+        ///		Stops the playback
+        /// </summary>
+        void Stop();
 
-		/// <summary>
-		///		Pauses the playback
-		/// </summary>
-		void Pause();
+        /// <summary>
+        ///		Pauses the playback
+        /// </summary>
+        void Pause();
 
-		/// <summary>
-		///		Resumes the playback
-		/// </summary>
-		void Resume();
+        /// <summary>
+        ///		Resumes the playback
+        /// </summary>
+        void Resume();
 
-		/// <summary>
-		///		Whether the player is playing or not
-		/// </summary>
-		bool IsPlaying{get;}
+        /// <summary>
+        ///		Whether the player is playing or not
+        /// </summary>
+        bool IsPlaying { get; }
 
-		/// <summary>
-		///		The current position of the playback in milliseconds
-		/// </summary>
-		int Position{get;set;}
+        /// <summary>
+        ///		The current position of the playback in milliseconds
+        /// </summary>
+        int Position { get; set; }
 
-		/// <summary>
-		///		The length of the current playback in milliseconds
-		/// </summary>
-		int Length{get;}
+        /// <summary>
+        ///		The length of the current playback in milliseconds
+        /// </summary>
+        int Length { get; }
 
-		/// <summary>
-		///		The current volume in percent
-		/// </summary>
-		int Volume{get;set;}
-	};
+        /// <summary>
+        ///		The current volume in percent
+        /// </summary>
+        int Volume { get; set; }
+    };
 }
