@@ -1,0 +1,39 @@
+﻿using System;
+using Noised.Core.Commands;
+using Noised.Core.IOC;
+using Noised.Core.Media;
+using Noised.Core.Service;
+
+namespace Noised.Plugins.Commands.CoreCommands
+{
+    public class SetVolume : AbstractCommand
+    {
+        private readonly int volume;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="context">The command's context</param>
+        /// <param name="volume">Volume to set+</param>
+        public SetVolume(IServiceConnectionContext context, int volume)
+            : base(context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            this.volume = volume;
+        }
+
+        #region Overrides of AbstractCommand
+
+        /// <summary>
+        /// Defines the command's behaviour
+        /// </summary>
+        protected override void Execute()
+        {
+            IocContainer.Get<IMediaManager>().Volume = volume;
+        }
+
+        #endregion
+    }
+}
