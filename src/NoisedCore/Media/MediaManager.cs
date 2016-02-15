@@ -144,7 +144,7 @@ namespace Noised.Core.Media
                 currentMediaItem = item;
             }
 
-            currentAudioOutput.Volume = volume;
+            currentAudioOutput.Volume = Volume;
             currentAudioOutput.Play(item);
 
             var broadcastMessage = new ResponseMetaData
