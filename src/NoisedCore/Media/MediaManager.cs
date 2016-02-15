@@ -141,10 +141,10 @@ namespace Noised.Core.Media
                         audio.GetMetaData().Name,
                         item.Uri));
                 currentAudioOutput = audio;
-                currentAudioOutput.Volume = volume;
                 currentMediaItem = item;
             }
 
+            currentAudioOutput.Volume = volume;
             currentAudioOutput.Play(item);
 
             var broadcastMessage = new ResponseMetaData
@@ -247,18 +247,22 @@ namespace Noised.Core.Media
             }
             set
             {
+                IAudioPlugin audio;
+
                 lock (locker)
                 {
+                    audio = currentAudioOutput;
+
                     if (value <= 100 && value > 0)
                         volume = value;
                     else if (value < 0)
                         volume = 0;
                     else if (value > 100)
                         volume = 100;
-
-                    if (currentAudioOutput != null)
-                        currentAudioOutput.Volume = value;
                 }
+
+                if (audio != null)
+                    audio.Volume = value;
             }
         }
 
