@@ -8,7 +8,7 @@ namespace Noised.Core.DB
     public interface IUnitOfWork : IDisposable
     {
         /// <summary>
-        ///		Repository for accesing PluginRegistration
+        ///	Repository for accesing PluginRegistration
         /// </summary>
         IPluginRepository PluginRepository { get; }
 
@@ -18,7 +18,12 @@ namespace Noised.Core.DB
         IPlaylistRepository PlaylistRepository { get; }
 
         /// <summary>
-        ///		Saves all changes made to the repositories 
+        /// Repository for Users
+        /// </summary>
+        IUserRepository UserRepository { get; }
+
+        /// <summary>
+        ///	Saves all changes made to the repositories 
         /// </summary>
         void SaveChanges();
     };

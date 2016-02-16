@@ -3,6 +3,7 @@ using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Service.Protocols;
 using Noised.Logging;
+using Noised.Core.UserManagement;
 
 namespace Noised.Core.Service
 {

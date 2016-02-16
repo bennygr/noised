@@ -12,6 +12,7 @@ using Noised.Core.Service;
 using Noised.Core.Service.Protocols;
 using Noised.Core.Service.Protocols.JSON;
 using Noised.Logging;
+using Noised.Core.UserManagement;
 
 namespace Noised.Core.IOC
 {
@@ -81,6 +82,9 @@ namespace Noised.Core.IOC
 
             //Queue
             builder.Register<IQueue, Queue>().ControlledBy<SingletonLifecycle>();
+
+            // UserManager
+            builder.Register<IUserManager, UserManager>().ControlledBy<SingletonLifecycle>();
 
             container = builder.Build();
         }

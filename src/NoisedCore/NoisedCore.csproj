@@ -74,9 +74,12 @@
     <Compile Include="Commands\ResponseMetaData.cs" />
     <Compile Include="DB\IDbFactory.cs" />
     <Compile Include="DB\IPlaylistRepository.cs" />
+    <Compile Include="DB\IUserRepository.cs" />
     <Compile Include="DB\Sqlite\PlaylistSql.cs" />
     <Compile Include="DB\DbFactory.cs" />
     <Compile Include="DB\Sqlite\SqlitePlaylistRepository.cs" />
+    <Compile Include="DB\Sqlite\SqliteUserRepostiory.cs" />
+    <Compile Include="DB\Sqlite\UserSql.cs" />
     <Compile Include="IOC\IocContainer.cs" />
     <Compile Include="Media\IMediaManager.cs" />
     <Compile Include="Media\IMediaSourceAccumulator.cs" />
@@ -122,7 +125,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="User.cs" />
+    <Compile Include="UserManagement\IUserManager.cs" />
+    <Compile Include="UserManagement\User.cs" />
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ConfigurationData.cs" />
@@ -156,6 +160,8 @@
     <Compile Include="Media\ClearQueue.cs" />
     <Compile Include="Media\Listable.cs" />
     <Compile Include="Commands\ProcessNextMusicCommand.cs" />
+    <Compile Include="UserManagement\UserManager.cs" />
+    <Compile Include="UserManagement\UserManagerException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\Commands\CommandTemplate.txt" />

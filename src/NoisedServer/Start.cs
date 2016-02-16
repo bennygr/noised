@@ -6,6 +6,7 @@ using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Service;
 using Noised.Logging;
+using Noised.Core.UserManagement;
 
 namespace Noised.Server
 {
@@ -54,6 +55,11 @@ namespace Noised.Server
             logger.Info("Initializing Playlistmanager");
             IocContainer.Get<IPlaylistManager>().RefreshPlaylists();
             logger.Info("Done initializing Playlistmanager");
+
+            // Initializing UserManager
+            logger.Info("Initializing UserManager");
+            IocContainer.Get<IUserManager>().LoadUsers();
+            logger.Info("Done initializing UserManager");
 
             logger.Info("Noised has been started.");
 

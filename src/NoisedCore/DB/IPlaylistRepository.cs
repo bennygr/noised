@@ -4,7 +4,7 @@ using Noised.Core.Media;
 namespace Noised.Core.DB
 {
     /// <summary>
-    /// Interface of the PlaylistRepository
+    /// Interface of a PlaylistRepository
     /// </summary>
     public interface IPlaylistRepository
     {

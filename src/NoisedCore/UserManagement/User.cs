@@ -1,6 +1,4 @@
-using System;
-
-namespace Noised.Core
+namespace Noised.Core.UserManagement
 {
     /// <summary>
     /// A user using noised
@@ -9,20 +7,23 @@ namespace Noised.Core
     {
         #region Properties
 
-        public String Name { get; private set; }
+        public string Name { get; set; }
+
+        public string Password { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public User(String name)
+        public User(string name, string password)
         {
             Name = name;
+            Password = password;
         }
 
         #endregion
 
-        public override String ToString()
+        public override string ToString()
         {
             return Name;
         }

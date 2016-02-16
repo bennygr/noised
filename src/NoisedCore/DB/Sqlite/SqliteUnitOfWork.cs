@@ -9,6 +9,7 @@ namespace Noised.Core.DB.Sqlite
     {
         private IPluginRepository pluginRepository;
         private IPlaylistRepository playlistRepository;
+        private IUserRepository userRepository;
         private readonly SqliteConnection connection;
         private readonly SqliteTransaction transaction;
 
@@ -44,6 +45,19 @@ namespace Noised.Core.DB.Sqlite
                 if (playlistRepository == null)
                     playlistRepository = new SqlitePlaylistRepository(connection);
                 return playlistRepository;
+            }
+        }
+
+        /// <summary>
+        /// Repository for Users
+        /// </summary>
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                if(userRepository == null)
+                    userRepository = new SqliteUserRepostiory(connection);
+                return userRepository;
             }
         }
 

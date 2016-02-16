@@ -1,5 +1,6 @@
 ﻿using Noised.Core.Commands;
 using Noised.Logging;
+using Noised.Core.UserManagement;
 
 namespace Noised.Core.Service
 {

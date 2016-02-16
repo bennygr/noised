@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Noised.Core.Commands;
+using Noised.Core.IOC;
 using Noised.Core.Service;
+using Noised.Core.UserManagement;
 using Noised.Logging;
 
 namespace Noised.Plugins.Commands.CoreCommands
@@ -37,21 +39,17 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-            //Just a test impl.
-            //TODO: query against an auth. service injected into the plugin
-            //-->PluginInitializer
-            if (userName == "benny" &&
-               password == "test")
+            if(IocContainer.Get<IUserManager>().Authenticate(userName, password))
             {
                 Context.IsAuthenticated = true;
                 Console.WriteLine("Access granted for user  " + userName);
                 var response =
-                    new ResponseMetaData 
+                    new ResponseMetaData
                     {
                         Name = "Noised.Commands.Core.Welcome",
-                        Parameters = new List<object> 
+                        Parameters = new List<object>
                         {
-                            "Welcome to the noised server \\m/",
+                            "Welcome to the noise \\m/",
                         },
                     };
                 Context.SendResponse(response);
