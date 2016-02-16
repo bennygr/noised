@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Media;
@@ -6,10 +7,14 @@ using Noised.Core.Service;
 
 namespace Noised.Plugins.Commands.CoreCommands
 {
-  public  class GetShuffleStatus : AbstractCommand
+    public class GetShuffleStatus : AbstractCommand
     {
-        public GetShuffleStatus(IServiceConnectionContext context):base(context)
-        { }
+        public GetShuffleStatus(IServiceConnectionContext context)
+            : base(context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+        }
 
         #region Overrides of AbstractCommand
 
