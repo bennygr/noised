@@ -14,6 +14,11 @@ namespace Noised.Core.Commands
         protected override void Execute()
         {
             var mediaManager = IocContainer.Get<IMediaManager>();
+
+            // checking for repeat
+            if (mediaManager.Repeat == RepeatMode.RepeatSong)
+                mediaManager.Play(mediaManager.CurrentMediaItem);
+
             var queue = IocContainer.Get<IQueue>();
             //Checking queue for new music 
             Listable<MediaItem> nextItem = queue.Dequeue();

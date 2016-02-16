@@ -90,6 +90,7 @@
     <Compile Include="Media\PlaylistAlreadyExistsException.cs" />
     <Compile Include="Media\PlaylistManager.cs" />
     <Compile Include="Media\PlaylistManagerException.cs" />
+    <Compile Include="Media\RepeatMode.cs" />
     <Compile Include="Plugins\Audio\IAudioPlugin.cs" />
     <Compile Include="Plugins\Commands\ICommandBundle.cs" />
     <Compile Include="Plugins\IPlugin.cs" />

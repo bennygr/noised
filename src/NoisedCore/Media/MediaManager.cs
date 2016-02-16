@@ -18,7 +18,7 @@ namespace Noised.Core.Media
         private readonly IServiceConnectionManager connectionManager;
         private MediaItem currentMediaItem;
         private volatile bool shuffle;
-        private volatile bool repeat;
+        private volatile RepeatMode repeat;
         private int volume;
 
         /// <summary>
@@ -37,10 +37,11 @@ namespace Noised.Core.Media
             this.pluginLoader = pluginLoader;
             this.core = core;
             this.connectionManager = connectionManager;
+
             foreach (IAudioPlugin audio in pluginLoader.GetPlugins<IAudioPlugin>())
-            {
                 audio.SongFinished += OnSongFinished;
-            }
+
+            repeat = RepeatMode.None;
         }
 
         private void OnSongFinished(Object sender, AudioEventArgs args)
@@ -102,7 +103,7 @@ namespace Noised.Core.Media
             }
         }
 
-        public bool Repeat
+        public RepeatMode Repeat
         {
             get
             {

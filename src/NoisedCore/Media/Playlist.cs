@@ -57,18 +57,31 @@ namespace Noised.Core.Media
                 {
                     if (notYetPlayed.Count == 0)
                     {
-                        CurrentMediaItem = null;
                         ResetAlreadyPlayedItems();
-                        return null;
+
+                        switch (IocContainer.Get<IMediaManager>().Repeat)
+                        {
+                            // If RepeatMode is None null will be returned
+                            case RepeatMode.None:
+                                {
+                                    CurrentMediaItem = null;
+                                    return null;
+                                }
+                            // If RepeatMode is RepeatSong the CurrentMediaItem will be returned
+                            case RepeatMode.RepeatSong:
+                                return CurrentMediaItem;
+                            // If RepeatMode is Playlist the NextItem will be determined as usual
+                        }
                     }
 
+                    // Get a random Item when Shuffle is true
                     if (IocContainer.Get<IMediaManager>().Shuffle)
                     {
                         CurrentMediaItem = notYetPlayed[new Random().Next(items.Count)];
                         return CurrentMediaItem;
                     }
 
-                    CurrentMediaItem = notYetPlayed.First();
+                    CurrentMediaItem = notYetPlayed.FirstOrDefault();
                     return CurrentMediaItem;
                 }
             }

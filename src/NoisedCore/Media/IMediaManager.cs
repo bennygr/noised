@@ -16,9 +16,9 @@ namespace Noised.Core.Media
         bool Shuffle { get; set; }
 
         /// <summary>
-        ///		Shuffle mode 
+        /// Repeat mode 
         /// </summary>
-        bool Repeat { get; set; }
+        RepeatMode Repeat { get; set; }
 
         /// <summary>
         ///		Plays a media item 
