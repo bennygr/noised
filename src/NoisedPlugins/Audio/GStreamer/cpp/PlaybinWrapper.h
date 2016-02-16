@@ -27,6 +27,7 @@ class PlaybinWrapper
 			this->isPlaying = false;
 			this->isPaused = false;
 			this->callbackRegistered = false;
+			this->pipeline = NULL;
 			int x=0;
 			gst_init(&x, 0);
 		}
@@ -36,6 +37,8 @@ class PlaybinWrapper
 		void Pause();
 		void Resume();
 		bool Seek(long ms);
+		void SetVolume(double volume);
+		double GetVolume();
 };
 
 //------------------------------------------------------------------------------

@@ -51,6 +51,16 @@ namespace Noised.Plugins.Audio.GStreamer
             SetSongFinishedCallback(songFinishedCallback);
         }
 
+		internal override double AbsGetVolume()
+		{
+			return GetVolume();
+		}
+
+		internal override void AbsSetVolume(double volume)
+		{
+			SetVolume(volume);
+		}
+
         #endregion
 
         [DllImport("GStreamerCpp.dll")]
@@ -82,5 +92,12 @@ namespace Noised.Plugins.Audio.GStreamer
         [DllImport("GStreamerCpp.dll")]
         internal static extern void SetSongFinishedCallback(
                 [MarshalAs(UnmanagedType.FunctionPtr)]SongFinishedCallback songFinishedCallback);
+
+        [DllImport("GStreamerCpp.dll")]
+        internal static extern bool SetVolume(double volume);
+
+        [DllImport("GStreamerCpp.dll")]
+        [return: MarshalAsAttribute(UnmanagedType.R8)]
+        internal static extern double GetVolume();
     }
 }

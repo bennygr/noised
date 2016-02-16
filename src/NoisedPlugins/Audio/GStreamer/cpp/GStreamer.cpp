@@ -49,3 +49,8 @@ extern "C" void SetSongFinishedCallback(SongFinishedCallback songFinishedCallbac
 	playbinWrapper->songFinishedCallback = songFinishedCallback;
 	playbinWrapper->callbackRegistered= true;
 }
+
+extern "C" void SetVolume(double volume)
+{
+	playbinWrapper->SetVolume(volume);
+}

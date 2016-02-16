@@ -24,5 +24,8 @@ namespace Noised.Plugins.Audio.GStreamer
         abstract internal bool AbsIsPaused();
 
         abstract internal void AbsSetSongFinishedCallback([MarshalAs(UnmanagedType.FunctionPtr)]SongFinishedCallback songFinishedCallback);
+
+		abstract internal double AbsGetVolume();
+		abstract internal void AbsSetVolume(double volume);
     }
 }

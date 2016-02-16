@@ -116,3 +116,21 @@ bool PlaybinWrapper::Seek(long ms)
 	}
 	return false;
 }
+
+void PlaybinWrapper::SetVolume(double volume)
+{
+	if(pipeline != NULL)
+	{
+		g_object_set(pipeline, "volume", volume, NULL);
+	}
+}
+
+double PlaybinWrapper::GetVolume()
+{
+	if(pipeline != NULL)
+	{
+		double volume;
+		g_object_set(pipeline, "volume", volume );
+		return volume;
+	}
+}

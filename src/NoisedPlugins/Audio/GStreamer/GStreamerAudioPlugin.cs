@@ -175,7 +175,7 @@ namespace Noised.Plugins.Audio.GStreamer
 
         public bool IsPlaying
         {
-            get { throw new NotImplementedException(); }
+            get { return gStreamerAccess.AbsIsPlaying(); }
         }
 
         public int Position
@@ -191,8 +191,14 @@ namespace Noised.Plugins.Audio.GStreamer
 
         public int Volume
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get 
+			{ 
+				return (int)(gStreamerAccess.AbsGetVolume() * 100.0d);
+			}
+            set 
+			{
+				gStreamerAccess.AbsSetVolume((double)value/100.0d); 
+			}
         }
 
         #endregion

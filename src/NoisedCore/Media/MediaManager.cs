@@ -37,6 +37,7 @@ namespace Noised.Core.Media
             this.pluginLoader = pluginLoader;
             this.core = core;
             this.connectionManager = connectionManager;
+			this.volume = 50;
 
             foreach (IAudioPlugin audio in pluginLoader.GetPlugins<IAudioPlugin>())
                 audio.SongFinished += OnSongFinished;
