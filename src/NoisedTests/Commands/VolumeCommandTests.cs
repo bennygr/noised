@@ -46,7 +46,7 @@ namespace NoisedTests.Commands
 
             new GetVolume(serviceConnectionMock.Object).ExecuteCommand();
 
-            responseMetaData.Parameters[0].ShouldEqual(0);
+            responseMetaData.Parameters[0].ShouldEqual(50);
 
             IocContainer.Get<IMediaManager>().Volume = 66;
 

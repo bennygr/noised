@@ -130,7 +130,7 @@ double PlaybinWrapper::GetVolume()
 	if(pipeline != NULL)
 	{
 		double volume;
-		g_object_set(pipeline, "volume", volume );
+		g_object_get(pipeline, "volume", &volume,NULL);
 		return volume;
 	}
 }

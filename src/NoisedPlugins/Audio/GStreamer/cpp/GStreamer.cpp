@@ -54,3 +54,8 @@ extern "C" void SetVolume(double volume)
 {
 	playbinWrapper->SetVolume(volume);
 }
+
+extern "C" double GetVolume()
+{
+	playbinWrapper->GetVolume();
+}

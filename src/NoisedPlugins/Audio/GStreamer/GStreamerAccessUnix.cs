@@ -101,7 +101,6 @@ namespace Noised.Plugins.Audio.GStreamer
         internal static extern bool SetVolume(double volume);
 
 		[DllImport ("libNoisedGstreamerAudio.so")]
-        [return: MarshalAsAttribute(UnmanagedType.R8)]
         internal static extern double GetVolume();
 	};
 }

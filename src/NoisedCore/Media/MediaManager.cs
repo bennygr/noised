@@ -29,15 +29,15 @@ namespace Noised.Core.Media
         /// <param name="core">The core</param>
         /// <param name="connectionManager">The connection manager</param>
         public MediaManager(ILogging logger,
-                            IPluginLoader pluginLoader,
-                            ICore core,
-                            IServiceConnectionManager connectionManager)
+            IPluginLoader pluginLoader,
+            ICore core,
+            IServiceConnectionManager connectionManager)
         {
             this.logger = logger;
             this.pluginLoader = pluginLoader;
             this.core = core;
             this.connectionManager = connectionManager;
-			this.volume = 50;
+            this.volume = 50;
 
             foreach (IAudioPlugin audio in pluginLoader.GetPlugins<IAudioPlugin>())
                 audio.SongFinished += OnSongFinished;
