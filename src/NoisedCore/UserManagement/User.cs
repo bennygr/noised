@@ -7,9 +7,13 @@ namespace Noised.Core.UserManagement
     {
         #region Properties
 
-        public string Name { get; set; }
+        internal string UniqueId { get; private set; }
 
-        public string Password { get; set; }
+        internal string Name { get; set; }
+
+        internal string Password { get; set; }
+
+        internal string Salt { get; set; }
 
         #endregion
 
