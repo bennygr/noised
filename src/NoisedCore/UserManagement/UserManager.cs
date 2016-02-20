@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Noised.Core.DB;
-using System.Linq;
 
 namespace Noised.Core.UserManagement
 {
@@ -30,7 +29,7 @@ namespace Noised.Core.UserManagement
         /// <returns></returns>
         public bool Authenticate(string username, string password)
         {
-            if(username == "benny" && password == "test")
+            if (username == "benny" && password == "test")
                 return true;
 
             return false;
@@ -43,7 +42,7 @@ namespace Noised.Core.UserManagement
         {
             private get
             {
-                if(dbFactory == null)
+                if (dbFactory == null)
                     throw new UserManagerException("You need to set the DbFactory Property first!");
 
                 return dbFactory;
@@ -51,18 +50,6 @@ namespace Noised.Core.UserManagement
             set
             {
                 dbFactory = value;
-            }
-        }
-
-        /// <summary>
-        /// Loads all Users from the Database
-        /// </summary>
-        public void LoadUsers()
-        {
-            lock (users)
-            {
-                using(IUnitOfWork uow = DbFactory.GetUnitOfWork())
-                    users = uow.UserRepository.Users.ToList();
             }
         }
     }

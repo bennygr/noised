@@ -19,10 +19,5 @@ namespace Noised.Core.UserManagement
         /// <param name="password"></param>
         /// <returns>true if the User is successfully authenticated</returns>
         bool Authenticate(string username, string password);
-
-        /// <summary>
-        /// Loads all Users
-        /// </summary>
-        void LoadUsers();
     }
 }
