@@ -22,31 +22,6 @@ namespace Noised.Core.DB.Sqlite
         }
 
         /// <summary>
-        /// Gets all Users
-        /// </summary>
-        public IList<User> Users
-        {
-            get
-            {
-                DataTable userTable = new DataTable();
-
-                using(SqliteCommand cmd = connection.CreateCommand())
-                {
-                    cmd.CommandText = UserSql.SelectAllusers;
-                    cmd.CommandType = CommandType.Text;
-
-                    userTable.Load(cmd.ExecuteReader());
-                }
-
-                List<User> users = new List<User>();
-                foreach(DataRow row in userTable.Rows)
-                    users.Add(new User(row["Username"].ToString(), row["Password"].ToString()));
-
-                return users;
-            }
-        }
-
-        /// <summary>
         /// Creates a User
         /// </summary>
         /// <param name="user">User to create</param>
@@ -60,6 +35,16 @@ namespace Noised.Core.DB.Sqlite
         /// </summary>
         /// <param name="user">User to delete</param>
         public void DeleteUser(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets a User by its Name
+        /// </summary>
+        /// <param name="username">The name of the user to get</param>
+        /// <returns>The User</returns>
+        public User GetUser(string username)
         {
             throw new NotImplementedException();
         }

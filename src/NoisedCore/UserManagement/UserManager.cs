@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Noised.Core.DB;
+using Noised.Core.IOC;
+using Sodium;
 
 namespace Noised.Core.UserManagement
 {
@@ -32,6 +34,10 @@ namespace Noised.Core.UserManagement
             if (username == "benny" && password == "test")
                 return true;
 
+            User user = IocContainer.Get<IUnitOfWork>().UserRepository.GetUser(username);
+
+            if (PasswordHash.ScryptHashStringVerify(user.Password, user.Salt + password))
+                return true;
             return false;
         }
 

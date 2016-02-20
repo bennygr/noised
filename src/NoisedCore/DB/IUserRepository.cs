@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Noised.Core.UserManagement;
+﻿using Noised.Core.UserManagement;
 
 namespace Noised.Core.DB
 {
@@ -27,8 +26,10 @@ namespace Noised.Core.DB
         void DeleteUser(User user);
 
         /// <summary>
-        /// Gets all Users
+        /// Gets a User by its Name
         /// </summary>
-        IList<User> Users { get; }
+        /// <param name="username">The name of the user to get</param>
+        /// <returns>The User</returns>
+        User GetUser(string username);
     }
 }
