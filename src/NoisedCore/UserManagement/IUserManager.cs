@@ -19,5 +19,12 @@ namespace Noised.Core.UserManagement
         /// <param name="password">Password</param>
         /// <returns>true if the User is successfully authenticated</returns>
         bool Authenticate(string username, string password);
+
+        /// <summary>
+        /// Creates a new User
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="password">Pswword</param>
+        void CreateUser(string username, string password);
     }
 }

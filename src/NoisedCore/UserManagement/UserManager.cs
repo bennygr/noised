@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Noised.Core.DB;
-using Noised.Core.IOC;
-using Sodium;
+//using Sodium;
 
 namespace Noised.Core.UserManagement
 {
@@ -34,10 +33,12 @@ namespace Noised.Core.UserManagement
             if (username == "benny" && password == "test")
                 return true;
 
-            User user = IocContainer.Get<IUnitOfWork>().UserRepository.GetUser(username);
+            User user;
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+                user = iuw.UserRepository.GetUser(username);
 
-            if (PasswordHash.ScryptHashStringVerify(user.Password, user.Salt + password))
-                return true;
+            //if (PasswordHash.ScryptHashStringVerify(user.Password, user.Salt + password))
+            //    return true;
             return false;
         }
 
@@ -57,6 +58,21 @@ namespace Noised.Core.UserManagement
             {
                 dbFactory = value;
             }
+        }
+
+        /// <summary>
+        /// Creates a new User
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="password">Password</param>
+        public void CreateUser(string username, string password)
+        {
+            //byte[] salt = PasswordHash.GenerateSalt();
+
+            //string hashedPw = PasswordHash.ScryptHashString(salt + password, PasswordHash.Strength.Medium);
+
+            //using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            //    iuw.UserRepository.CreateUser(new User(username) { Salt = tempSalt, Password = hashedPw });
         }
     }
 }

@@ -19,10 +19,9 @@ namespace Noised.Core.UserManagement
 
         #region Constructors
 
-        public User(string name, string password)
+        public User(string name)
         {
             Name = name;
-            Password = password;
         }
 
         #endregion
