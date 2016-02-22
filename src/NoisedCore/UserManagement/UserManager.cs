@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using Noised.Core.DB;
-//using Sodium;
+﻿using Noised.Core.DB;
+using PasswordSecurity;
 
 namespace Noised.Core.UserManagement
 {
@@ -10,7 +9,6 @@ namespace Noised.Core.UserManagement
     public class UserManager : IUserManager
     {
         private IDbFactory dbFactory;
-        private List<User> users;
 
         /// <summary>
         /// Manages all the Users
@@ -19,7 +17,6 @@ namespace Noised.Core.UserManagement
         public UserManager(IDbFactory dbFactory)
         {
             this.dbFactory = dbFactory;
-            users = new List<User>();
         }
 
         /// <summary>
@@ -37,8 +34,8 @@ namespace Noised.Core.UserManagement
             using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
                 user = iuw.UserRepository.GetUser(username);
 
-            //if (PasswordHash.ScryptHashStringVerify(user.Password, user.Salt + password))
-            //    return true;
+            if (PasswordStorage.VerifyPassword(password, user.Password))
+                return true;
             return false;
         }
 
@@ -67,12 +64,10 @@ namespace Noised.Core.UserManagement
         /// <param name="password">Password</param>
         public void CreateUser(string username, string password)
         {
-            //byte[] salt = PasswordHash.GenerateSalt();
+            string hashedPw = PasswordStorage.CreateHash(password);
 
-            //string hashedPw = PasswordHash.ScryptHashString(salt + password, PasswordHash.Strength.Medium);
-
-            //using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
-            //    iuw.UserRepository.CreateUser(new User(username) { Salt = tempSalt, Password = hashedPw });
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+                iuw.UserRepository.CreateUser(new User(username) { Password = hashedPw });
         }
     }
 }

@@ -13,8 +13,6 @@ namespace Noised.Core.UserManagement
 
         internal string Password { get; set; }
 
-        internal string Salt { get; set; }
-
         #endregion
 
         #region Constructors
