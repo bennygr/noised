@@ -27,9 +27,6 @@ namespace Noised.Core.UserManagement
         /// <returns></returns>
         public bool Authenticate(string username, string password)
         {
-            if (username == "benny" && password == "test")
-                return true;
-
             User user;
             using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
                 user = iuw.UserRepository.GetUser(username);
@@ -67,7 +64,10 @@ namespace Noised.Core.UserManagement
             string hashedPw = PasswordStorage.CreateHash(password);
 
             using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            {
                 iuw.UserRepository.CreateUser(new User(username) { Password = hashedPw });
+                iuw.SaveChanges();
+            }
         }
     }
 }
