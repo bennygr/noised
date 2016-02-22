@@ -81,6 +81,7 @@
     <Compile Include="DB\Sqlite\SqlitePlaylistRepository.cs" />
     <Compile Include="DB\Sqlite\SqliteUserRepostiory.cs" />
     <Compile Include="DB\Sqlite\UserSql.cs" />
+    <Compile Include="DB\UserRepositoryException.cs" />
     <Compile Include="IOC\IocContainer.cs" />
     <Compile Include="Media\IMediaManager.cs" />
     <Compile Include="Media\IMediaSourceAccumulator.cs" />
