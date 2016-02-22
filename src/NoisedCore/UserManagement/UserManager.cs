@@ -69,5 +69,42 @@ namespace Noised.Core.UserManagement
                 iuw.SaveChanges();
             }
         }
+
+        /// <summary>
+        /// Deletes a User
+        /// </summary>
+        /// <param name="user">User to delete</param>
+        public void DeleteUser(User user)
+        {
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            {
+                iuw.UserRepository.DeleteUser(user);
+                iuw.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Updates an User
+        /// </summary>
+        /// <param name="user">User to Update</param>
+        public void UpdateUser(User user)
+        {
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            {
+                iuw.UserRepository.UpdateUser(user);
+                iuw.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Gets a User by its name
+        /// </summary>
+        /// <param name="username">Name of the user</param>
+        /// <returns>The User with the given name</returns>
+        public User GetUser(string username)
+        {
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+                return iuw.UserRepository.GetUser(username);
+        }
     }
 }

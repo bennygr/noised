@@ -13,7 +13,7 @@ namespace Noised.Core.UserManagement
         IDbFactory DbFactory { set; }
 
         /// <summary>
-        /// Authenticates a User
+        /// Authenticates an User
         /// </summary>
         /// <param name="username">Username</param>
         /// <param name="password">Password</param>
@@ -21,10 +21,29 @@ namespace Noised.Core.UserManagement
         bool Authenticate(string username, string password);
 
         /// <summary>
-        /// Creates a new User
+        /// Creates an new User
         /// </summary>
         /// <param name="username">Username</param>
         /// <param name="password">Pswword</param>
         void CreateUser(string username, string password);
+
+        /// <summary>
+        /// Deletes an User
+        /// </summary>
+        /// <param name="user">User to delete</param>
+        void DeleteUser(User user);
+
+        /// <summary>
+        /// Updates an User
+        /// </summary>
+        /// <param name="user">User to Update</param>
+        void UpdateUser(User user);
+
+        /// <summary>
+        /// Gets a User by its name
+        /// </summary>
+        /// <param name="username">Name of the user</param>
+        /// <returns>The User with the given name</returns>
+        User GetUser(string username);
     }
 }
