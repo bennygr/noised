@@ -7,9 +7,9 @@ namespace Noised.Core.UserManagement
     {
         #region Properties
 
-        internal string Name { get; set; }
+        public string Name { get; set; }
 
-        internal string Password { get; set; }
+        public string Password { get; set; }
 
         #endregion
 
