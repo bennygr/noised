@@ -31,7 +31,7 @@ namespace Noised.Core.UserManagement
             using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
                 user = iuw.UserRepository.GetUser(username);
 
-            if (PasswordStorage.VerifyPassword(password, user.Password))
+            if (user != null && PasswordStorage.VerifyPassword(password, user.Password))
                 return true;
             return false;
         }
