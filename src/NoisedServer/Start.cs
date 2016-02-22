@@ -85,6 +85,10 @@ namespace Noised.Server
                     string[] realArgArr = realArgs.Split(',');
 
                     IocContainer.Get<IUserManager>().CreateUser(realArgArr[0], realArgArr[1]);
+
+                    logger.Info("\"" + realArgArr[0] + "\" can now rock this noised!\nPress Enter to continue!");
+                    Console.ReadLine();
+
                     return 0;
                 }
             }
