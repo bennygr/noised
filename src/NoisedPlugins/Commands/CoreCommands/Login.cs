@@ -39,7 +39,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-            if(IocContainer.Get<IUserManager>().Authenticate(userName, password))
+            if (IocContainer.Get<IUserManager>().Authenticate(userName, password))
             {
                 Context.IsAuthenticated = true;
                 Console.WriteLine("Access granted for user  " + userName);
@@ -50,7 +50,7 @@ namespace Noised.Plugins.Commands.CoreCommands
                         Parameters = new List<object>
                         {
                             "Welcome to the noise \\m/",
-                        },
+                        }
                     };
                 Context.SendResponse(response);
             }
