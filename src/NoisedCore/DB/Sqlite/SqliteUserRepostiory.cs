@@ -47,7 +47,18 @@ namespace Noised.Core.DB.Sqlite
         /// <param name="user">User to delete</param>
         public void DeleteUser(User user)
         {
-            throw new NotImplementedException();
+            if (user == null)
+                throw new ArgumentNullException("user");
+
+            using (SqliteCommand cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = UserSql.DeleteUser;
+                cmd.CommandType = CommandType.Text;
+
+                cmd.Parameters.Add(new SqliteParameter("@Username", user.Name));
+
+                cmd.ExecuteNonQuery();
+            }
         }
 
         /// <summary>
@@ -90,7 +101,11 @@ namespace Noised.Core.DB.Sqlite
         /// <param name="user">User to update</param>
         public void UpdateUser(User user)
         {
-            throw new NotImplementedException();
+            if (user == null)
+                throw new ArgumentNullException("user");
+
+            DeleteUser(user);
+            CreateUser(user);
         }
     }
 }
