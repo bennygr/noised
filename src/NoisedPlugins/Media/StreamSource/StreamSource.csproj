@@ -35,6 +35,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="YamlDotNet, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StreamSource.cs" />
@@ -66,6 +70,7 @@
     <Copy SourceFiles=".\bin\$(Configuration)\StreamSource.dll" DestinationFiles="$(TargetDir)\StreamSource.nplugin" />
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\StreamSource.nplugin" />
+	  <PluginRuntimeFiles Include=".\bin\$(Configuration)\YamlDotNet.dll" />
     </ItemGroup>
     <ItemGroup>
       <PluginConfigurationFiles Include=".\bin\$(Configuration)\etc\noised.plugins.media.streamsource.nconfig" />
@@ -75,6 +80,7 @@
     <Copy SourceFiles="$(TargetDir)\..\StreamSource.npluginz" DestinationFiles="..\..\..\bin\$(Configuration)\plugins\StreamSource.npluginz" />
   </Target>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="plugin.nplugininfo">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

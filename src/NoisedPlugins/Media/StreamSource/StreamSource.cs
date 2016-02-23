@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Noised.Core.Config;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Media;
+using YamlDotNet.RepresentationModel;
 
 namespace Noised.Plugins.Media.StreamSource
 {
@@ -16,7 +16,7 @@ namespace Noised.Plugins.Media.StreamSource
     public class StreamSource : IMediaSource
     {
         private readonly PluginInitializer initalizer;
-        private readonly List<string> streamUris;
+        private readonly List<MediaItem> streams;
 
         public StreamSource(PluginInitializer initalizer)
         {
@@ -24,7 +24,7 @@ namespace Noised.Plugins.Media.StreamSource
                 throw new ArgumentNullException("initalizer");
 
             this.initalizer = initalizer;
-            streamUris = new List<string>();
+            streams = new List<MediaItem>();
         }
 
         #region Implementation of IDisposable
@@ -55,6 +55,7 @@ namespace Noised.Plugins.Media.StreamSource
         /// </summary>
         public void Refresh()
         {
+            // Get configured StreamSource-Files
             string configValue = initalizer.Get<IConfig>().GetProperty("noised.plugins.media.filesystemsource.streams");
 
             if (String.IsNullOrWhiteSpace(configValue))
@@ -63,9 +64,8 @@ namespace Noised.Plugins.Media.StreamSource
                 return;
             }
 
+            // Iterate over every configured StreamSource-File
             string[] files = configValue.Split(',');
-
-            StringBuilder streamString = new StringBuilder();
             foreach (string file in files)
             {
                 initalizer.Logging.Debug("Refreshing from file \"" + file + "\"");
@@ -76,14 +76,23 @@ namespace Noised.Plugins.Media.StreamSource
                     continue;
                 }
 
-                streamString.Append(File.ReadAllText(file));
+                // Read streams from file and add to list
+                YamlStream yaml = new YamlStream();
+                yaml.Load(new StringReader(File.ReadAllText(file)));
+                YamlMappingNode mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+                YamlSequenceNode sequence = (YamlSequenceNode)mapping.Children[new YamlScalarNode("streams")];
+                foreach (YamlNode yamlNode in sequence)
+                {
+                    YamlMappingNode stream = (YamlMappingNode)yamlNode;
+                    streams.Add(new MediaItem(new Uri(stream.Children[new YamlScalarNode("uri")].ToString()),
+                        String.Empty)
+                    {
+                        MetaData = new MetaData { Title = stream.Children[new YamlScalarNode("title")].ToString() }
+                    });
+                }
             }
 
-            foreach (string singleStreamString in streamString.ToString().Split(','))
-                if(!String.IsNullOrWhiteSpace(singleStreamString))
-                    streamUris.Add(singleStreamString);
-
-            initalizer.Logging.Debug(streamUris.Count + " stream(s) added");
+            initalizer.Logging.Debug(streams.Count + " stream(s) added");
         }
 
         /// <summary>
@@ -94,7 +103,7 @@ namespace Noised.Plugins.Media.StreamSource
         public MediaItem Get(Uri uri)
         {
             // If we have a Uri pointing to the desired stream we create a new MediaItem with it.
-            if (streamUris.Any(x => x == uri.AbsoluteUri))
+            if (streams.Any(x => x.Uri.AbsoluteUri == uri.AbsoluteUri))
                 return new MediaItem(uri, String.Empty);
 
             return null;
@@ -111,9 +120,11 @@ namespace Noised.Plugins.Media.StreamSource
             // Searching in the List of Uris
             List<MediaItem> items = new List<MediaItem>();
 
-            foreach (string streamUri in streamUris)
-                if (streamUri.Contains(pattern))
-                    items.Add(new MediaItem(new Uri(streamUri), String.Empty));
+            foreach (MediaItem item in streams)
+            {
+                if (item.Uri.AbsoluteUri.Contains(pattern) || item.MetaData.Title.Contains(pattern))
+                    items.Add(item);
+            }
 
             return new MediaSourceSearchResult(Identifier, items);
         }
