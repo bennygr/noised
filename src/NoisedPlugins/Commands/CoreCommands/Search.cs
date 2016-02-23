@@ -22,15 +22,8 @@ namespace Noised.Plugins.Commands.CoreCommands
         /// <param name="context">ConnectionContext</param>
         /// <param name="searchPattern">What to search for</param>
         public Search(ServiceConnectionContext context, string searchPattern)
-            : base(context)
-        {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            if (String.IsNullOrWhiteSpace(searchPattern))
-                throw new ArgumentNullException("searchPattern");
-
-            this.searchPattern = searchPattern;
-        }
+            : this(context, searchPattern, null)
+        { }
 
         /// <summary>
         /// Command that executes a search for MediaItems
@@ -45,8 +38,9 @@ namespace Noised.Plugins.Commands.CoreCommands
                 throw new ArgumentNullException("context");
             if (String.IsNullOrWhiteSpace(searchPattern))
                 throw new ArgumentNullException("searchPattern");
-            if (sourceIdentifiers == null || sourceIdentifiers.Count == 0)
-                throw new ArgumentNullException("sourceIdentifiers");
+
+            if (sourceIdentifiers == null)
+                sourceIdentifiers = new List<object>();
 
             this.searchPattern = searchPattern;
             this.sourceIdentifiers = sourceIdentifiers;
