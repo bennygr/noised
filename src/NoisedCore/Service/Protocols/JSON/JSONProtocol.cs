@@ -44,22 +44,22 @@ namespace Noised.Core.Service.Protocols.JSON
             //Injection the context as first argument
             var parameters = new List<object>();
             parameters.Add(context);
-			//injection the other arguments
-			if(commandMetaData.Parameters != null)
-			{
-				foreach(object parameter in commandMetaData.Parameters)
-				{
-					var arrayParameter = parameter as JArray;
-					if(arrayParameter != null)
-					{
-						parameters.Add(arrayParameter.ToObject<List<Object>>());
-					}
-					else
-					{
-						parameters.Add(parameter);
-					}
-				}
-			}
+            //injection the other arguments
+            if(commandMetaData.Parameters != null)
+            {
+                foreach(object parameter in commandMetaData.Parameters)
+                {
+                    var arrayParameter = parameter as JArray;
+                    if(arrayParameter != null)
+                    {
+                        parameters.Add(arrayParameter.ToObject<List<Object>>());
+                    }
+                    else
+                    {
+                        parameters.Add(parameter);
+                    }
+                }
+            }
             commandMetaData.Parameters = parameters;
 
             return commandFactory.CreateCommand(commandMetaData);
