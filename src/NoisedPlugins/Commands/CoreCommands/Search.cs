@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Noised.Core.Commands;
 using Noised.Core.IOC;
 using Noised.Core.Media;
@@ -8,32 +9,57 @@ using Noised.Core.Service;
 namespace Noised.Plugins.Commands.CoreCommands
 {
     /// <summary>
-    ///		Command for Searching for MediaItems
+    /// Command that executes a search for MediaItems
     /// </summary>
     public class Search : AbstractCommand
     {
         private readonly string searchPattern;
+        private readonly List<object> sourceIdentifiers;
 
         /// <summary>
-        ///		Constructor
+        /// Command that executes a search for MediaItems
         /// </summary>
-        /// <param name="context">Connection context</param>
-        public Search(ServiceConnectionContext context, String searchPattern)
+        /// <param name="context">ConnectionContext</param>
+        /// <param name="searchPattern">What to search for</param>
+        public Search(ServiceConnectionContext context, string searchPattern)
             : base(context)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (String.IsNullOrWhiteSpace(searchPattern))
+                throw new ArgumentNullException("searchPattern");
+
             this.searchPattern = searchPattern;
+        }
+
+        /// <summary>
+        /// Command that executes a search for MediaItems
+        /// </summary>
+        /// <param name="context">ConnectionContext</param>
+        /// <param name="searchPattern">What to search for</param>
+        /// <param name="sourceIdentifiers">Where to search it</param>
+        public Search(ServiceConnectionContext context, string searchPattern, List<object> sourceIdentifiers)
+            : base(context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (String.IsNullOrWhiteSpace(searchPattern))
+                throw new ArgumentNullException("searchPattern");
+            if (sourceIdentifiers == null || sourceIdentifiers.Count == 0)
+                throw new ArgumentNullException("sourceIdentifiers");
+
+            this.searchPattern = searchPattern;
+            this.sourceIdentifiers = sourceIdentifiers;
         }
 
         #region implemented abstract members of AbstractCommand
 
         protected override void Execute()
         {
-            var sources = IocContainer.Get<IMediaSourceAccumulator>();
-            var searchResults = sources.Search(searchPattern);
             Context.SendResponse(new ResponseMetaData
             {
                 Name = "Noised.Commands.Core.Search",
-                Parameters = new List<Object> { searchResults }
+                Parameters = new List<Object> { IocContainer.Get<IMediaSourceAccumulator>().Search(searchPattern, sourceIdentifiers.OfType<string>()) }
             });
         }
 
