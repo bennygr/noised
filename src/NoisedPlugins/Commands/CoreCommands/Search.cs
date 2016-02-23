@@ -53,7 +53,12 @@ namespace Noised.Plugins.Commands.CoreCommands
             Context.SendResponse(new ResponseMetaData
             {
                 Name = "Noised.Commands.Core.Search",
-                Parameters = new List<Object> { IocContainer.Get<IMediaSourceAccumulator>().Search(searchPattern, sourceIdentifiers.OfType<string>()) }
+                Parameters =
+                    new List<Object>
+                    {
+                        IocContainer.Get<IMediaSourceAccumulator>()
+                            .Search(searchPattern, sourceIdentifiers.OfType<string>())
+                    }
             });
         }
 
