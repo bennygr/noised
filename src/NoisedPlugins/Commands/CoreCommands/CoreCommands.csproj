@@ -46,6 +46,7 @@
     <Compile Include="CoreCommandBundlePlugin.cs" />
     <Compile Include="CreatePlaylist.cs" />
     <Compile Include="DeletePlaylist.cs" />
+    <Compile Include="GetMediaSources.cs" />
     <Compile Include="GetPlaylist.cs" />
     <Compile Include="GetPlaylists.cs" />
     <Compile Include="GetRepeatMode.cs" />
