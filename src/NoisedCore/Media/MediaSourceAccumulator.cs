@@ -21,7 +21,7 @@ namespace Noised.Core.Media
             this.pluginLoader = pluginLoader;
         }
 
-        #region IMediaSourceManager
+        #region IMediaSourceAccumulator
 
         public void Refresh()
         {
