@@ -28,8 +28,9 @@ namespace Noised.Core.DB.Sqlite
             {
                 PluginsSql.CREATE_TABLE_STMT,
                 PluginFilesSql.CREATE_TABLE_STMT,
-                PlaylistSql.CreateTableStmt,
-                UserSql.CreateTableStmt
+                PlaylistsSql.CreateTableStmt,
+                UserSql.CreateTableStmt,
+                MetaFilesSql.CreateTableStmt
             };
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace Noised.Core.DB.Sqlite
 {
-    internal static class PlaylistSql
+    internal static class PlaylistsSql
     {
         internal const string CreateTableStmt = "CREATE TABLE IF NOT EXISTS [Playlists] (" +
                                                 "[Name] TEXT NOT NULL," +

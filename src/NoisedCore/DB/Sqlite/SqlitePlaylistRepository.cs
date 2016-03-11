@@ -41,7 +41,7 @@ namespace Noised.Core.DB.Sqlite
             {
                 using (SqliteCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = PlaylistSql.InsertPlaylistStatement;
+                    cmd.CommandText = PlaylistsSql.InsertPlaylistStatement;
                     cmd.CommandType = CommandType.Text;
 
                     cmd.Parameters.Add(new SqliteParameter("@Name", playlist.Name));
@@ -76,7 +76,7 @@ namespace Noised.Core.DB.Sqlite
 
             using (SqliteCommand cmd = connection.CreateCommand())
             {
-                cmd.CommandText = PlaylistSql.DeletePlaylistStatement;
+                cmd.CommandText = PlaylistsSql.DeletePlaylistStatement;
                 cmd.CommandType = CommandType.Text;
 
                 cmd.Parameters.Add(new SqliteParameter("@Name", playlist.Name));
@@ -96,7 +96,7 @@ namespace Noised.Core.DB.Sqlite
 
                 using (SqliteCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = PlaylistSql.SelectAllPlaylists;
+                    cmd.CommandText = PlaylistsSql.SelectAllPlaylists;
                     cmd.CommandType = CommandType.Text;
 
                     playlistTable.Load(cmd.ExecuteReader());
