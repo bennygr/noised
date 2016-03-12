@@ -86,12 +86,15 @@
     <Compile Include="IOC\IocContainer.cs" />
     <Compile Include="Media\IMediaManager.cs" />
     <Compile Include="Media\IMediaSourceAccumulator.cs" />
+    <Compile Include="Media\IMetaFileAccumulator.cs" />
     <Compile Include="Media\IPlaylistManager.cs" />
     <Compile Include="Media\MediaItem.cs" />
     <Compile Include="Media\MediaItemNotFoundException.cs" />
     <Compile Include="Media\MediaManager.cs" />
     <Compile Include="Media\MediaSourceAccumulator.cs" />
     <Compile Include="Media\MetaData.cs" />
+    <Compile Include="Media\MetaFile.cs" />
+    <Compile Include="Media\MetaFileAccumulator.cs" />
     <Compile Include="Media\Playlist.cs" />
     <Compile Include="Media\PlaylistAlreadyExistsException.cs" />
     <Compile Include="Media\PlaylistManager.cs" />

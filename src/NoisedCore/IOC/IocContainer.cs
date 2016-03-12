@@ -11,8 +11,8 @@ using Noised.Core.Plugins;
 using Noised.Core.Service;
 using Noised.Core.Service.Protocols;
 using Noised.Core.Service.Protocols.JSON;
-using Noised.Logging;
 using Noised.Core.UserManagement;
+using Noised.Logging;
 
 namespace Noised.Core.IOC
 {
@@ -73,6 +73,7 @@ namespace Noised.Core.IOC
                 ControlledBy<SingletonLifecycle>();
             builder.Register<IMediaManager, MediaManager>().
                 ControlledBy<SingletonLifecycle>();
+            builder.Register<IMetaFileAccumulator, MetaFileAccumulator>().ControlledBy<SingletonLifecycle>();
 
             //Crypto
             builder.Register<IChecksum, MD5Checksum>();

@@ -56,6 +56,11 @@ namespace Noised.Server
             sourceAccumulator.Refresh();
             logger.Info("Done refreshing music.");
 
+            // Refresh metafiles
+            logger.Info("Refreshing Metafiles...");
+            IocContainer.Get<IMetaFileAccumulator>().Refresh();
+            logger.Info("Done refreshing Metafiles.");
+
             // Initializing Playlistmanager
             logger.Info("Initializing Playlistmanager");
             IocContainer.Get<IPlaylistManager>().RefreshPlaylists();
