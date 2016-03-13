@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Noised.Core.DB;
 using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Media;
@@ -10,29 +11,53 @@ namespace Noised.Core.Media
     public class MetaFileAccumulator : IMetaFileAccumulator
     {
         private readonly IPluginLoader pluginLoader;
+        private readonly IDbFactory dbFactory;
 
-        public MetaFileAccumulator(IPluginLoader pluginLoader)
+        public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory)
         {
             if (pluginLoader == null)
                 throw new ArgumentNullException("pluginLoader");
+            if (dbFactory == null)
+                throw new ArgumentNullException("dbFactory");
 
             this.pluginLoader = pluginLoader;
+            this.dbFactory = dbFactory;
         }
 
         #region Methods
 
-        private static void ProcessAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaData)
+        private void ProcessAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaData)
         {
             List<MetaFile> albumCovers = new List<MetaFile>();
             List<MetaFile> artistPictures = new List<MetaFile>();
 
             foreach (string album in metaData.Albums)
                 albumCovers.AddRange(scraper.GetAlbumCover(album));
+
             foreach (string artist in metaData.Artists)
                 artistPictures.AddRange(scraper.GetArtistPictures(artist));
 
-            // Write AlbumCovers to disk/database
-            // Write ArtistPictures to disk/database
+            using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
+            {
+                foreach (MetaFile artistPicture in artistPictures)
+                {
+                    WriteMetaFile(artistPicture);
+                    uow.MetaFileRepository.CreateMetaFile(artistPicture);
+                }
+
+                foreach (MetaFile albumCover in albumCovers)
+                {
+                    WriteMetaFile(albumCover);
+                    uow.MetaFileRepository.CreateMetaFile(albumCover);
+                }
+
+                uow.SaveChanges();
+            }
+        }
+
+        private static void WriteMetaFile(MetaFile metaFile)
+        {
+            IocContainer.Get<IMetaFileWriter>().WriteMetaFileToDisk(metaFile);
         }
 
         private static DistinctMetaDataCollection GetDistinctMetaData()

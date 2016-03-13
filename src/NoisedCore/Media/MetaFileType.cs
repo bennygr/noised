@@ -1,4 +1,4 @@
-﻿namespace Noised.Core.Plugins.Media
+﻿namespace Noised.Core.Media
 {
     public enum MetaFileType
     {
