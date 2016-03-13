@@ -89,6 +89,7 @@
     <Compile Include="Media\IMediaManager.cs" />
     <Compile Include="Media\IMediaSourceAccumulator.cs" />
     <Compile Include="Media\IMetaFileAccumulator.cs" />
+    <Compile Include="Media\IMetaFileWriter.cs" />
     <Compile Include="Media\IPlaylistManager.cs" />
     <Compile Include="Media\MediaItem.cs" />
     <Compile Include="Media\MediaItemNotFoundException.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Media\MetaData.cs" />
     <Compile Include="Media\MetaFile.cs" />
     <Compile Include="Media\MetaFileAccumulator.cs" />
+    <Compile Include="Media\MetaFileWriter.cs" />
     <Compile Include="Media\Playlist.cs" />
     <Compile Include="Media\PlaylistAlreadyExistsException.cs" />
     <Compile Include="Media\PlaylistManager.cs" />
@@ -108,7 +110,7 @@
     <Compile Include="Plugins\IPluginLoader.cs" />
     <Compile Include="Plugins\Media\IMediaSource.cs" />
     <Compile Include="Plugins\Media\IMetaFileScraper.cs" />
-    <Compile Include="Plugins\Media\MetaFileType.cs" />
+    <Compile Include="Media\MetaFileType.cs" />
     <Compile Include="Plugins\PluginInitializer.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Core.cs" />
