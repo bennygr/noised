@@ -10,6 +10,7 @@ namespace Noised.Core.Media
         public string Album { get; private set; }
         public Uri Uri { get; set; }
         public byte[] Data { get; private set; }
+        public string Extension { get; private set; }
 
         public MetaFileType Type
         {
@@ -19,7 +20,7 @@ namespace Noised.Core.Media
             }
         }
 
-        public MetaFile(string artist, string album, string type, Uri uri, byte[] data)
+        public MetaFile(string artist, string album, string type, Uri uri, byte[] data, string extension)
         {
             if (String.IsNullOrWhiteSpace(artist))
                 throw new ArgumentNullException("artist");
@@ -31,6 +32,8 @@ namespace Noised.Core.Media
                 throw new ArgumentNullException("uri");
             if (data == null)
                 throw new ArgumentNullException("data");
+            if (extension == null)
+                throw new ArgumentNullException("extension");
 
             Artist = artist;
             Album = album;
@@ -39,6 +42,8 @@ namespace Noised.Core.Media
 
             if (!Enum.TryParse(type, out this.type))
                 throw new ArgumentException("Invalid Type");
+
+            Extension = extension;
         }
     }
 }
