@@ -58,8 +58,11 @@ namespace Noised.Server
 
             // Refresh metafiles
             logger.Info("Refreshing Metafiles...");
-            IocContainer.Get<IMetaFileAccumulator>().Refresh();
-            logger.Info("Done refreshing Metafiles.");
+            //IocContainer.Get<IMetaFileAccumulator>().Refresh();
+            //logger.Info("Done refreshing Metafiles.");
+            IMetaFileAccumulator metaFileAccumulator = IocContainer.Get<IMetaFileAccumulator>();
+            metaFileAccumulator.RefreshAsyncFinished += MetaFileAccumulatorRefreshAsyncFinished;
+            metaFileAccumulator.RefreshAsync();
 
             // Initializing Playlistmanager
             logger.Info("Initializing Playlistmanager");
@@ -69,6 +72,11 @@ namespace Noised.Server
             logger.Info("Noised has been started.");
 
             return 0;
+        }
+
+        private static void MetaFileAccumulatorRefreshAsyncFinished()
+        {
+            IocContainer.Get<ILogging>().Info("Done refreshing Metafiles");
         }
 
         private static int HandleArgs(string[] args)
