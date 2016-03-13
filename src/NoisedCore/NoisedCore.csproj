@@ -74,11 +74,13 @@
     <Compile Include="Commands\ResponseMetaData.cs" />
     <Compile Include="Crypto\PasswordStorage.cs" />
     <Compile Include="DB\IDbFactory.cs" />
+    <Compile Include="DB\IMetaFileRepository.cs" />
     <Compile Include="DB\IPlaylistRepository.cs" />
     <Compile Include="DB\IUserRepository.cs" />
     <Compile Include="DB\Sqlite\MetaFilesSql.cs" />
     <Compile Include="DB\Sqlite\PlaylistsSql.cs" />
     <Compile Include="DB\DbFactory.cs" />
+    <Compile Include="DB\Sqlite\SqliteMetaFileRepository.cs" />
     <Compile Include="DB\Sqlite\SqlitePlaylistRepository.cs" />
     <Compile Include="DB\Sqlite\SqliteUserRepostiory.cs" />
     <Compile Include="DB\Sqlite\UserSql.cs" />
