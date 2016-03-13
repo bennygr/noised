@@ -22,6 +22,8 @@ namespace Noised.Core.DB
         /// </summary>
         IUserRepository UserRepository { get; }
 
+        IMetaFileRepository MetaFileRepository { get; }
+
         /// <summary>
         ///	Saves all changes made to the repositories 
         /// </summary>
