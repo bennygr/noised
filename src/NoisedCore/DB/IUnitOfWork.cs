@@ -22,6 +22,9 @@ namespace Noised.Core.DB
         /// </summary>
         IUserRepository UserRepository { get; }
 
+        /// <summary>
+        /// Repository for MetaFiles
+        /// </summary>
         IMetaFileRepository MetaFileRepository { get; }
 
         /// <summary>

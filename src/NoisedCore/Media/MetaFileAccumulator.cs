@@ -8,11 +8,19 @@ using Noised.Core.Plugins.Media;
 
 namespace Noised.Core.Media
 {
+    /// <summary>
+    /// Access to all MetaFiles sources
+    /// </summary>
     public class MetaFileAccumulator : IMetaFileAccumulator
     {
         private readonly IPluginLoader pluginLoader;
         private readonly IDbFactory dbFactory;
 
+        /// <summary>
+        /// Access to all MetaFiles sources
+        /// </summary>
+        /// <param name="pluginLoader">PluginLoader</param>
+        /// <param name="dbFactory">Database factory</param>
         public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory)
         {
             if (pluginLoader == null)
@@ -26,6 +34,11 @@ namespace Noised.Core.Media
 
         #region Methods
 
+        /// <summary>
+        /// Internal method to refresh a IMetaFileScraper asynchronously (it's called asynchronously)
+        /// </summary>
+        /// <param name="scraper">The scraper which is about be refreshed</param>
+        /// <param name="metaData">The input for the scraper</param>
         private void ProcessAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaData)
         {
             List<MetaFile> albumCovers = new List<MetaFile>();
@@ -55,11 +68,19 @@ namespace Noised.Core.Media
             }
         }
 
+        /// <summary>
+        /// Methof to write a MetaFile to the disk
+        /// </summary>
+        /// <param name="metaFile">The MetaFile</param>
         private static void WriteMetaFile(MetaFile metaFile)
         {
             IocContainer.Get<IMetaFileWriter>().WriteMetaFileToDisk(metaFile);
         }
 
+        /// <summary>
+        /// Gets a distinct collection of all MetaData (Artist, Album)
+        /// </summary>
+        /// <returns>A distinct collection of all MetaData (Artist, Album)</returns>
         private static DistinctMetaDataCollection GetDistinctMetaData()
         {
             List<string> artists = new List<string>();
@@ -79,6 +100,10 @@ namespace Noised.Core.Media
             return new DistinctMetaDataCollection(albums, artists);
         }
 
+        /// <summary>
+        /// Refreshes the albums Covers over all Scrapers
+        /// </summary>
+        /// <param name="albums">List of all albums that will be refreshed</param>
         private void RefreshAlbumCovers(List<string> albums)
         {
             List<MetaFile> albumCovers = new List<MetaFile>();
@@ -91,9 +116,14 @@ namespace Noised.Core.Media
                 }
             }
 
-            // Write AlbumCovers to disk/database
+            foreach (MetaFile albumCover in albumCovers)
+                WriteMetaFile(albumCover);
         }
 
+        /// <summary>
+        /// Refreshes the artist images
+        /// </summary>
+        /// <param name="artists">List of all artists for which the scraper should load new images</param>
         private void RefreshArtistImages(List<string> artists)
         {
             List<MetaFile> artistPictures = new List<MetaFile>();
@@ -106,13 +136,17 @@ namespace Noised.Core.Media
                 }
             }
 
-            // Write ArtistPictures to disk/database
+            foreach (MetaFile artistPicture in artistPictures)
+                WriteMetaFile(artistPicture);
         }
 
         #endregion
 
         #region Implementation of IMetaFileAccumulator
 
+        /// <summary>
+        /// Refreshs all MetaFiles from alle MetaFile sources
+        /// </summary>
         public void Refresh()
         {
             DistinctMetaDataCollection metaData = GetDistinctMetaData();
@@ -120,6 +154,9 @@ namespace Noised.Core.Media
             RefreshAlbumCovers(metaData.Albums);
         }
 
+        /// <summary>
+        /// Refreshs all MetaFiles from alle MetaFile sources asynchronous
+        /// </summary>
         public void RefreshAsync()
         {
             DistinctMetaDataCollection metaData = GetDistinctMetaData();
@@ -130,16 +167,22 @@ namespace Noised.Core.Media
                 RefreshAsyncFinished();
         }
 
+        /// <summary>
+        /// A calback that fires when the asynchronous refresh is finished
+        /// </summary>
         public event Action RefreshAsyncFinished;
 
         #endregion
 
+        /// <summary>
+        /// A Space to store Lists of MetaData to process by Scrapers
+        /// </summary>
         private class DistinctMetaDataCollection
         {
-            public List<string> Albums { get; private set; }
-            public List<string> Artists { get; private set; }
+            internal List<string> Albums { get; private set; }
+            internal List<string> Artists { get; private set; }
 
-            public DistinctMetaDataCollection(List<string> albums, List<string> artists)
+            internal DistinctMetaDataCollection(List<string> albums, List<string> artists)
             {
                 if (albums == null)
                     throw new ArgumentNullException("albums");

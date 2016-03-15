@@ -5,10 +5,17 @@ using Noised.Core.Media;
 
 namespace Noised.Core.DB.Sqlite
 {
+    /// <summary>
+    /// A MetaFileRepository for SQLite
+    /// </summary>
     public class SqliteMetaFileRepository : IMetaFileRepository
     {
         private readonly SqliteConnection connection;
 
+        /// <summary>
+        /// A MetaFileRepository for SQLite
+        /// </summary>
+        /// <param name="connection">The SqliteConnection</param>
         public SqliteMetaFileRepository(SqliteConnection connection)
         {
             if (connection == null)
@@ -18,6 +25,10 @@ namespace Noised.Core.DB.Sqlite
 
         #region Implementation of IMetaFileRepository
 
+        /// <summary>
+        /// Creates a new entry for a MetaFile in the current IUnitOfWork implementation
+        /// </summary>
+        /// <param name="metaFile">MetaFile for which an entry should be created</param>
         public void CreateMetaFile(MetaFile metaFile)
         {
             if (metaFile == null)
