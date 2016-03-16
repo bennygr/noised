@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Noised.Core.DB;
 using Noised.Core.IOC;
 using Noised.Logging;
@@ -44,7 +45,8 @@ namespace Noised.Core.Plugins
                 throw new FileNotFoundException("Plugin does not contain a plugin.nplugininfo file");
             }
             string metaContent = File.ReadAllText(metaDataFile);
-            return JsonConvert.DeserializeObject<PluginMetaData>(metaContent);
+            return JsonConvert.DeserializeObject<PluginMetaData>(metaContent,
+                new IsoDateTimeConverter { DateTimeFormat = "dd.MM.yyyy" });
         }
 
         /// <summary>
