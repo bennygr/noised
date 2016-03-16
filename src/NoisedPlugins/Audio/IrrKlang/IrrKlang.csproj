@@ -91,10 +91,9 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFiles="$(TargetDir)\$(TargetName).nplugin" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(TargetDir)\IrrKlang.dll" DestinationFiles="$(TargetDir)\IrrKlang.nplugin" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="$(TargetDir)\IrrKlang.dll" DestinationFiles="$(TargetDir)\IrrKlang.nplugin" SkipUnchangedFiles="true" />
     <ItemGroup>
-      <PluginRuntimeFiles Include=".\bin\$(Configuration)\IrrKlang.nplugin" />
+      <PluginRuntimeFiles Include="$(TargetDir)\IrrKlang.nplugin" />
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\irrKlang.NET4.dll" />
     </ItemGroup>
     <CreatePluginPackage Name="IrrKlang" PluginRuntimeFiles="@(PluginRuntimeFiles)">
