@@ -70,7 +70,7 @@
     <Copy SourceFiles=".\bin\$(Configuration)\StreamSource.dll" DestinationFiles="$(TargetDir)\StreamSource.nplugin" />
     <ItemGroup>
       <PluginRuntimeFiles Include=".\bin\$(Configuration)\StreamSource.nplugin" />
-	  <PluginRuntimeFiles Include=".\bin\$(Configuration)\YamlDotNet.dll" />
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\YamlDotNet.dll" />
     </ItemGroup>
     <ItemGroup>
       <PluginConfigurationFiles Include=".\bin\$(Configuration)\etc\noised.plugins.media.streamsource.nconfig" />
