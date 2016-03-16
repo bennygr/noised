@@ -6,7 +6,7 @@ namespace Noised.Core.Plugins.Media
     /// <summary>
     /// Interface for a plugin that scrapes certain sources for MetaFiles
     /// </summary>
-    interface IMetaFileScraper : IPlugin
+    public interface IMetaFileScraper : IPlugin
     {
         /// <summary>
         /// Unique Identifier of the source
