@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Noised.Core.DB;
 using Noised.Core.IOC;
@@ -89,13 +90,14 @@ namespace Noised.Core.Media
             {
                 foreach (MediaItem mediaItem in mediaSourceSearchResult.MediaItems)
                 {
-                    foreach (string artist in mediaItem.MetaData.Artists)
-                        artists.Add(artist);
-                    foreach (string albumArtist in mediaItem.MetaData.AlbumArtists)
-                        artists.Add(albumArtist);
+                    artists.AddRange(mediaItem.MetaData.Artists);
+                    artists.AddRange(mediaItem.MetaData.AlbumArtists);
                     albums.Add(mediaItem.MetaData.Album);
                 }
             }
+
+            albums = albums.Distinct().ToList();
+            artists = artists.Distinct().ToList();
 
             return new DistinctMetaDataCollection(albums, artists);
         }
@@ -159,12 +161,14 @@ namespace Noised.Core.Media
         /// </summary>
         public void RefreshAsync()
         {
-            DistinctMetaDataCollection metaData = GetDistinctMetaData();
-
-            Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => ProcessAsync(x, metaData));
-
-            if (RefreshAsyncFinished != null)
-                RefreshAsyncFinished();
+            Task.Factory.StartNew(
+                () =>
+                {
+                    DistinctMetaDataCollection metaData = GetDistinctMetaData();
+                    Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => ProcessAsync(x, metaData));
+                    if (RefreshAsyncFinished != null)
+                        RefreshAsyncFinished();
+                });
         }
 
         /// <summary>
