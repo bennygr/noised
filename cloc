@@ -1,1 +1,1 @@
-cloc . --exclude-dir="packages"
+cloc . --exclude-dir="packages,bin"
