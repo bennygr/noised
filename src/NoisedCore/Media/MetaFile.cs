@@ -8,6 +8,7 @@ namespace Noised.Core.Media
     public class MetaFile
     {
         private readonly MetaFileType type;
+        private readonly MetaFileCategory category;
 
         /// <summary>
         /// The Artist corresponding to this MetaFile
@@ -35,6 +36,17 @@ namespace Noised.Core.Media
         public string Extension { get; private set; }
 
         /// <summary>
+        /// The Category of the MetaFile
+        /// </summary>
+        public MetaFileCategory Category
+        {
+            get
+            {
+                return category;
+            }
+        }
+
+        /// <summary>
         /// The type of the MetaFile
         /// </summary>
         public MetaFileType Type
@@ -54,7 +66,8 @@ namespace Noised.Core.Media
         /// <param name="uri">The Uri of the MetaFile</param>
         /// <param name="data">The MetaFile in memory</param>
         /// <param name="extension">The file extension of the MetaFile</param>
-        public MetaFile(string artist, string album, string type, Uri uri, byte[] data, string extension)
+        /// <param name="category">The category of the MetaFile</param>
+        public MetaFile(string artist, string album, string type, Uri uri, byte[] data, string extension, string category)
         {
             if (String.IsNullOrWhiteSpace(artist))
                 throw new ArgumentNullException("artist");
@@ -66,8 +79,10 @@ namespace Noised.Core.Media
                 throw new ArgumentNullException("uri");
             if (data == null)
                 throw new ArgumentNullException("data");
-            if (extension == null)
+            if (String.IsNullOrWhiteSpace(extension))
                 throw new ArgumentNullException("extension");
+            if (String.IsNullOrWhiteSpace(category))
+                throw new ArgumentNullException("category");
 
             Artist = artist;
             Album = album;
@@ -78,6 +93,9 @@ namespace Noised.Core.Media
                 throw new ArgumentException("Invalid Type");
 
             Extension = extension;
+
+            if (!Enum.TryParse(category, out this.category))
+                throw new ArgumentException("Invalid Category");
         }
     }
 }

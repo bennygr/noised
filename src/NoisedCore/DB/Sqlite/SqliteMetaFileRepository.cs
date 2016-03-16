@@ -41,8 +41,9 @@ namespace Noised.Core.DB.Sqlite
 
                 cmd.Parameters.Add(new SqliteParameter("@Artist", metaFile.Artist));
                 cmd.Parameters.Add(new SqliteParameter("@Album", metaFile.Album));
-                cmd.Parameters.Add(new SqliteParameter("@Type", metaFile.Type));
+                cmd.Parameters.Add(new SqliteParameter("@Type", metaFile.Type.ToString()));
                 cmd.Parameters.Add(new SqliteParameter("@Uri", metaFile.Uri));
+                cmd.Parameters.Add(new SqliteParameter("@Category", metaFile.Category.ToString()));
 
                 cmd.ExecuteNonQuery();
             }

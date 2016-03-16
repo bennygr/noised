@@ -7,8 +7,9 @@
                                                 "[Artist] TEXT NOT NULL," +
                                                 "[Album] TEXT," +
                                                 "[Type] TEXT NOT NULL," +
-                                                "[Uri] TEXT NOT NULL);";
+                                                "[Uri] TEXT NOT NULL," +
+                                                "[Category] TEXT NOT NULL);";
 
-        internal const string InsertStmt = "INSERT INTO MetaFiles (Artist, Album, Type, Uri) VALUES (@Artist, @Album, @Type, @Uri)";
+        internal const string InsertStmt = "INSERT INTO MetaFiles (Artist, Album, Type, Uri, Category) VALUES (@Artist, @Album, @Type, @Uri, @Category)";
     }
 }
