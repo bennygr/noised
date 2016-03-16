@@ -194,6 +194,9 @@ namespace Noised.Plugins.Media.FileSystemSource
         public MediaSourceSearchResult Search(string pattern)
         {
             var ret = new List<MediaItem>();
+
+            pattern = pattern.Replace("*", String.Empty);
+
             using (var unitOfWork = new SqliteFileSystemUnitOfWork())
             {
                 //Search for title
