@@ -85,6 +85,7 @@
     <Compile Include="DB\Sqlite\SqliteUserRepostiory.cs" />
     <Compile Include="DB\Sqlite\UserSql.cs" />
     <Compile Include="DB\UserRepositoryException.cs" />
+    <Compile Include="etc\CoreConfigProperties.cs" />
     <Compile Include="IOC\IocContainer.cs" />
     <Compile Include="Media\IMediaManager.cs" />
     <Compile Include="Media\IMediaSourceAccumulator.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Plugins\Media\IMediaSource.cs" />
     <Compile Include="Plugins\Media\IMetaFileScraper.cs" />
     <Compile Include="Media\MetaFileType.cs" />
+    <Compile Include="Plugins\Media\ScraperAlbumInformation.cs" />
     <Compile Include="Plugins\PluginInitializer.cs" />
     <Compile Include="Plugins\PluginLoader.cs" />
     <Compile Include="Core.cs" />
