@@ -16,9 +16,9 @@ namespace Noised.Core.Plugins.Media
         /// <summary>
         /// Method that gets the album cover for an album name
         /// </summary>
-        /// <param name="albumName">Name of the album</param>
+        /// <param name="albumInfo">Name of the artist and the album</param>
         /// <returns>One or more album covers</returns>
-        IEnumerable<MetaFile> GetAlbumCover(string albumName);
+        IEnumerable<MetaFile> GetAlbumCover(ScraperAlbumInformation albumInfo);
 
         /// <summary>
         /// Method that gets pictues of an artist
