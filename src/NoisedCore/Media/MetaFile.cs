@@ -7,8 +7,8 @@ namespace Noised.Core.Media
     /// </summary>
     public class MetaFile
     {
-        private readonly MetaFileType type;
-        private readonly MetaFileCategory category;
+        private MetaFileType type;
+        private MetaFileCategory category;
 
         /// <summary>
         /// The Artist corresponding to this MetaFile
@@ -58,6 +58,11 @@ namespace Noised.Core.Media
         }
 
         /// <summary>
+        /// Filename as defined by the source
+        /// </summary>
+        public string OriginalFilename { get; private set; }
+
+        /// <summary>
         /// A file consisting meta informations about media entities like album covers and artist pictures
         /// </summary>
         /// <param name="artist">The Artist corresponding to this MetaFile</param>
@@ -67,7 +72,8 @@ namespace Noised.Core.Media
         /// <param name="data">The MetaFile in memory</param>
         /// <param name="extension">The file extension of the MetaFile</param>
         /// <param name="category">The category of the MetaFile</param>
-        public MetaFile(string artist, string album, string type, Uri uri, byte[] data, string extension, string category)
+        /// <param name="originalFilename">Filename as defined by the source</param>
+        public MetaFile(string artist, string album, string type, Uri uri, byte[] data, string extension, string category, string originalFilename)
         {
             if (String.IsNullOrWhiteSpace(artist))
                 throw new ArgumentNullException("artist");
@@ -79,6 +85,8 @@ namespace Noised.Core.Media
                 throw new ArgumentNullException("uri");
             if (data == null)
                 throw new ArgumentNullException("data");
+            if (String.IsNullOrWhiteSpace(originalFilename))
+                throw new ArgumentNullException("originalFilename");
             if (String.IsNullOrWhiteSpace(extension))
                 throw new ArgumentNullException("extension");
             if (String.IsNullOrWhiteSpace(category))
@@ -96,6 +104,23 @@ namespace Noised.Core.Media
 
             if (!Enum.TryParse(category, out this.category))
                 throw new ArgumentException("Invalid Category");
+
+            OriginalFilename = originalFilename;
         }
+
+        /// <summary>
+        /// A file consisting meta informations about media entities like album covers and artist pictures
+        /// </summary>
+        /// <param name="artist">The Artist corresponding to this MetaFile</param>
+        /// <param name="album">The Album corresponfig to this MetaFile if applicable</param>
+        /// <param name="type">The type of the MetaFile</param>
+        /// <param name="uri">The Uri of the MetaFile</param>
+        /// <param name="data">The MetaFile in memory</param>
+        /// <param name="extension">The file extension of the MetaFile</param>
+        /// <param name="category">The category of the MetaFile</param>
+        /// <param name="originalFilename">Filename as defined by the source</param>
+        public MetaFile(string artist, string album, MetaFileType type, Uri uri, byte[] data, string extension, MetaFileCategory category, string originalFilename)
+            : this(artist, album, type.ToString(), uri, data, extension, category.ToString(), originalFilename)
+        { }
     }
 }
