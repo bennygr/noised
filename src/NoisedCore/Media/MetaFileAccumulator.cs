@@ -45,8 +45,8 @@ namespace Noised.Core.Media
             List<MetaFile> albumCovers = new List<MetaFile>();
             List<MetaFile> artistPictures = new List<MetaFile>();
 
-            foreach (string album in metaData.Albums)
-                albumCovers.AddRange(scraper.GetAlbumCover(album));
+            foreach (ScraperAlbumInformation album in metaData.Albums)
+                albumCovers.AddRange(scraper.GetAlbumCover(new ScraperAlbumInformation(album.Artist, album.Album)));
 
             foreach (string artist in metaData.Artists)
                 artistPictures.AddRange(scraper.GetArtistPictures(artist));
@@ -85,18 +85,26 @@ namespace Noised.Core.Media
         private static DistinctMetaDataCollection GetDistinctMetaData()
         {
             List<string> artists = new List<string>();
-            List<string> albums = new List<string>();
+            List<ScraperAlbumInformation> albums = new List<ScraperAlbumInformation>();
             foreach (MediaSourceSearchResult mediaSourceSearchResult in IocContainer.Get<IMediaSourceAccumulator>().Search("*"))
             {
                 foreach (MediaItem mediaItem in mediaSourceSearchResult.MediaItems)
                 {
-                    artists.AddRange(mediaItem.MetaData.Artists);
+                    artists.AddRange(mediaItem.MetaData.Artists.Concat(mediaItem.MetaData.AlbumArtists));
                     artists.AddRange(mediaItem.MetaData.AlbumArtists);
-                    albums.Add(mediaItem.MetaData.Album);
+
+                    foreach (string artist in mediaItem.MetaData.Artists.Concat(mediaItem.MetaData.AlbumArtists))
+                    {
+                        ScraperAlbumInformation albumInfo = new ScraperAlbumInformation(artist, mediaItem.MetaData.Album);
+
+                        if (albums.Any(x => x.Artist == albumInfo.Artist && x.Album == albumInfo.Album))
+                            continue;
+
+                        albums.Add(albumInfo);
+                    }
                 }
             }
 
-            albums = albums.Distinct().ToList();
             artists = artists.Distinct().ToList();
 
             return new DistinctMetaDataCollection(albums, artists);
@@ -106,15 +114,15 @@ namespace Noised.Core.Media
         /// Refreshes the albums Covers over all Scrapers
         /// </summary>
         /// <param name="albums">List of all albums that will be refreshed</param>
-        private void RefreshAlbumCovers(List<string> albums)
+        private void RefreshAlbumCovers(List<ScraperAlbumInformation> albums)
         {
             List<MetaFile> albumCovers = new List<MetaFile>();
 
             foreach (IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
             {
-                foreach (string album in albums)
+                foreach (ScraperAlbumInformation album in albums)
                 {
-                    albumCovers.AddRange(scraper.GetAlbumCover(album));
+                    albumCovers.AddRange(scraper.GetAlbumCover(new ScraperAlbumInformation(album.Artist, album.Album)));
                 }
             }
 
@@ -134,7 +142,7 @@ namespace Noised.Core.Media
             {
                 foreach (string artist in artists)
                 {
-                    artistPictures.AddRange(scraper.GetAlbumCover(artist));
+                    artistPictures.AddRange(scraper.GetArtistPictures(artist));
                 }
             }
 
@@ -183,10 +191,10 @@ namespace Noised.Core.Media
         /// </summary>
         private class DistinctMetaDataCollection
         {
-            internal List<string> Albums { get; private set; }
+            internal List<ScraperAlbumInformation> Albums { get; private set; }
             internal List<string> Artists { get; private set; }
 
-            internal DistinctMetaDataCollection(List<string> albums, List<string> artists)
+            internal DistinctMetaDataCollection(List<ScraperAlbumInformation> albums, List<string> artists)
             {
                 if (albums == null)
                     throw new ArgumentNullException("albums");
