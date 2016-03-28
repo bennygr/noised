@@ -1,0 +1,8 @@
+{
+	"GUID": "2af5d70c-c374-4526-8ebf-271edfbb895e",
+	"Version": "1.0.0",
+	"Name": "MusicBrainzMetaFileScraper",
+	"Description": "scrapes MetaFiles from MusiBrainz",
+	"Author": "noised core team",
+	"CreationDate": "16.03.2016"
+}
