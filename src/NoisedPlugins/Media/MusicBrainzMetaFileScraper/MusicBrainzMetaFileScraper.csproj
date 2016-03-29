@@ -53,6 +53,10 @@
       <Project>{8785a9c8-505a-4069-8620-72f5228c6a51}</Project>
       <Name>NoisedCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\NoisedLogging\NoisedLogging.csproj">
+      <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
+      <Name>NoisedLogging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\NoisedPluginsSDK\NoisedPluginsSDK.csproj">
       <Project>{f27de48b-4389-4a05-bed5-05f919b45899}</Project>
       <Name>NoisedPluginsSDK</Name>
@@ -70,8 +74,8 @@
     <Copy SourceFiles="$(TargetDir)\MusicBrainzMetaFileScraper.dll" DestinationFiles="$(TargetDir)\MusicBrainzMetaFileScraper.nplugin" SkipUnchangedFiles="true" />
     <ItemGroup>
       <PluginRuntimeFiles Include="$(TargetDir)\MusicBrainzMetaFileScraper.nplugin" />
-	  <PluginRuntimeFiles Include=".\bin\$(Configuration)\CoverArtArchive.dll" />
-	  <PluginRuntimeFiles Include=".\bin\$(Configuration)\MusicBrainz.dll" />
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\CoverArtArchive.dll" />
+      <PluginRuntimeFiles Include=".\bin\$(Configuration)\MusicBrainz.dll" />
     </ItemGroup>
     <CreatePluginPackage Name="MusicBrainzMetaFileScraper" PluginRuntimeFiles="@(PluginRuntimeFiles)">
     </CreatePluginPackage>
