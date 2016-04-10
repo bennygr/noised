@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using Mono.Data.Sqlite;
 using Noised.Core.Media;
@@ -47,6 +48,26 @@ namespace Noised.Core.DB.Sqlite
 
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        /// <summary>
+        /// Gets all MetaFiles for the given artist and album
+        /// </summary>
+        /// <param name="artist">artist for which the metafiles should be searched</param>
+        /// <param name="album">album for which the metafiles should be searched</param>
+        /// <returns></returns>
+        public IEnumerable<MetaFile> GetMetaFiles(string artist, string album)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Permanently deletes a MetaFile
+        /// </summary>
+        /// <param name="mf">MetaFile to delete</param>
+        public void DeleteMetaFile(MetaFile mf)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

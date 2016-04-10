@@ -1,100 +1,250 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using CoverArtArchive;
-using MusicBrainz.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using Noised.Core.DB;
+using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Media;
-using Noised.Logging;
 
 namespace Noised.Plugins.Media.MusicBrainzMetaFileScraper
 {
-    public class MusicBrainzScraper : IMetaFileScraper
+    /// <summary>
+    /// Access to all MetaFiles sources
+    /// </summary>
+    public class MetaFileAccumulator : IMetaFileAccumulator
     {
-        private readonly ILogging log;
+        private readonly IPluginLoader pluginLoader;
+        private readonly IDbFactory dbFactory;
 
-        public MusicBrainzScraper(PluginInitializer initializer)
+        /// <summary>
+        /// Access to all MetaFiles sources
+        /// </summary>
+        /// <param name="pluginLoader">PluginLoader</param>
+        /// <param name="dbFactory">Database factory</param>
+        public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory)
         {
-            log = initializer.Logging;
+            if (pluginLoader == null)
+                throw new ArgumentNullException("pluginLoader");
+            if (dbFactory == null)
+                throw new ArgumentNullException("dbFactory");
 
-            log.Debug("Initialised " + Identifier);
+            this.pluginLoader = pluginLoader;
+            this.dbFactory = dbFactory;
         }
 
-        #region Implementation of IDisposable
+        #region Methods
 
         /// <summary>
-        /// Führt anwendungsspezifische Aufgaben aus, die mit dem Freigeben, Zurückgeben oder Zurücksetzen von nicht verwalteten Ressourcen zusammenhängen.
+        /// Internal method to refresh a IMetaFileScraper asynchronously (it's called asynchronously)
         /// </summary>
-        public void Dispose()
-        { }
-
-        #endregion
-
-        #region Implementation of IMetaFileScraper
-
-        /// <summary>
-        /// Unique Identifier of the source
-        /// </summary>
-        public string Identifier
+        /// <param name="scraper">The scraper which is about be refreshed</param>
+        /// <param name="metaData">The input for the scraper</param>
+        private void ProcessAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaData)
         {
-            get
-            {
-                return "MusicBrainzScraper";
-            }
-        }
-
-        /// <summary>
-        /// Method that gets the album cover for an album name
-        /// </summary>
-        /// <param name="albumInfo">Name of the artist and the album</param>
-        /// <returns>One or more album covers</returns>
-        public IEnumerable<MetaFile> GetAlbumCover(ScraperAlbumInformation albumInfo)
-        {
-            log.Debug("Scraping MusicBrainz for " + albumInfo.Artist + "/" + albumInfo.Album);
-
             List<MetaFile> albumCovers = new List<MetaFile>();
+            List<MetaFile> artistPictures = new List<MetaFile>();
 
-            // Search for album cover in MusicBrainz service via album name and artist
-            // current limit is 3 hits
-            Release release = MusicBrainz.Search.Release(albumInfo.Album, null, null, albumInfo.Artist, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, 3);
-
-            if (release == null)
+            foreach (MetaDataAlbumInfo album in metaData.Albums)
             {
-                log.Debug("Nothing found in MusicBrainz for " + albumInfo.Artist + "/" + albumInfo.Album);
-                return albumCovers;
+                int deleted = 0;
+
+                List<MetaFile> mfs;
+                using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
+                    mfs = uow.MetaFileRepository.GetMetaFiles(album.Artist, album.Album).ToList();
+
+                if (mfs.Count > 0)
+                {
+                    foreach (MetaFile mf in mfs)
+                    {
+                        if (!File.Exists(mf.Uri.AbsolutePath))
+                        {
+                            using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
+                                uow.MetaFileRepository.DeleteMetaFile(mf);
+                            deleted++;
+
+                        }
+                    }
+
+                    if (deleted < mfs.Count)
+                        continue;
+                }
+
+                albumCovers.AddRange(scraper.GetAlbumCover(new ScraperAlbumInformation(album.Artist, album.Album)));
             }
 
-            // we only consider hits that are "Official" and have a score of 100
-            foreach (ReleaseData releaseData in release.Data.FindAll(x => x.Score == 100 && x.Status == "Official"))
+            foreach (string artist in metaData.Artists)
+                artistPictures.AddRange(scraper.GetArtistPictures(artist));
+
+            using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
             {
-                foreach (Cover cover in CoverArtArchive.Release.Get.Cover(releaseData.Id).Images.FindAll(x => x.Front && !String.IsNullOrWhiteSpace(x.Image)))
+                foreach (MetaFile artistPicture in artistPictures)
                 {
-                    // determine here wether file is gallery, thumbnail etc. (https://stackoverflow.com/questions/123838/get-the-resolution-of-a-jpeg-image-using-c-sharp-and-the-net-environment)
-                    albumCovers.Add(new MetaFile(albumInfo.Artist, albumInfo.Album, MetaFileType.AlbumCover,
-                        new Uri(cover.Image),
-                        new WebClient().DownloadData(cover.Image), Path.GetExtension(cover.Image),
-                        MetaFileCategory.Gallery, cover.Id + Path.GetExtension(cover.Image)));
+                    WriteMetaFile(artistPicture);
+                    uow.MetaFileRepository.CreateMetaFile(artistPicture);
+                }
+
+                foreach (MetaFile albumCover in albumCovers)
+                {
+                    WriteMetaFile(albumCover);
+                    uow.MetaFileRepository.CreateMetaFile(albumCover);
+                }
+
+                uow.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Methof to write a MetaFile to the disk
+        /// </summary>
+        /// <param name="metaFile">The MetaFile</param>
+        private static void WriteMetaFile(MetaFile metaFile)
+        {
+            IocContainer.Get<IMetaFileWriter>().WriteMetaFileToDisk(metaFile);
+        }
+
+        /// <summary>
+        /// Gets a distinct collection of all MetaData (Artist, Album)
+        /// </summary>
+        /// <returns>A distinct collection of all MetaData (Artist, Album)</returns>
+        private static DistinctMetaDataCollection GetDistinctMetaData()
+        {
+            List<string> artists = new List<string>();
+            List<MetaDataAlbumInfo> albums = new List<MetaDataAlbumInfo>();
+            MetaDataAlbumInfo albumInfo;
+            foreach (MediaSourceSearchResult mediaSourceSearchResult in IocContainer.Get<IMediaSourceAccumulator>().Search("*"))
+            {
+                foreach (MediaItem mediaItem in mediaSourceSearchResult.MediaItems)
+                {
+                    artists.AddRange(mediaItem.MetaData.Artists.Concat(mediaItem.MetaData.AlbumArtists));
+                    artists.AddRange(mediaItem.MetaData.AlbumArtists);
+
+                    foreach (string artist in mediaItem.MetaData.Artists.Concat(mediaItem.MetaData.AlbumArtists))
+                    {
+                        albumInfo = new MetaDataAlbumInfo(artist, mediaItem.MetaData.Album);
+
+                        if (albums.Any(x => x.Artist == albumInfo.Artist && x.Album == albumInfo.Album))
+                            continue;
+
+                        albums.Add(albumInfo);
+                    }
                 }
             }
 
-            log.Debug("Found " + albumCovers.Count + " album covers for " + albumInfo.Artist + "/" + albumInfo.Album);
-            return albumCovers;
+            artists = artists.Distinct().ToList();
+
+            return new DistinctMetaDataCollection(albums, artists);
         }
 
         /// <summary>
-        /// Method that gets pictues of an artist
+        /// Refreshes the albums Covers over all Scrapers
         /// </summary>
-        /// <param name="artistName">The name of the artist</param>
-        /// <returns>One or more pictues of an artist</returns>
-        public IEnumerable<MetaFile> GetArtistPictures(string artistName)
+        /// <param name="albums">List of all albums that will be refreshed</param>
+        private void RefreshAlbumCovers(List<MetaDataAlbumInfo> albums)
         {
-            return new List<MetaFile>();
+            List<MetaFile> albumCovers = new List<MetaFile>();
+
+            foreach (IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
+            {
+                foreach (MetaDataAlbumInfo album in albums)
+                {
+                    albumCovers.AddRange(scraper.GetAlbumCover(new ScraperAlbumInformation(album.Artist, album.Album)));
+                }
+            }
+
+            foreach (MetaFile albumCover in albumCovers)
+                WriteMetaFile(albumCover);
+        }
+
+        /// <summary>
+        /// Refreshes the artist images
+        /// </summary>
+        /// <param name="artists">List of all artists for which the scraper should load new images</param>
+        private void RefreshArtistImages(List<string> artists)
+        {
+            List<MetaFile> artistPictures = new List<MetaFile>();
+
+            foreach (IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
+            {
+                foreach (string artist in artists)
+                {
+                    artistPictures.AddRange(scraper.GetArtistPictures(artist));
+                }
+            }
+
+            foreach (MetaFile artistPicture in artistPictures)
+                WriteMetaFile(artistPicture);
         }
 
         #endregion
+
+        #region Implementation of IMetaFileAccumulator
+
+        /// <summary>
+        /// Refreshs all MetaFiles from alle MetaFile sources
+        /// </summary>
+        public void Refresh()
+        {
+            DistinctMetaDataCollection metaData = GetDistinctMetaData();
+            RefreshArtistImages(metaData.Artists);
+            RefreshAlbumCovers(metaData.Albums);
+        }
+
+        /// <summary>
+        /// Refreshs all MetaFiles from alle MetaFile sources asynchronous
+        /// </summary>
+        public void RefreshAsync()
+        {
+            Task.Run(() =>
+            {
+                DistinctMetaDataCollection metaData = GetDistinctMetaData();
+                Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => ProcessAsync(x, metaData));
+                if (RefreshAsyncFinished != null)
+                    RefreshAsyncFinished();
+            });
+        }
+
+        /// <summary>
+        /// A calback that fires when the asynchronous refresh is finished
+        /// </summary>
+        public event Action RefreshAsyncFinished;
+
+        #endregion
+
+        /// <summary>
+        /// A Space to store Lists of MetaData to process by Scrapers
+        /// </summary>
+        private class DistinctMetaDataCollection
+        {
+            internal List<MetaDataAlbumInfo> Albums { get; private set; }
+            internal List<string> Artists { get; private set; }
+
+            internal DistinctMetaDataCollection(List<MetaDataAlbumInfo> albums, List<string> artists)
+            {
+                if (albums == null)
+                    throw new ArgumentNullException("albums");
+                if (artists == null)
+                    throw new ArgumentNullException("artists");
+                Albums = albums;
+                Artists = artists;
+            }
+        }
+
+        /// <summary>
+        /// Stores Informations about an Album
+        /// </summary>
+        private class MetaDataAlbumInfo
+        {
+            public string Artist { get; private set; }
+            public string Album { get; private set; }
+
+            internal MetaDataAlbumInfo(string artist, string album)
+            {
+                Artist = artist;
+                Album = album;
+            }
+        }
     }
 }
