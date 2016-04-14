@@ -17,6 +17,11 @@ namespace Noised.Core.Media
     {
         private readonly IPluginLoader pluginLoader;
         private readonly IDbFactory dbFactory;
+        private readonly IMetaFileWriter metaFileWriter;
+
+        // TODO: remove this locking and make underlying classes threadsafe
+        private readonly Object lockUnitOfWork = new Object();
+        private readonly Object lockMetaFileWriter = new Object();
 
         /// <summary>
         /// Access to all MetaFiles sources
@@ -32,6 +37,8 @@ namespace Noised.Core.Media
 
             this.pluginLoader = pluginLoader;
             this.dbFactory = dbFactory;
+
+            metaFileWriter = IocContainer.Get<IMetaFileWriter>();
         }
 
         #region Methods
@@ -41,39 +48,13 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="scraper">The scraper which is about be refreshed</param>
         /// <param name="metaDataCollection">The input for the scraper</param>
-        private void RefreshAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaDataCollection)
+        private void RefreshAsyncInternal(IMetaFileScraper scraper, DistinctMetaDataCollection metaDataCollection)
         {
-            using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
-            {
-                // Get all AlbumCovers from IMetaFileScraper
-                foreach (ScraperAlbumInformation album in metaDataCollection.Albums)
-                {
-                    foreach (MetaFile mf in scraper.GetAlbumCover(album))
-                    {
-                        WriteMetaFile(mf);
-                        uow.MetaFileRepository.CreateMetaFile(mf);
-                    }
-                }
+            // Get all AlbumCovers from IMetaFileScraper
+            RefreshAlbumCovers(scraper, metaDataCollection.Albums, metaFileWriter);
 
-                // Get all Artistpictures from IMetaFileScraper
-                foreach (string artist in metaDataCollection.Artists)
-                {
-                    foreach (MetaFile mf in scraper.GetArtistPictures(artist))
-                    {
-                        WriteMetaFile(mf);
-                        uow.MetaFileRepository.CreateMetaFile(mf);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Methof to write a MetaFile to the disk
-        /// </summary>
-        /// <param name="metaFile">The MetaFile</param>
-        private static void WriteMetaFile(MetaFile metaFile)
-        {
-            IocContainer.Get<IMetaFileWriter>().WriteMetaFileToDisk(metaFile);
+            // Get all Artistpictures from IMetaFileScraper
+            RefreshArtistImages(scraper, metaDataCollection.Artists, metaFileWriter);
         }
 
         /// <summary>
@@ -118,41 +99,57 @@ namespace Noised.Core.Media
         /// <summary>
         /// Refreshes the albums Covers over all Scrapers
         /// </summary>
+        /// <param name="scraper">IMetaFileScraper to get the MetaFiles</param>
         /// <param name="albums">List of all albums that will be refreshed</param>
-        private void RefreshAlbumCovers(List<ScraperAlbumInformation> albums)
+        /// <param name="mfw">IMetaFileWriter to save the MetaFile</param>
+        private void RefreshAlbumCovers(IMetaFileScraper scraper, List<ScraperAlbumInformation> albums, IMetaFileWriter mfw)
         {
-            List<MetaFile> albumCovers = new List<MetaFile>();
-
-            foreach (IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
+            // Get all Artistpictures from IMetaFileScraper
+            foreach (ScraperAlbumInformation album in albums)
             {
-                foreach (ScraperAlbumInformation album in albums)
+                foreach (MetaFile mf in scraper.GetAlbumCover(album))
                 {
-                    albumCovers.AddRange(scraper.GetAlbumCover(new ScraperAlbumInformation(album.Artist, album.Album)));
+                    // TODO: remove this locking and make underlying classes threadsafe
+                    lock (lockMetaFileWriter)
+                        mfw.WriteMetaFileToDisk(mf);
+                    lock (lockUnitOfWork)
+                    {
+                        using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
+                        {
+                            uow.MetaFileRepository.CreateMetaFile(mf);
+                            uow.SaveChanges();
+                        }
+                    }
                 }
             }
-
-            foreach (MetaFile albumCover in albumCovers)
-                WriteMetaFile(albumCover);
         }
 
         /// <summary>
         /// Refreshes the artist images
         /// </summary>
+        /// <param name="scraper">IMetaFileScraper to get the MetaFiles</param>
         /// <param name="artists">List of all artists for which the scraper should load new images</param>
-        private void RefreshArtistImages(List<string> artists)
+        /// <param name="mfw">IMetaFileWriter to save the MetaFile</param>
+        private void RefreshArtistImages(IMetaFileScraper scraper, List<string> artists, IMetaFileWriter mfw)
         {
-            List<MetaFile> artistPictures = new List<MetaFile>();
-
-            foreach (IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
+            // Get all Artistpictures from IMetaFileScraper
+            foreach (string artist in artists)
             {
-                foreach (string artist in artists)
+                foreach (MetaFile mf in scraper.GetArtistPictures(artist))
                 {
-                    artistPictures.AddRange(scraper.GetArtistPictures(artist));
+                    // TODO: remove this locking and make underlying classes threadsafe
+                    lock (lockMetaFileWriter)
+                        mfw.WriteMetaFileToDisk(mf);
+                    lock (lockUnitOfWork)
+                    {
+                        using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
+                        {
+                            uow.MetaFileRepository.CreateMetaFile(mf);
+                            uow.SaveChanges();
+                        }
+                    }
                 }
             }
-
-            foreach (MetaFile artistPicture in artistPictures)
-                WriteMetaFile(artistPicture);
         }
 
         #endregion
@@ -164,9 +161,14 @@ namespace Noised.Core.Media
         /// </summary>
         public void Refresh()
         {
+            // Get Collection of all Album/Artist combinations and all Artists
             DistinctMetaDataCollection metaData = GetDistinctMetaData();
-            RefreshArtistImages(metaData.Artists);
-            RefreshAlbumCovers(metaData.Albums);
+
+            foreach (IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
+            {
+                RefreshArtistImages(scraper, metaData.Artists, metaFileWriter);
+                RefreshAlbumCovers(scraper, metaData.Albums, metaFileWriter);
+            }
         }
 
         /// <summary>
@@ -180,7 +182,7 @@ namespace Noised.Core.Media
                     // Get Collection of all Album/Artist combinations and all Artists
                     DistinctMetaDataCollection metaData = GetDistinctMetaData();
                     // Iterate over all registered IMetaFileScapers and execute them asynchronously
-                    Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => RefreshAsync(x, metaData));
+                    Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => RefreshAsyncInternal(x, metaData));
                     if (RefreshAsyncFinished != null)
                         RefreshAsyncFinished();
                 });
@@ -201,6 +203,11 @@ namespace Noised.Core.Media
             internal List<ScraperAlbumInformation> Albums { get; private set; }
             internal List<string> Artists { get; private set; }
 
+            /// <summary>
+            /// A Space to store Lists of MetaData to process by Scrapers
+            /// </summary>
+            /// <param name="albums">A List of Albums</param>
+            /// <param name="artists">A List of Artists (names)</param>
             internal DistinctMetaDataCollection(List<ScraperAlbumInformation> albums, List<string> artists)
             {
                 if (albums == null)
