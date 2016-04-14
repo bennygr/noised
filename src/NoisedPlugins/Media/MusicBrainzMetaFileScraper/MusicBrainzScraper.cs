@@ -54,8 +54,6 @@ namespace Noised.Plugins.Media.MusicBrainzMetaFileScraper
         {
             log.Debug("Scraping MusicBrainz for " + albumInfo.Artist + "/" + albumInfo.Album);
 
-            List<MetaFile> albumCovers = new List<MetaFile>();
-
             // Search for album cover in MusicBrainz service via album name and artist
             // current limit is 3 hits
             Release release = MusicBrainz.Search.Release(albumInfo.Album, null, null, albumInfo.Artist, null, null, null,
@@ -65,24 +63,31 @@ namespace Noised.Plugins.Media.MusicBrainzMetaFileScraper
             if (release == null)
             {
                 log.Debug("Nothing found in MusicBrainz for " + albumInfo.Artist + "/" + albumInfo.Album);
-                return albumCovers;
+                yield break;
             }
 
+            int i = 0;
             // we only consider hits that are "Official" and have a score of 100
             foreach (ReleaseData releaseData in release.Data.FindAll(x => x.Score == 100 && x.Status == "Official"))
             {
                 foreach (Cover cover in CoverArtArchive.Release.Get.Cover(releaseData.Id).Images.FindAll(x => x.Front && !String.IsNullOrWhiteSpace(x.Image)))
                 {
                     // determine here wether file is gallery, thumbnail etc. (https://stackoverflow.com/questions/123838/get-the-resolution-of-a-jpeg-image-using-c-sharp-and-the-net-environment)
-                    albumCovers.Add(new MetaFile(albumInfo.Artist, albumInfo.Album, MetaFileType.AlbumCover,
-                        new Uri(cover.Image),
-                        new WebClient().DownloadData(cover.Image), Path.GetExtension(cover.Image),
-                        MetaFileCategory.Gallery, cover.Id + Path.GetExtension(cover.Image)));
+                    //albumCovers.Add(new MetaFile(albumInfo.Artist, albumInfo.Album, MetaFileType.AlbumCover,
+                    //    new Uri(cover.Image),
+                    //    new WebClient().DownloadData(cover.Image), Path.GetExtension(cover.Image),
+                    //    MetaFileCategory.Gallery, cover.Id + Path.GetExtension(cover.Image)));
+
+                    yield return
+                        new MetaFile(albumInfo.Artist, albumInfo.Album, MetaFileType.AlbumCover, new Uri(cover.Image),
+                            new WebClient().DownloadData(cover.Image), Path.GetExtension(cover.Image),
+                            MetaFileCategory.Gallery, cover.Id + Path.GetExtension(cover.Image));
+
+                    i++;
                 }
             }
 
-            log.Debug("Found " + albumCovers.Count + " album covers for " + albumInfo.Artist + "/" + albumInfo.Album);
-            return albumCovers;
+            log.Debug("Found " + i + " album covers for " + albumInfo.Artist + "/" + albumInfo.Album);
         }
 
         /// <summary>
