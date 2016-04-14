@@ -40,33 +40,30 @@ namespace Noised.Core.Media
         /// Internal method to refresh a IMetaFileScraper asynchronously (it's called asynchronously)
         /// </summary>
         /// <param name="scraper">The scraper which is about be refreshed</param>
-        /// <param name="metaData">The input for the scraper</param>
-        private void RefreshAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaData)
+        /// <param name="metaDataCollection">The input for the scraper</param>
+        private void RefreshAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaDataCollection)
         {
-            List<MetaFile> albumCovers = new List<MetaFile>();
-            List<MetaFile> artistPictures = new List<MetaFile>();
-
-            foreach (ScraperAlbumInformation album in metaData.Albums)
-                albumCovers.AddRange(scraper.GetAlbumCover(new ScraperAlbumInformation(album.Artist, album.Album)));
-
-            foreach (string artist in metaData.Artists)
-                artistPictures.AddRange(scraper.GetArtistPictures(artist));
-
             using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
             {
-                foreach (MetaFile artistPicture in artistPictures)
+                // Get all AlbumCovers from IMetaFileScraper
+                foreach (ScraperAlbumInformation album in metaDataCollection.Albums)
                 {
-                    WriteMetaFile(artistPicture);
-                    uow.MetaFileRepository.CreateMetaFile(artistPicture);
+                    foreach (MetaFile mf in scraper.GetAlbumCover(album))
+                    {
+                        WriteMetaFile(mf);
+                        uow.MetaFileRepository.CreateMetaFile(mf);
+                    }
                 }
 
-                foreach (MetaFile albumCover in albumCovers)
+                // Get all Artistpictures from IMetaFileScraper
+                foreach (string artist in metaDataCollection.Artists)
                 {
-                    WriteMetaFile(albumCover);
-                    uow.MetaFileRepository.CreateMetaFile(albumCover);
+                    foreach (MetaFile mf in scraper.GetArtistPictures(artist))
+                    {
+                        WriteMetaFile(mf);
+                        uow.MetaFileRepository.CreateMetaFile(mf);
+                    }
                 }
-
-                uow.SaveChanges();
             }
         }
 
