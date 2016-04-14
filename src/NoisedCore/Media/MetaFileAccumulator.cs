@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="scraper">The scraper which is about be refreshed</param>
         /// <param name="metaData">The input for the scraper</param>
-        private void ProcessAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaData)
+        private void RefreshAsync(IMetaFileScraper scraper, DistinctMetaDataCollection metaData)
         {
             List<MetaFile> albumCovers = new List<MetaFile>();
             List<MetaFile> artistPictures = new List<MetaFile>();
@@ -84,30 +85,37 @@ namespace Noised.Core.Media
         /// <returns>A distinct collection of all MetaData (Artist, Album)</returns>
         private static DistinctMetaDataCollection GetDistinctMetaData()
         {
-            List<string> artists = new List<string>();
-            List<ScraperAlbumInformation> albums = new List<ScraperAlbumInformation>();
-            foreach (MediaSourceSearchResult mediaSourceSearchResult in IocContainer.Get<IMediaSourceAccumulator>().Search("*"))
-            {
-                foreach (MediaItem mediaItem in mediaSourceSearchResult.MediaItems)
-                {
-                    artists.AddRange(mediaItem.MetaData.Artists.Concat(mediaItem.MetaData.AlbumArtists));
-                    artists.AddRange(mediaItem.MetaData.AlbumArtists);
+            ConcurrentBag<string> artists = new ConcurrentBag<string>();
+            ConcurrentBag<ScraperAlbumInformation> albums = new ConcurrentBag<ScraperAlbumInformation>();
 
+            // Search every MediaItem in every MediaSource and iterate over the results.
+            // Because of possible time intensive searches we iterate parallel
+            Parallel.ForEach(IocContainer.Get<IMediaSourceAccumulator>().Search("*"), searchResult =>
+            {
+                // iterate over all MediaItems of all serachresults
+                foreach (MediaItem mediaItem in searchResult.MediaItems)
+                {
+                    // iterate over all Artists and all AlbumArtists of the MediaItem
                     foreach (string artist in mediaItem.MetaData.Artists.Concat(mediaItem.MetaData.AlbumArtists))
                     {
-                        ScraperAlbumInformation albumInfo = new ScraperAlbumInformation(artist, mediaItem.MetaData.Album);
+                        // Add every artist to artists
+                        artists.Add(artist);
 
-                        if (albums.Any(x => x.Artist == albumInfo.Artist && x.Album == albumInfo.Album))
+                        // if combination is already known just continue
+                        if (albums.Any(y => y.Artist == artist && y.Album == mediaItem.MetaData.Album))
                             continue;
 
+                        // otherwise create new ScraperAlbumInformation from artist and Album
+                        ScraperAlbumInformation albumInfo = new ScraperAlbumInformation(artist, mediaItem.MetaData.Album);
+
+                        // and add it to albums
                         albums.Add(albumInfo);
                     }
                 }
-            }
+            });
 
-            artists = artists.Distinct().ToList();
-
-            return new DistinctMetaDataCollection(albums, artists);
+            // Return collection of all Album/Artists combination and all Artists
+            return new DistinctMetaDataCollection(albums.ToList(), artists.Distinct().ToList());
         }
 
         /// <summary>
@@ -169,11 +177,13 @@ namespace Noised.Core.Media
         /// </summary>
         public void RefreshAsync()
         {
-            Task.Factory.StartNew(
+            Task.Run(
                 () =>
                 {
+                    // Get Collection of all Album/Artist combinations and all Artists
                     DistinctMetaDataCollection metaData = GetDistinctMetaData();
-                    Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => ProcessAsync(x, metaData));
+                    // Iterate over all registered IMetaFileScapers and execute them asynchronously
+                    Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => RefreshAsync(x, metaData));
                     if (RefreshAsyncFinished != null)
                         RefreshAsyncFinished();
                 });
