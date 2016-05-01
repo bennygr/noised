@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -11,7 +10,7 @@ namespace  Noised.Plugins.Commands.CoreCommands
         private readonly IList<object> listIDs;
 
         /// <summary>
-        ///		Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="context">The command's context</param>
         /// <param name="listIDs">A list of listIDs of the items to remove from the queue</param>
@@ -25,11 +24,11 @@ namespace  Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-			var queue = IocContainer.Get<IQueue>();
-            foreach(var id in listIDs)
-			{
-				queue.Remove((long)id);
-			}
+            var queue = Context.DIContainer.Get<IQueue>();
+            foreach (var id in listIDs)
+            {
+                queue.Remove((long)id);
+            }
         }
 
         #endregion

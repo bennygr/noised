@@ -26,10 +26,10 @@ namespace Noised.Core.Plugins
         {
             //Creating a tmp dir 
             string tmpPluginPath = noisedTmpRoot + Path.DirectorySeparatorChar + Guid.NewGuid();
-            IocContainer.Get<ILogging>().Debug(String.Format("Unpacking new plugin {0}...", npluginzFilePath));
+            IoC.Get<ILogging>().Debug(String.Format("Unpacking new plugin {0}...", npluginzFilePath));
             //..and extract the plugin content to the dir
             System.IO.Compression.ZipFile.ExtractToDirectory(npluginzFilePath, tmpPluginPath);
-            IocContainer.Get<ILogging>().Debug(
+            IoC.Get<ILogging>().Debug(
                 String.Format("Plugin {0} has been extracted to {1}", npluginzFilePath, tmpPluginPath));
             return tmpPluginPath;
         }
@@ -56,7 +56,7 @@ namespace Noised.Core.Plugins
         /// <returns>True if the plugin is already installed, false otherwise</returns>
         private bool IsPluginInstalled(PluginMetaData pluginMetaData)
         {
-            using (IUnitOfWork unitOfWork = IocContainer.Get<IUnitOfWork>())
+            using (IUnitOfWork unitOfWork = IoC.Get<IUnitOfWork>())
             {
                 var existingPlugin = unitOfWork.PluginRepository.GetByGuid(pluginMetaData.GetGuid());
                 return (existingPlugin != null && existingPlugin.GetVersion() >= pluginMetaData.GetVersion());
@@ -75,20 +75,20 @@ namespace Noised.Core.Plugins
             {
                 try
                 {
-                    IocContainer.Get<ILogging>().Debug(String.Format("Found new plugin {0}...", file));
+                    IoC.Get<ILogging>().Debug(String.Format("Found new plugin {0}...", file));
                     Install(file);
                 }
                 catch (Exception e)
                 {
-                    IocContainer.Get<ILogging>().Error(String.Format("Error while loading plugin {0}: {1}", file, e.Message));
-                    IocContainer.Get<ILogging>().Debug(e.StackTrace);
+                    IoC.Get<ILogging>().Error(String.Format("Error while loading plugin {0}: {1}", file, e.Message));
+                    IoC.Get<ILogging>().Debug(e.StackTrace);
                 }
             }
         }
 
         public void Install(string npluginzFilePath)
         {
-            var logger = IocContainer.Get<ILogging>();
+            var logger = IoC.Get<ILogging>();
 
             //Create a tmp if not existing yet directory
             string tmpPath = "." + Path.DirectorySeparatorChar + "tmp";
@@ -118,7 +118,7 @@ namespace Noised.Core.Plugins
             if (!isPluginInstalled || forceInstallation)
             {
                 //Installing plugin
-                using (IUnitOfWork unitOfWork = IocContainer.Get<IUnitOfWork>())
+                using (IUnitOfWork unitOfWork = IoC.Get<IUnitOfWork>())
                 {
                     //Uninstall old files first (if existing)
                     if (unitOfWork.PluginRepository.GetByGuid(pluginRegistrationData.GetGuid()) != null)
@@ -165,7 +165,7 @@ namespace Noised.Core.Plugins
 
                     //Registering the plugin into the DB
                     unitOfWork.PluginRepository.RegisterPlugin(pluginRegistrationData, installedFiles);
-                    IocContainer.Get<ILogging>().Debug(
+                    IoC.Get<ILogging>().Debug(
                         String.Format("Plugin {0} has been installed (Version {1})",
                             pluginRegistrationData.Name,
                             pluginRegistrationData.Version));

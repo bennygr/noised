@@ -177,6 +177,12 @@
     <Compile Include="Commands\ProcessNextMusicCommand.cs" />
     <Compile Include="UserManagement\UserManager.cs" />
     <Compile Include="UserManagement\UserManagerException.cs" />
+    <Compile Include="IOC\IoC.cs" />
+    <Compile Include="IOC\IDIContainer.cs" />
+    <Compile Include="IOC\LightCoreDIContainer.cs" />
+    <Compile Include="CoreStarter.cs" />
+    <Compile Include="Media\IProcessPlaylistStrategy.cs" />
+    <Compile Include="Media\ProcessPlaylistStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\Commands\CommandTemplate.txt" />

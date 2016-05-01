@@ -8,12 +8,15 @@ namespace Noised.Core.Plugins
     /// </summary>
     public class PluginInitializer
     {
-		/// <summary>
-		///		Gets the service for type T
-		/// </summary>
-        public T Get<T>()
+        /// <summary>
+        ///	Gets the DI container
+        /// </summary>
+        public IDIContainer DIContainer
         {
-            return IocContainer.Get<T>();
+            get
+            {
+                return  IoC.Container;
+            }
         }
 
         /// <summary>

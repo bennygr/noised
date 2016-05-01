@@ -27,12 +27,12 @@ namespace Noised.Core.Service
         #region Constructor
 
         /// <summary>
-        ///		Constructor
+        ///	Constructor
         /// </summary>
         public ServiceConnectionManager()
         {
-            this.logging = IocContainer.Get<ILogging>();
-            this.core = IocContainer.Get<ICore>();
+            this.logging = IoC.Get<ILogging>();
+            this.core = IoC.Get<ICore>();
             this.connections = new List<ServiceConnectionContext>();
         }
 
@@ -41,7 +41,7 @@ namespace Noised.Core.Service
         #region Methods
 
         /// <summary>
-        ///		Internal method to handle an incoming service connection
+        ///	Internal method to handle an incoming service connection
         /// </summary>
         private void ClientConnected(object sender, ServiceEventArgs eventArgs)
         {
@@ -50,13 +50,13 @@ namespace Noised.Core.Service
                 connections.Add(
                     new ServiceConnectionContext(core,
                         eventArgs.Connection,
-                        IocContainer.Get<IProtocol>()));
+                        IoC.Get<IProtocol>()));
             }
             logging.Debug(String.Format("A new client connected. {0} clients connected.", connections.Count));
         }
 
         /// <summary>
-        ///		Internal method to handle a service disconnection
+        ///     Internal method to handle a service disconnection
         /// </summary>
         private void ClientDisconnected(object sender, ServiceEventArgs eventArgs)
         {
@@ -74,7 +74,7 @@ namespace Noised.Core.Service
         public void StartServices()
         {
             //Getting all loaded service plugins
-            var services = IocContainer.Get<IPluginLoader>().GetPlugins<IService>();
+            var services = IoC.Get<IPluginLoader>().GetPlugins<IService>();
             int serviceCount = services.Count();
             if (serviceCount > 0)
             {
@@ -108,7 +108,7 @@ namespace Noised.Core.Service
         {
             try
             {
-				logging.Debug("Sending broadcast response " + response);
+                logging.Debug("Sending broadcast response " + response);
                 List<ServiceConnectionContext> activeConnections;
                 lock (locker)
                 {

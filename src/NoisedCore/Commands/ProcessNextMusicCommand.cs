@@ -7,33 +7,32 @@ namespace Noised.Core.Commands
     {
         internal ProcessNextMusicCommand()
             : base(null)
-        { }
+        {
+        }
 
         #region implemented abstract members of AbstractCommand
 
         protected override void Execute()
         {
-            var mediaManager = IocContainer.Get<IMediaManager>();
+            var mediaManager = IoC.Get<IMediaManager>();
 
             // checking for repeat
             if (mediaManager.Repeat == RepeatMode.RepeatSong)
                 mediaManager.Play(mediaManager.CurrentMediaItem);
 
-            var queue = IocContainer.Get<IQueue>();
             //Checking queue for new music 
+            var queue = IoC.Get<IQueue>();
             Listable<MediaItem> nextItem = queue.Dequeue();
 
-            // If nothing was queued we check if a Playlist is loaded and if it can give us new music
+            // Checking current playlist for new music
             if (nextItem == null)
             {
-                IPlaylistManager pman = IocContainer.Get<IPlaylistManager>();
-
-                if (pman != null)
+                var playlistManager = IoC.Get<IPlaylistManager>();
+                var loadedPlaylist = playlistManager.LoadedPlaylist;
+                if (loadedPlaylist != null)
                 {
-                    Playlist p = pman.LoadedPlaylist;
-
-                    if (p != null)
-                        nextItem = p.NextItem;
+                    var processor = IoC.Get<IProcessPlaylistStrategy>();
+                    nextItem = processor.GetNextItem(loadedPlaylist);
                 }
             }
 

@@ -27,13 +27,13 @@ namespace Noised.Core.Media
         {
             foreach (IMediaSource mediaSource in pluginLoader.GetPlugins<IMediaSource>())
             {
-                IocContainer.Get<ILogging>().Info(String.Format("Refreshing media source {0}...",
+                IoC.Get<ILogging>().Info(String.Format("Refreshing media source {0}...",
                     mediaSource.Identifier));
                 DateTime t0 = DateTime.Now;
                 mediaSource.Refresh();
                 DateTime t1 = DateTime.Now;
                 TimeSpan td = t1 - t0;
-                IocContainer.Get<ILogging>().Info(String.Format("Refreshed media source {0} in {1} seconds",
+                IoC.Get<ILogging>().Info(String.Format("Refreshed media source {0} in {1} seconds",
                     mediaSource.Identifier,
                     td.TotalSeconds));
             }

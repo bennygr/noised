@@ -17,22 +17,15 @@ using Noised.Logging;
 namespace Noised.Core.IOC
 {
     /// <summary>
-    ///		Noised core depedency injection container
+    ///	    DI Container implementation using LightCore (http://lightcore.ch/)
     /// </summary>
-    public static class IocContainer
+    class LightCoreDIContainer : IDIContainer
     {
-        #region Fields
+        private IContainer container;
 
-        private static IContainer container;
+        #region IDIContainer implementation
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        ///		Creates the dependency injection-container
-        /// </summary>
-        public static void Build()
+        public void Build()
         {
             var builder = new ContainerBuilder();
 
@@ -91,11 +84,7 @@ namespace Noised.Core.IOC
             container = builder.Build();
         }
 
-        /// <summary>
-        ///		Get the Service for type T
-        /// </summary>
-        /// <return>The service fot type T</return>
-        public static T Get<T>()
+        public T Get<T>()
         {
             return container.Resolve<T>();
         }

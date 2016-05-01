@@ -3,22 +3,22 @@ using Noised.Core.Service;
 namespace Noised.Core.Commands
 {
     /// <summary>
-    ///		An abstract noised command
+    ///	An abstract noised command
     /// </summary>
     /// <remarks>
-    ///		Extend this class in order to define your own commands
+    ///	Extend this class in order to define your own commands
     /// </remarks>
     public abstract class AbstractCommand
     {
         #region Properties
 
-        /// <summary>
-        ///		The contect in which the command is executed
-        /// </summary>
+        ///<summary>
+        ///The contect in which the command is executed
+        ///</summary>
         public IServiceConnectionContext Context { get; private set; }
 
         /// <summary>
-        ///		Whether the command requires authentication or not
+        /// Whether the command requires authentication or not
         /// </summary>
         public bool RequiresAuthentication { get; protected set; }
 
@@ -27,7 +27,7 @@ namespace Noised.Core.Commands
         #region Constructor
 
         /// <summary>
-        ///		Constructor
+        ///	Constructor
         /// </summary>
         /// <param name="context">The command's context</param>
         /// <param name="requiresAuthentication">Whether the command requires authentication or not</param>

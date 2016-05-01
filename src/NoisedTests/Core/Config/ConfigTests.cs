@@ -1,43 +1,40 @@
 using System;
 using Moq;
-using Noised.Core.Config;
-using Noised.Core.IOC;
 using NUnit.Framework;
+using Noised.Core.Config;
+using Noised.Logging;
 using Should;
 
 namespace NoisedTests.Core.Config
 {
     /// <summary>
-    ///		Test fixtures for testing configuration behaviour
+    ///     Test fixtures for testing configuration behaviour
     /// </summary>
     [TestFixture]
     public class ConfigTests
     {
-        private IConfig config;
-
-        [SetUp]
-        public void RunBeforeAnyTests()
-        {
-            //building configuration object on
-            IocContainer.Build();
-            config = IocContainer.Get<IConfig>();
-        }
 
         /// <summary>
-        ///		Noised should be able to load an empty configuration without errors
+        ///     Noised should be able to load an empty configuration without errors
         /// </summary>
         [Test]
         public void ShouldLoadEmptyConfiguration()
         {
-            //Testing an empty configuration
-            var mockLoader = new Mock<IConfigurationLoader>();
-            mockLoader.Setup(x => x.LoadData()).Returns(new System.Collections.Generic.List<ConfigurationData>());
-            config.Load(mockLoader.Object);
+            //Setting up an config loader which returns am empty configruation
+            var configLoader = new Mock<IConfigurationLoader>();
+            configLoader.Setup(x => x.LoadData()).Returns(new System.Collections.Generic.List<ConfigurationData>());
+
+            //Setting up the config which we want to test
+            var logging = new Mock<ILogging>();
+            IConfig config = new Noised.Core.Config.Config(logging.Object);
+
+            //Test to load an emtpy configuration
+            config.Load(configLoader.Object);
             config.Count.ShouldEqual(0);
         }
 
         /// <summary>
-        ///		Noised should be able to load multiple configuration properties correctly
+        ///	Noised should be able to load multiple configuration properties correctly
         /// </summary>
         [Test]
         public void ShouldLoadMultipleConfigurationProperties()
@@ -45,21 +42,28 @@ namespace NoisedTests.Core.Config
             //Setting up a simple property source
             var simpleMockLoader = new Mock<IConfigurationLoader>();
             simpleMockLoader.Setup(x => x.LoadData()).Returns(
-                    new System.Collections.Generic.List<ConfigurationData> 
+                new System.Collections.Generic.List<ConfigurationData>
+                {
+                    new ConfigurationData
                     {
-                        new ConfigurationData{
-                            Name = "Test.nconfig",
-                            Data = "#This comment should not be parsed " + Environment.NewLine + 
-                                   "Noised.Test.SimpleConfiguration.Value1=1" + Environment.NewLine + 
-                                   "Noised.Test.SimpleConfiguration.Value2=2"
-                        },
-                        new ConfigurationData{
-                            Name = "Test2.nconfig",
-                            Data = "#This comment should not be parsed " + Environment.NewLine + 
-                                   "Noised.Test.SimpleConfiguration.Value3=3" + Environment.NewLine + 
-                                   "Noised.Test.SimpleConfiguration.Value4=4"
-                        }
-                    });
+                        Name = "Test.nconfig",
+                        Data = "#This comment should not be parsed " + Environment.NewLine +
+                        "Noised.Test.SimpleConfiguration.Value1=1" + Environment.NewLine +
+                        "Noised.Test.SimpleConfiguration.Value2=2"
+                    },
+                    new ConfigurationData
+                    {
+                        Name = "Test2.nconfig",
+                        Data = "#This comment should not be parsed " + Environment.NewLine +
+                        "Noised.Test.SimpleConfiguration.Value3=3" + Environment.NewLine +
+                        "Noised.Test.SimpleConfiguration.Value4=4"
+                    }
+                });
+
+            //Setting up the config which we want to test
+            var logging = new Mock<ILogging>();
+            IConfig config = new Noised.Core.Config.Config(logging.Object);
+
             config.Load(simpleMockLoader.Object);
             config.Count.ShouldEqual(4);
 
@@ -83,7 +87,7 @@ namespace NoisedTests.Core.Config
         }
 
         /// <summary>
-        ///		Noised should allow property overwriting
+        ///     Noised should allow property overwriting
         /// </summary>
         [Test]
         public void ShouldOverwriteIfPropertyIsSetMoreThanOnce()
@@ -91,21 +95,27 @@ namespace NoisedTests.Core.Config
             //Setting up a config which overwrites an already defined value existing
             var simpleMockLoader = new Mock<IConfigurationLoader>();
             simpleMockLoader.Setup(x => x.LoadData()).Returns(
-                    new System.Collections.Generic.List<ConfigurationData> 
+                new System.Collections.Generic.List<ConfigurationData>
+                {
+                    new ConfigurationData
                     {
-                        new ConfigurationData{
-                            Name = "Test.nconfig",
-                            Data = "#This comment should not be parsed " + Environment.NewLine + 
-                                   "Noised.Test.SimpleConfiguration.Value1=old" + Environment.NewLine + 
-                                   "Noised.Test.SimpleConfiguration.Value1=new"
-                        },
-                        new ConfigurationData{
-                            Name = "Test.nconfig",
-                            Data = "#This comment should not be parsed " + Environment.NewLine + 
-                                   "Noised.Test.SimpleConfiguration.Value1=newer" + Environment.NewLine + 
-                                   "Noised.Test.SimpleConfiguration.Value1=latest"
-                        },
-                    });
+                        Name = "Test.nconfig",
+                        Data = "#This comment should not be parsed " + Environment.NewLine +
+                        "Noised.Test.SimpleConfiguration.Value1=old" + Environment.NewLine +
+                        "Noised.Test.SimpleConfiguration.Value1=new"
+                    },
+                    new ConfigurationData
+                    {
+                        Name = "Test.nconfig",
+                        Data = "#This comment should not be parsed " + Environment.NewLine +
+                        "Noised.Test.SimpleConfiguration.Value1=newer" + Environment.NewLine +
+                        "Noised.Test.SimpleConfiguration.Value1=latest"
+                    },
+                });
+
+            //Setting up the config which we want to test
+            var logging = new Mock<ILogging>();
+            IConfig config = new Noised.Core.Config.Config(logging.Object);
 
             config.Load(simpleMockLoader.Object);
             config.Count.ShouldEqual(1);

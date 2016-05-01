@@ -26,8 +26,8 @@ namespace Noised.Core.Plugins
 
         public int LoadPlugins()
         {
-            var logger = IocContainer.Get<ILogging>();
-            using (var unitOfWork = IocContainer.Get<IUnitOfWork>())
+            var logger = IoC.Get<ILogging>();
+            using (var unitOfWork = IoC.Get<IUnitOfWork>())
             {
                 var files = unitOfWork.PluginRepository.GetFiles(".nplugin");
                 FileInfo currentFile = null;
@@ -66,7 +66,7 @@ namespace Noised.Core.Plugins
                             {
                                 throw new Exception("No PluginMetaData found for file " + file);
                             }
-                            IocContainer.Get<ILogging>().Info(
+                            IoC.Get<ILogging>().Info(
                                 String.Format("Loaded Plugin {0} - {1}",
                                     metaData.Name,
                                     metaData.Description));
@@ -74,15 +74,15 @@ namespace Noised.Core.Plugins
                         }
                         else
                         {
-                            IocContainer.Get<ILogging>().Error(
+                            IoC.Get<ILogging>().Error(
                                 String.Format("No IPlugin implementation found in assembly {0}", file));
                         }
                     }
                     catch (Exception e)
                     {
-                        IocContainer.Get<ILogging>().Error(
+                        IoC.Get<ILogging>().Error(
                             "Could not load plugin " + currentFile.FullName);
-                        IocContainer.Get<ILogging>().Error(e.Message);
+                        IoC.Get<ILogging>().Error(e.Message);
                     }
                 }
                 plugins = plugins.OrderByDescending(p => p.GetMetaData().Priority).ToList();

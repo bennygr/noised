@@ -19,33 +19,15 @@ namespace Noised.Core.UserManagement
             this.dbFactory = dbFactory;
         }
 
-        /// <summary>
-        /// Authenticate a User
-        /// </summary>
-        /// <param name="username">Login of the User</param>
-        /// <param name="password">Password(hash) of the User</param>
-        /// <returns></returns>
-        public bool Authenticate(string username, string password)
-        {
-            User user;
-            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
-                user = iuw.UserRepository.GetUser(username);
-
-            if (user != null && PasswordStorage.VerifyPassword(password, user.Password))
-                return true;
-            return false;
-        }
-
-        /// <summary>
-        /// Sets a Factory for creating instances of IUnitOfWork to access the Database
-        /// </summary>
+        #region IUserManager
+        
         public IDbFactory DbFactory
         {
             private get
             {
                 if (dbFactory == null)
                     throw new UserManagerException("You need to set the DbFactory Property first!");
-
+        
                 return dbFactory;
             }
             set
@@ -53,27 +35,31 @@ namespace Noised.Core.UserManagement
                 dbFactory = value;
             }
         }
-
-        /// <summary>
-        /// Creates a new User
-        /// </summary>
-        /// <param name="username">Username</param>
-        /// <param name="password">Password</param>
-        public void CreateUser(string username, string password)
+        
+        public bool Authenticate(string username, string password)
+        {
+            User user;
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+                user = iuw.UserRepository.GetUser(username);
+        
+            if (user != null && PasswordStorage.VerifyPassword(password, user.PasswordHash))
+                return true;
+            return false;
+        }
+        
+        public User CreateUser(string username, string password)
         {
             string hashedPw = PasswordStorage.CreateHash(password);
-
+        
             using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
             {
-                iuw.UserRepository.CreateUser(new User(username) { Password = hashedPw });
+                var user = new User(username) { PasswordHash = hashedPw };
+                iuw.UserRepository.CreateUser(user);
                 iuw.SaveChanges();
+                return user;
             }
         }
-
-        /// <summary>
-        /// Deletes a User
-        /// </summary>
-        /// <param name="user">User to delete</param>
+        
         public void DeleteUser(User user)
         {
             using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
@@ -82,11 +68,7 @@ namespace Noised.Core.UserManagement
                 iuw.SaveChanges();
             }
         }
-
-        /// <summary>
-        /// Updates an User
-        /// </summary>
-        /// <param name="user">User to Update</param>
+        
         public void UpdateUser(User user)
         {
             using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
@@ -95,16 +77,13 @@ namespace Noised.Core.UserManagement
                 iuw.SaveChanges();
             }
         }
-
-        /// <summary>
-        /// Gets a User by its name
-        /// </summary>
-        /// <param name="username">Name of the user</param>
-        /// <returns>The User with the given name</returns>
+        
         public User GetUser(string username)
         {
             using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
                 return iuw.UserRepository.GetUser(username);
         }
+        
+        #endregion
     }
 }

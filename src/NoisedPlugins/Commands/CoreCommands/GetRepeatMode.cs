@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -28,10 +27,10 @@ namespace Noised.Plugins.Commands.CoreCommands
         protected override void Execute()
         {
             Context.SendResponse(new ResponseMetaData
-            {
-                Name = "Noised.Plugins.Commands.CoreCommands.GetRepeatMode",
-                Parameters = new List<object> { IocContainer.Get<IMediaManager>().Repeat }
-            });
+                {
+                    Name = "Noised.Plugins.Commands.CoreCommands.GetRepeatMode",
+                    Parameters = new List<object> { Context.DIContainer.Get<IMediaManager>().Repeat }
+                });
         }
 
         #endregion

@@ -18,7 +18,7 @@ namespace Noised.Core.Plugins
 		/// </summary>
 		public static PluginMetaData GetMetaData(this IPlugin plugin)
 		{
-			var pluginLoader = IocContainer.Get<IPluginLoader>();
+			var pluginLoader = IoC.Get<IPluginLoader>();
 			return pluginLoader.GetMetaData(plugin);
 		}
 	};

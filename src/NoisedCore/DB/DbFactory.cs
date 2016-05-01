@@ -15,7 +15,7 @@ namespace Noised.Core.DB
         /// <returns>A new instance of the current IUnitOfWork implementation</returns>
         public IUnitOfWork GetUnitOfWork()
         {
-            return IocContainer.Get<IUnitOfWork>();
+            return IoC.Get<IUnitOfWork>();
         }
 
         #endregion

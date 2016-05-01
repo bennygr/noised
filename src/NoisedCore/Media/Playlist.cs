@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Noised.Core.IOC;
 
 namespace Noised.Core.Media
 {
@@ -11,24 +9,16 @@ namespace Noised.Core.Media
     /// </summary>
     public class Playlist
     {
-        private readonly List<Listable<MediaItem>> items;
-        private readonly List<Listable<MediaItem>> notYetPlayed;
+        private readonly object locker = new Object();
+        private readonly List<Listable<MediaItem>> items = new List<Listable<MediaItem>>();
+        private readonly List<Listable<MediaItem>> returned = new List<Listable<MediaItem>>();
+        private readonly Random random = new Random();
+        private int position = -1;
 
-        private Listable<MediaItem> currentMediaItem;
-
-        private Listable<MediaItem> CurrentMediaItem
-        {
-            get
-            {
-                return currentMediaItem;
-            }
-            set
-            {
-                currentMediaItem = value;
-                lock (this)
-                    notYetPlayed.Remove(CurrentMediaItem);
-            }
-        }
+        /// <summary>
+        ///     Unique ID of the playlist
+        /// </summary>
+        public Int64 Id{ get; set; }
 
         /// <summary>
         /// Gets the Name of the Playlist
@@ -47,71 +37,46 @@ namespace Noised.Core.Media
         }
 
         /// <summary>
-        /// Gets the next Item of the Playlist
-        /// </summary>
-        public Listable<MediaItem> NextItem
-        {
-            get
-            {
-                lock (this)
-                {
-                    if (notYetPlayed.Count == 0)
-                    {
-                        ResetAlreadyPlayedItems();
-
-                        switch (IocContainer.Get<IMediaManager>().Repeat)
-                        {
-                            // If RepeatMode is None null will be returned
-                            case RepeatMode.None:
-                                {
-                                    CurrentMediaItem = null;
-                                    return null;
-                                }
-                            // If RepeatMode is RepeatSong the CurrentMediaItem will be returned
-                            case RepeatMode.RepeatSong:
-                                return CurrentMediaItem;
-                            // If RepeatMode is Playlist the NextItem will be determined as usual
-                        }
-                    }
-
-                    // Get a random Item when Shuffle is true
-                    if (IocContainer.Get<IMediaManager>().Shuffle)
-                    {
-                        CurrentMediaItem = notYetPlayed[new Random().Next(items.Count)];
-                        return CurrentMediaItem;
-                    }
-
-                    CurrentMediaItem = notYetPlayed.FirstOrDefault();
-                    return CurrentMediaItem;
-                }
-            }
-        }
-
-        /// <summary>
         /// A Playlist containing MediaItems
         /// </summary>
         /// <param name="name">Name of the Playlist</param>
-        internal Playlist(string name)
+        public Playlist(string name)
         {
             if (String.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Please provide a valid (non empty) name for the playlist.", "name");
-
             Name = name;
-
-            items = new List<Listable<MediaItem>>();
-            notYetPlayed = new List<Listable<MediaItem>>();
         }
 
         /// <summary>
-        /// Adds a MediaItem to the Playlist
+        ///     Internal method to return the item from the given position
         /// </summary>
-        /// <param name="item">MediaItem to add</param>
-        public void Add(Listable<MediaItem> item)
+        /// <param name="position">The position to get the item from</param>
+        /// <returns>The item for the given position</returns>
+        private Listable<MediaItem> GetAt(int position)
         {
-            lock (this)
+            var item = items[position];
+            returned.Add(item);
+            return item;
+        }
+        
+        /// <summary>
+        ///     Internal method to return a list of items which has not been returned yet
+        /// </summary>
+        /// <returns>A list of items which have not been returned yet</returns>
+        private List<Listable<MediaItem>> GetNotReturned()
+        {
+            return items.FindAll(l => !returned.Contains(l));
+        }
+
+        /// <summary>
+        /// Adds  MediaItems to the Playlist
+        /// </summary>
+        /// <param name="items">The MediaItems to add</param>
+        public void Add(params Listable<MediaItem>[] items)
+        {
+            lock (locker)
             {
-                items.Add(item);
-                notYetPlayed.Add(item);
+                this.items.AddRange(items);
             }
         }
 
@@ -121,25 +86,64 @@ namespace Noised.Core.Media
         /// <param name="mediaItem">MediaItem to remove</param>
         public void Remove(Listable<MediaItem> mediaItem)
         {
-            lock (this)
+            if (mediaItem == null)
+                throw new ArgumentNullException("mediaItem");
+            lock (locker)
             {
                 items.Remove(items.Find(x => x.ListId == mediaItem.ListId));
-                notYetPlayed.Remove(notYetPlayed.Find(x => x.ListId == mediaItem.ListId));
             }
         }
 
         /// <summary>
-        /// Resets the already played MediaItems
+        ///  Returns if the playlist has unreturned items 
         /// </summary>
-        public void ResetAlreadyPlayedItems()
+        /// <returns>Whether the playlist has unreturned items or not</returns>
+        public bool HasUnreturnedItems()
         {
-            lock (this)
+            return GetNotReturned().Count > 0;
+        }
+
+        /// <summary>
+        ///	Get the next item from the playlist
+        /// </summary>
+        /// <returns>The next item from the playlist</returns>
+        public Listable<MediaItem> GetNext()
+        {
+            lock (locker)
             {
-                foreach (Listable<MediaItem> mediaItem in Items)
+                return (position < items.Count-1 && items.Count > 0) ? GetAt(++position) : null;
+            }
+        }
+
+        /// <summary>
+        ///     Gets a random item from the playlist which has not been returned yet
+        /// </summary>
+        /// <returns>An item which has not been returned yet</returns>
+        public Listable<MediaItem> GetNextRandom()
+        {
+            lock (locker)
+            {
+                var candiates = GetNotReturned();
+                if (candiates.Count > 0)
                 {
-                    if (!notYetPlayed.Contains(mediaItem))
-                        notYetPlayed.Add(mediaItem);
+                    int index = random.Next(0, candiates.Count - 1);
+                    var ret = candiates[index];
+                    returned.Add(ret);
+                    return ret;
                 }
+                return null;
+            }
+        }
+
+        /// <summary>
+        ///     Clears the list of already returned items
+        /// </summary>
+        public void Reset()
+        {
+            lock (locker)
+            {
+                returned.Clear();
+                position = -1;
             }
         }
     }

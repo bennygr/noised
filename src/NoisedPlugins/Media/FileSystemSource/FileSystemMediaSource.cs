@@ -23,7 +23,7 @@ namespace Noised.Plugins.Media.FileSystemSource
         #region Contructor
 
         /// <summary>
-        ///		Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="initalizer">initalizting data</param>        
         public FileSystemMediaSource(PluginInitializer initalizer)
@@ -71,7 +71,7 @@ namespace Noised.Plugins.Media.FileSystemSource
             var logger = core.Logging;
             using (var unitOfWork = new SqliteFileSystemUnitOfWork())
             {
-                var checksum = IocContainer.Get<IChecksum>().CalculateChecksum(file);
+                var checksum = core.DIContainer.Get<IChecksum>().CalculateChecksum(file);
                 var uri = new Uri("file://" + file.FullName);
 
                 //Check if we already know the media item
@@ -110,7 +110,7 @@ namespace Noised.Plugins.Media.FileSystemSource
                 //Checking all files in the directory
                 foreach (var fileInfo in directory.GetFiles())
                 {
-                    if (SupportedFileTypes.IsFileSupported(fileInfo))
+                    if (new SupportedFileTypes(core.DIContainer.Get<IConfig>()).IsFileSupported(fileInfo))
                     {
                         try
                         {
@@ -163,7 +163,7 @@ namespace Noised.Plugins.Media.FileSystemSource
         {
             var logger = core.Logging;
             //loading all media files from a specified directory
-            var config = core.Get<IConfig>();
+            var config = core.DIContainer.Get<IConfig>();
             string directoryList = config.GetProperty(FileSystemSourceProperties.Directories);
             if (!string.IsNullOrEmpty(directoryList))
             {
