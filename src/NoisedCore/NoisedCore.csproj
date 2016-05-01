@@ -86,7 +86,6 @@
     <Compile Include="DB\Sqlite\UserSql.cs" />
     <Compile Include="DB\UserRepositoryException.cs" />
     <Compile Include="etc\CoreConfigProperties.cs" />
-    <Compile Include="IOC\IocContainer.cs" />
     <Compile Include="Media\IMediaManager.cs" />
     <Compile Include="Media\IMediaSourceAccumulator.cs" />
     <Compile Include="Media\IMetaFileAccumulator.cs" />

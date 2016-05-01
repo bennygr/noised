@@ -32,7 +32,7 @@ namespace Noised.Core.DB.Sqlite
             var factory = IoC.Get<IMediaSourceAccumulator>();
             using (SqliteCommand cmd = connection.CreateCommand())
             {
-                cmd.CommandText = PlaylistSql.SelectPlaylistItems;
+                cmd.CommandText = PlaylistsSql.SelectPlaylistItems;
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.Add(new SqliteParameter("@ID", listId));
                 var reader = cmd.ExecuteReader();
@@ -54,7 +54,7 @@ namespace Noised.Core.DB.Sqlite
             //Adding the playlist to the DB
             using (SqliteCommand cmd = connection.CreateCommand())
             {
-                cmd.CommandText = PlaylistSql.InsertPlaylistStatement;
+                cmd.CommandText = PlaylistsSql.InsertPlaylistStatement;
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.Add(new SqliteParameter("@Name", playlist.Name));
                 cmd.ExecuteNonQuery();
@@ -66,7 +66,7 @@ namespace Noised.Core.DB.Sqlite
             {
                 using (SqliteCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = PlaylistSql.InsertPlaylistItemStatement;
+                    cmd.CommandText = PlaylistsSql.InsertPlaylistItemStatement;
                     cmd.CommandType = CommandType.Text;
 
                     cmd.Parameters.Add(new SqliteParameter("@ID", playlist.Id));
@@ -94,7 +94,7 @@ namespace Noised.Core.DB.Sqlite
             //Removing the playlist's items
             using (SqliteCommand cmd = connection.CreateCommand())
             {
-                cmd.CommandText = PlaylistSql.DeletePlaylistItemsStatement;
+                cmd.CommandText = PlaylistsSql.DeletePlaylistItemsStatement;
                 cmd.CommandType = CommandType.Text;
 
                 cmd.Parameters.Add(new SqliteParameter("@ID", playlist.Id));
@@ -104,7 +104,7 @@ namespace Noised.Core.DB.Sqlite
             //removing the playlist
             using (SqliteCommand cmd = connection.CreateCommand())
             {
-                cmd.CommandText = PlaylistSql.DeletePlaylistStatement;
+                cmd.CommandText = PlaylistsSql.DeletePlaylistStatement;
                 cmd.CommandType = CommandType.Text;
 
                 cmd.Parameters.Add(new SqliteParameter("@ID", playlist.Id));
@@ -117,7 +117,7 @@ namespace Noised.Core.DB.Sqlite
             var ret = new List<Playlist>();
             using (var cmd = connection.CreateCommand())
             {
-                cmd.CommandText = PlaylistSql.SelectAllPlaylists;
+                cmd.CommandText = PlaylistsSql.SelectAllPlaylists;
                 cmd.CommandType = CommandType.Text;
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -140,7 +140,7 @@ namespace Noised.Core.DB.Sqlite
             Playlist playlist = null;
             using (var cmd = connection.CreateCommand())
             {
-                cmd.CommandText = PlaylistSql.SelectPlaylist;
+                cmd.CommandText = PlaylistsSql.SelectPlaylist;
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.Add(new SqliteParameter("@ID", id));
                 var reader = cmd.ExecuteReader();

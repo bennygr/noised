@@ -16,13 +16,14 @@ namespace Noised.Core.Media
     {
         private readonly IPluginLoader pluginLoader;
         private readonly IDbFactory dbFactory;
-
+        private readonly IMetaFileWriter metaFileWriter;
+        private readonly IMediaSourceAccumulator mediaSourceAccumulator;
         /// <summary>
         /// Access to all MetaFiles sources
         /// </summary>
         /// <param name="pluginLoader">PluginLoader</param>
         /// <param name="dbFactory">Database factory</param>
-        public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory)
+        public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory, IMetaFileWriter metaFileWriter, IMediaSourceAccumulator mediaSourceAccumulator)
         {
             if (pluginLoader == null)
                 throw new ArgumentNullException("pluginLoader");
@@ -31,6 +32,8 @@ namespace Noised.Core.Media
 
             this.pluginLoader = pluginLoader;
             this.dbFactory = dbFactory;
+            this.metaFileWriter = metaFileWriter;
+            this.mediaSourceAccumulator = mediaSourceAccumulator;
         }
 
         #region Methods
@@ -73,20 +76,20 @@ namespace Noised.Core.Media
         /// Methof to write a MetaFile to the disk
         /// </summary>
         /// <param name="metaFile">The MetaFile</param>
-        private static void WriteMetaFile(MetaFile metaFile)
+        private void WriteMetaFile(MetaFile metaFile)
         {
-            IocContainer.Get<IMetaFileWriter>().WriteMetaFileToDisk(metaFile);
+            this.metaFileWriter.WriteMetaFileToDisk(metaFile);
         }
 
         /// <summary>
         /// Gets a distinct collection of all MetaData (Artist, Album)
         /// </summary>
         /// <returns>A distinct collection of all MetaData (Artist, Album)</returns>
-        private static DistinctMetaDataCollection GetDistinctMetaData()
+        private DistinctMetaDataCollection GetDistinctMetaData()
         {
             List<string> artists = new List<string>();
             List<ScraperAlbumInformation> albums = new List<ScraperAlbumInformation>();
-            foreach (MediaSourceSearchResult mediaSourceSearchResult in IocContainer.Get<IMediaSourceAccumulator>().Search("*"))
+            foreach (MediaSourceSearchResult mediaSourceSearchResult in mediaSourceAccumulator.Search("*"))
             {
                 foreach (MediaItem mediaItem in mediaSourceSearchResult.MediaItems)
                 {
