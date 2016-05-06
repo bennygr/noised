@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Noised.Core.DB;
-using Noised.Core.IOC;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Media;
 
@@ -18,7 +17,7 @@ namespace Noised.Core.Media
         private readonly IPluginLoader pluginLoader;
         private readonly IDbFactory dbFactory;
         private readonly IMetaFileWriter metaFileWriter;
-
+        private readonly IMediaSourceAccumulator mediaSourceAccumulator;
         // TODO: remove this locking and make underlying classes threadsafe
         private readonly Object lockUnitOfWork = new Object();
         private readonly Object lockMetaFileWriter = new Object();
@@ -28,7 +27,9 @@ namespace Noised.Core.Media
         /// </summary>
         /// <param name="pluginLoader">PluginLoader</param>
         /// <param name="dbFactory">Database factory</param>
-        public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory)
+        /// <param name="metaFileWriter">MetaFileWriter</param>
+        /// <param name="mediaSourceAccumulator">MediaSourceAccumulator</param>
+        public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory, IMetaFileWriter metaFileWriter, IMediaSourceAccumulator mediaSourceAccumulator)
         {
             if (pluginLoader == null)
                 throw new ArgumentNullException("pluginLoader");
@@ -37,8 +38,8 @@ namespace Noised.Core.Media
 
             this.pluginLoader = pluginLoader;
             this.dbFactory = dbFactory;
-
-            metaFileWriter = IocContainer.Get<IMetaFileWriter>();
+            this.metaFileWriter = metaFileWriter;
+            this.mediaSourceAccumulator = mediaSourceAccumulator;
         }
 
         #region Methods
@@ -61,14 +62,14 @@ namespace Noised.Core.Media
         /// Gets a distinct collection of all MetaData (Artist, Album)
         /// </summary>
         /// <returns>A distinct collection of all MetaData (Artist, Album)</returns>
-        private static DistinctMetaDataCollection GetDistinctMetaData()
+        private DistinctMetaDataCollection GetDistinctMetaData()
         {
             ConcurrentBag<string> artists = new ConcurrentBag<string>();
             ConcurrentBag<ScraperAlbumInformation> albums = new ConcurrentBag<ScraperAlbumInformation>();
 
             // Search every MediaItem in every MediaSource and iterate over the results.
             // Because of possible time intensive searches we iterate parallel
-            Parallel.ForEach(IocContainer.Get<IMediaSourceAccumulator>().Search("*"), searchResult =>
+            Parallel.ForEach(mediaSourceAccumulator.Search("*"), searchResult =>
             {
                 // iterate over all MediaItems of all serachresults
                 foreach (MediaItem mediaItem in searchResult.MediaItems)

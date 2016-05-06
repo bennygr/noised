@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Noised.Core;
 using Noised.Core.Commands;
+using Noised.Core.DB;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
@@ -11,45 +11,34 @@ namespace Noised.Plugins.Commands.CoreCommands
 {
     public class RemoveFromPlaylist : AbstractCommand
     {
-        private readonly string playlistName;
+        private readonly long playlistId;
         private readonly IList<string> mediaItemUris;
 
-        ///  <summary>
-        /// 		Constructor
-        ///  </summary>
-        ///  <param name="context">The command's context</param>
-        /// <param name="playlistName">Name of the Playlist from which the Items should be removed</param>
-        /// <param name="mediaItemUris">List of Uris of MediaItems that should be removed</param>
-        public RemoveFromPlaylist(IServiceConnectionContext context, string playlistName, IList<string> mediaItemUris)
+        ///<summary>
+        ///    Constructor
+        ///</summary>
+        ///<param name="context">The command's context</param>
+        ///<param name="playlistId">ID of the Playlist from which the Items should be removed</param>
+        ///<param name="mediaItemUris">List of Uris of MediaItems that should be removed</param>
+        public RemoveFromPlaylist(IServiceConnectionContext context, long playlistId, IList<string> mediaItemUris)
             : base(context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            if (String.IsNullOrWhiteSpace(playlistName))
-            {
-                ArgumentException argumentException = new ArgumentException(strings.NoValidPlaylistName, "playlistName");
-                Context.SendResponse(new ErrorResponse(argumentException)
-                {
-                    Name = "Noised.Plugins.Commands.CoreCommands.RemoveFromPlaylist"
-                });
-
-                throw argumentException;
-            }
-
             if (mediaItemUris == null ||
                 !mediaItemUris.Any())
             {
-                ArgumentNullException argumentNullException = new ArgumentNullException("mediaItemUris", "please provide valid MediaItemUris");
+                var argumentNullException = new ArgumentNullException("mediaItemUris", "please provide valid MediaItemUris");
                 Context.SendResponse(new ErrorResponse(argumentNullException)
-                {
-                    Name = "Noised.Plugins.Commands.CoreCommands.RemoveFromPlaylist"
-                });
+                    {
+                        Name = "Noised.Plugins.Commands.CoreCommands.RemoveFromPlaylist"
+                    });
 
                 throw argumentNullException;
             }
 
-            this.playlistName = playlistName;
+            this.playlistId = playlistId;
             this.mediaItemUris = mediaItemUris;
         }
 
@@ -60,12 +49,26 @@ namespace Noised.Plugins.Commands.CoreCommands
         /// </summary>
         protected override void Execute()
         {
-            foreach (string mediaItemUri in mediaItemUris)
+            using (IUnitOfWork unitOfWork = Context.DIContainer.Get<IUnitOfWork>())
             {
-                IPlaylistManager playlistManager = IocContainer.Get<IPlaylistManager>();
-                Playlist playlist = playlistManager.FindPlaylist(playlistName);
-                playlist.Remove(new Listable<MediaItem>(IocContainer.Get<IMediaSourceAccumulator>().Get(new Uri(mediaItemUri))));
-                playlistManager.SavePlaylist(playlist);
+                var playlist = unitOfWork.PlaylistRepository.GetById(playlistId);
+                if (playlist != null)
+                {
+                    bool changed = false;
+                    foreach (string mediaItemUri in mediaItemUris)
+                    {
+                        playlist.Remove(new Listable<MediaItem>(Context.DIContainer.Get<IMediaSourceAccumulator>().Get(new Uri(mediaItemUri))));
+                        changed = true;
+                    }
+                    if (changed)
+                    {
+                        unitOfWork.PlaylistRepository.Update(playlist);
+                    }
+                }
+                else
+                {
+                    Context.SendResponse(new ErrorResponse("Could not find a Playlist with id \"" + playlistId + "\""));
+                }
             }
         }
 

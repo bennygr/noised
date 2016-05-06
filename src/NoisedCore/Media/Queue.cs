@@ -7,7 +7,7 @@ using Noised.Core.Service;
 namespace Noised.Core.Media
 {
     /// <summary>
-    ///		Default implementaion of IQueue
+    ///	    Default implementaion of IQueue
     /// </summary>
     public class Queue : IQueue
     {
@@ -37,10 +37,10 @@ namespace Noised.Core.Media
         private void OnQueueChanged(IEnumerable<Listable<MediaItem>> newContent)
         {
             connectionManager.SendBroadcast(new ResponseMetaData
-            {
-                Name = "Noised.Commands.Core.GetQueue",
-                Parameters = new List<object>(newContent)
-            });
+                {
+                    Name = "Noised.Commands.Core.GetQueue",
+                    Parameters = new List<object>(newContent)
+                });
         }
 
         #region IQueue implementation
@@ -58,7 +58,7 @@ namespace Noised.Core.Media
 
         public void Enqueue(params Listable<MediaItem>[] mediaItems)
         {
-			Enqueue(new List<Listable<MediaItem>>(mediaItems));
+            Enqueue(new List<Listable<MediaItem>>(mediaItems));
         }
 
         public void Enqueue(IEnumerable<Listable<MediaItem>> mediaItems)

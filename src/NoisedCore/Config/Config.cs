@@ -13,7 +13,7 @@ namespace Noised.Core.Config
         #region Fields
 
         private readonly ILogging logging;
-        private readonly Dictionary<string, string> properties;
+        private readonly Dictionary<string,string> properties;
         private const char CharComment = '#';
         private const char CharAssign = '=';
 
@@ -27,7 +27,7 @@ namespace Noised.Core.Config
         /// <param name="logging">The logging object</param>
         public Config(ILogging logging)
         {
-            properties = new Dictionary<string, string>();
+            this.properties = new Dictionary<string,string>();
             this.logging = logging;
         }
 
@@ -71,11 +71,11 @@ namespace Noised.Core.Config
                                 else
                                 {
                                     logging.Error(
-                                            String.Format("Failed to load value {0} from {1} at line {2}. Could not split line.",
-                                                line,
-                                                data.Name,
-                                                lineCounter
-                                                ));
+                                        String.Format("Failed to load value {0} from {1} at line {2}. Could not split line.",
+                                            line,
+                                            data.Name,
+                                            lineCounter
+                                        ));
                                 }
                             }
                         } while (line != null);
@@ -83,7 +83,7 @@ namespace Noised.Core.Config
                 }
             }
             logging.Debug(String.Format("{0} properties loaded from configuration",
-                                        properties.Count));
+                    properties.Count));
 
         }
 

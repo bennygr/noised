@@ -29,7 +29,7 @@ namespace Noised.Core.Service
 		/// </summary>
 		internal CommandDataBuffer()
 		{
-			endTag = IocContainer.Get<IProtocol>().CommandEndTag;
+			endTag = IoC.Get<IProtocol>().CommandEndTag;
 		}
 
 		#endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using Noised.Core;
 using Noised.Core.Commands;
+using Noised.Core.DB;
 using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
@@ -9,54 +10,44 @@ namespace Noised.Plugins.Commands.CoreCommands
 {
     public class DeletePlaylist : AbstractCommand
     {
-        private readonly string playlistName;
+        private readonly long playlistId;
 
         ///  <summary>
-        /// 		Constructor
+        ///     Constructor
         ///  </summary>
         ///  <param name="context">The command's context</param>
-        /// <param name="playlistName">Name of the Playlist that should be deleted</param>
-        public DeletePlaylist(IServiceConnectionContext context, string playlistName)
+        /// <param name="playlistId">ID of the Playlist that should be deleted</param>
+        public DeletePlaylist(IServiceConnectionContext context, long playlistId)
             : base(context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-
-            if (String.IsNullOrWhiteSpace(playlistName))
-            {
-                ArgumentException argumentException = new ArgumentException(strings.NoValidPlaylistName, "playlistName");
-                Context.SendResponse(new ErrorResponse(argumentException)
-                {
-                    Name = "Noised.Commands.Core.DeletePlaylist",
-                });
-
-                throw argumentException;
-            }
-
-            this.playlistName = playlistName;
+            this.playlistId = playlistId;
         }
 
         #region Overrides of AbstractCommand
 
         /// <summary>
-        ///		Defines the command's behaviour
+        ///     Defines the command's behaviour
         /// </summary>
         protected override void Execute()
         {
-            IPlaylistManager playlistManager = IocContainer.Get<IPlaylistManager>();
-
-            Playlist playlist = playlistManager.FindPlaylist(playlistName);
-
-            if (playlist == null)
+            using (IUnitOfWork unitOfWork = Context.DIContainer.Get<IUnitOfWork>())
             {
-                Context.SendResponse(new ErrorResponse("Playlist " + playlistName + " not found")
+                var playlist = unitOfWork.PlaylistRepository.GetById(playlistId);
+                if (playlist != null)
                 {
-                    Name = "Noised.Plugins.Commands.CoreCommands.DeletePlaylist"
-                });
-                return;
+                    unitOfWork.PlaylistRepository.Delete(playlist);
+                    unitOfWork.SaveChanges();
+                }
+                else
+                {
+                    Context.SendResponse(new ErrorResponse("Playlist " + playlistId + " not found")
+                        {
+                            Name = "Noised.Plugins.Commands.CoreCommands.DeletePlaylist"
+                        });
+                }
             }
-
-            playlistManager.DeletePlaylist(playlist);
         }
 
         #endregion

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Moq;
-using Noised.Core.DB;
-using Noised.Core.IOC;
-using Noised.Core.UserManagement;
 using NUnit.Framework;
+using Noised.Core.DB;
+using Noised.Core.UserManagement;
 using Should;
 
 namespace NoisedTests.Core.UserManagement
@@ -13,24 +12,25 @@ namespace NoisedTests.Core.UserManagement
     public class UserManagerTest
     {
         private UserManager uMan;
+        private Mock<IUserRepository> mockUserRepository;
         private List<User> userList;
 
         [TestFixtureSetUp]
         public void OneTimeSetup()
         {
             userList = new List<User>();
-            IocContainer.Build();
 
-            Mock<IUserRepository> mockUserRepository = new Mock<IUserRepository>();
+            //Mocking a user repoitory which operatores on an in-memory list
+            mockUserRepository = new Mock<IUserRepository>();
             mockUserRepository.Setup(x => x.CreateUser(It.IsAny<User>())).Callback(CreateUserAction());
             mockUserRepository.Setup(x => x.GetUser(It.IsAny<String>())).Returns(GetUserFunc());
             mockUserRepository.Setup(x => x.DeleteUser(It.IsAny<User>())).Callback(DeleteUserAction());
             mockUserRepository.Setup(x => x.UpdateUser(It.IsAny<User>())).Callback(new Action<User>(UpdateUserlistAction));
 
-            Mock<IUnitOfWork> mockUnitOfWork = new Mock<IUnitOfWork>();
+            var mockUnitOfWork = new Mock<IUnitOfWork>();
             mockUnitOfWork.Setup(x => x.UserRepository).Returns(mockUserRepository.Object);
 
-            Mock<IDbFactory> mockFactory = new Mock<IDbFactory>();
+            var mockFactory = new Mock<IDbFactory>();
             mockFactory.Setup(x => x.GetUnitOfWork()).Returns(mockUnitOfWork.Object);
 
             uMan = new UserManager(mockFactory.Object);
@@ -48,7 +48,7 @@ namespace NoisedTests.Core.UserManagement
 
         private Action<User> CreateUserAction()
         {
-            return user => userList.Add(user);
+            return userList.Add;
         }
 
         private void UpdateUserlistAction(User user)
@@ -56,14 +56,26 @@ namespace NoisedTests.Core.UserManagement
             DeleteUserAction();
             CreateUserAction();
         }
-
+        
         [Test]
         public void CreateUser()
         {
-            uMan.CreateUser("test", "user");
+            const string userName = "username";
+            const string password = "password";
+            
+            //Testing the creation of a user
+            uMan.CreateUser(userName,password);
+
+            //Assert that the usermanager has stored a user with the given name into the repo
+            mockUserRepository.Verify(r => r.CreateUser(It.Is<User>(u => u.Name == userName)));
+
+            //Check if the user was created
+            var user = uMan.GetUser(userName);
+            user.ShouldNotBeNull();
+            user.Name.ShouldEqual(userName);
         }
 
-        [Test]
+        //[Test]
         public void AuthenticateUser()
         {
             uMan.CreateUser("authTestUser", "authTestPassword");
@@ -72,7 +84,7 @@ namespace NoisedTests.Core.UserManagement
             uMan.Authenticate("authTestUser2", "authTestPassword").ShouldBeFalse("This user should not authenticate correctly.");
         }
 
-        [Test]
+        //[Test]
         public void DeleteUser()
         {
             uMan.CreateUser("deleteTestUser", "deleteTestPassword");

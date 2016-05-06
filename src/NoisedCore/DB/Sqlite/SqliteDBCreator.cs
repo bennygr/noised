@@ -31,7 +31,7 @@ namespace Noised.Core.DB.Sqlite
                     }
                     catch (Exception e)
                     {
-                        var logger = IocContainer.Get<ILogging>();
+                        var logger = IoC.Get<ILogging>();
                         logger.Error("Error while executing SQL: " +
                             sql +
                             " --> Error: " +

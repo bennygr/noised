@@ -20,7 +20,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-            IocContainer.Get<IQueue>().Clear();
+            IoC.Get<IQueue>().Clear();
         }
 
         #endregion

@@ -1,7 +1,7 @@
 ﻿using System;
 using Noised.Core;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
+using Noised.Core.DB;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -24,11 +24,11 @@ namespace Noised.Plugins.Commands.CoreCommands
 
             if (String.IsNullOrWhiteSpace(name))
             {
-                ArgumentException argumentException = new ArgumentException(strings.NoValidPlaylistName, "name");
+                var argumentException = new ArgumentException(strings.NoValidPlaylistName, "name");
                 Context.SendResponse(new ErrorResponse(argumentException)
-                {
-                    Name = "Noised.Commands.Core.CreatePlaylist"
-                });
+                    {
+                        Name = "Noised.Commands.Core.CreatePlaylist"
+                    });
 
                 throw argumentException;
             }
@@ -39,11 +39,15 @@ namespace Noised.Plugins.Commands.CoreCommands
         #region Overrides of AbstractCommand
 
         /// <summary>
-        ///		Defines the command's behaviour
+        ///	Defines the command's behaviour
         /// </summary>
         protected override void Execute()
         {
-            IocContainer.Get<IPlaylistManager>().AddPlaylist(IocContainer.Get<IPlaylistManager>().CreatePlaylist(name));
+            using (IUnitOfWork unitOfWork = Context.DIContainer.Get<IUnitOfWork>())
+            {
+                unitOfWork.PlaylistRepository.Create(new Playlist(name));
+                unitOfWork.SaveChanges();
+            }
         }
 
         #endregion

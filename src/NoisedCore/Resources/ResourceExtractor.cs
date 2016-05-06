@@ -16,7 +16,7 @@ namespace Noised.Core.Resources
         /// <param name="files">List of Names of Files to extract</param>
         public static void ExtractEmbeddedResource(string outputDir, string resourceLocation, List<string> files)
         {
-            ILogging log = IocContainer.Get<ILogging>();
+            ILogging log = IoC.Get<ILogging>();
 
             foreach (string file in files)
             {

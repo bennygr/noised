@@ -1,6 +1,5 @@
 ﻿using System;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -33,7 +32,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         /// </summary>
         protected override void Execute()
         {
-            IocContainer.Get<IMediaManager>().Repeat = rmRepeatMode;
+            Context.DIContainer.Get<IMediaManager>().Repeat = rmRepeatMode;
         }
 
         #endregion

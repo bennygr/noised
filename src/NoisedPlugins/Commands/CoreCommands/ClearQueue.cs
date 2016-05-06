@@ -1,5 +1,4 @@
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -19,7 +18,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-            IocContainer.Get<IQueue>().Clear();
+            Context.DIContainer.Get<IQueue>().Clear();
         }
 
         #endregion

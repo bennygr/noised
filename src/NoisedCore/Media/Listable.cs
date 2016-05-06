@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 namespace Noised.Core.Media
 {
     /// <summary>
@@ -17,7 +18,7 @@ namespace Noised.Core.Media
     public static class ListableExtensions
     {
         /// <summary>
-        ///		Helper method converting an enumeration of Listables to an enumeration of MediaItems
+        ///     Helper method converting an enumeration of Listables to an enumeration of MediaItems
         /// </summary>
         public static IEnumerable<MediaItem> GetMediaItems(this IEnumerable<Listable<MediaItem>> listables)
         {
@@ -29,7 +30,7 @@ namespace Noised.Core.Media
     };
 
     /// <summary>
-    ///		Wrapper class for making an item appear in an ordered list while applying a unique ID to the item
+    ///     Wrapper class for making an item appear in an ordered list while applying a unique ID to the item
     /// </summary>
     public class Listable<T>
     {
@@ -37,7 +38,7 @@ namespace Noised.Core.Media
         private readonly long itemID;
 
         /// <summary>
-        ///		Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="item">The item to wrap and apply an ID for</param>
         public Listable(T item)
@@ -50,7 +51,7 @@ namespace Noised.Core.Media
         }
 
         /// <summary>
-        ///		Constructor
+        ///	Constructor
         /// </summary>
         /// <param name="item">The item to wrap and apply an ID for</param>
         /// <param name="itemID">The id to apply for the item</param>
@@ -61,7 +62,7 @@ namespace Noised.Core.Media
         }
 
         /// <summary>
-        ///		The wrapped item
+        ///	The wrapped item
         /// </summary>
         public T Item
         {
@@ -72,7 +73,7 @@ namespace Noised.Core.Media
         }
 
         /// <summary>
-        ///		The ID of the wrapped item
+        ///	The ID of the wrapped item
         /// </summary>
         public long ListId
         {

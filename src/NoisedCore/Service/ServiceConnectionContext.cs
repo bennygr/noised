@@ -21,34 +21,10 @@ namespace Noised.Core.Service
 
         #endregion
 
-        #region Properties
-
-        /// <summary>
-        ///		The service connection to handle
-        /// </summary>
-        public IServiceConnection Connection { get; private set; }
-
-        /// <summary>
-        ///		Whether the context has been authenticated or not
-        /// </summary>
-        public bool IsAuthenticated { get; set; }
-
-        /// <summary>
-        ///		The user related to the context
-        /// </summary>
-        public User User { get; set; }
-
-        /// <summary>
-        ///		The logging object
-        /// </summary>
-        public ILogging Logging { get { return logging; } }
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
-        ///		Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="core">The core</param>
         /// <param name="connection">The service connection to handle</param>
@@ -62,15 +38,16 @@ namespace Noised.Core.Service
             this.Connection = connection;
             this.commandBuffer = new CommandDataBuffer();
             this.protocol = protocol;
-            this.logging = IocContainer.Get<ILogging>();
+            this.DIContainer = IoC.Container;
+            this.logging = IoC.Get<ILogging>();
         }
 
         #endregion
-
-        #region Methods
+    
+        #region Methods 
 
         /// <summary>
-        ///		Method to handle received data from the connection
+        ///	Method to handle received data from the connection
         /// </summary>
         private void DataReceived(object sender, ServiceEventArgs eventArgs)
         {
@@ -128,13 +105,27 @@ namespace Noised.Core.Service
             }
         }
 
+        #endregion
+
+        #region IServiceConnectionContext
+
+        public IServiceConnection Connection { get; private set; }
+
+        public bool IsAuthenticated { get; set; }
+
+        public ILogging Logging { get { return logging; } }
+
+        public User User { get; set; }
+
+        public IDIContainer DIContainer {get; private set;}
+
         public void SendResponse(ResponseMetaData response)
         {
             logging.Debug("Sending response to client: " + response.Name);
             byte[] responseBytes = protocol.CreateResponse(response);
             Connection.Send(responseBytes);
         }
-
         #endregion
+
     };
 }

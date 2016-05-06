@@ -12,7 +12,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         #region Constructor
 
         /// <summary>
-        ///		Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="context">Connection context</param>
         public Ping(ServiceConnectionContext context)
@@ -31,7 +31,7 @@ namespace Noised.Plugins.Commands.CoreCommands
                 {
                     Name = "Noised.Commands.Core.Pong",
                 };
-            Console.WriteLine("PING!!!!");
+            Context.Logging.Info("PING !!!");
             Context.SendResponse(response);
         }
 

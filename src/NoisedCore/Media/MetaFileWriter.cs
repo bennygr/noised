@@ -2,7 +2,6 @@
 using System.IO;
 using Noised.Core.Config;
 using Noised.Core.etc;
-using Noised.Core.IOC;
 
 namespace Noised.Core.Media
 {
@@ -16,10 +15,9 @@ namespace Noised.Core.Media
         /// <summary>
         /// A class which can write a MetaFile to the designated directory
         /// </summary>
-        public MetaFileWriter()
+        public MetaFileWriter(IConfig configuration)
         {
-            metaFilePath = IocContainer.Get<IConfig>().GetProperty(CoreConfigProperties.MetaFileDirectory);
-
+            metaFilePath = configuration.GetProperty(CoreConfigProperties.MetaFileDirectory);
             CreateDirectoryIfNotExists(metaFilePath);
         }
 

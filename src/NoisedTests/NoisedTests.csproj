@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -51,6 +50,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Config\ConfigTests.cs" />
     <Compile Include="Media\QueueTests.cs" />
+    <Compile Include="Media\PlaylistManagerTests.cs" />
+    <Compile Include="Commands\AbstractCommandTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -59,8 +60,12 @@
       <Name>NoisedCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\NoisedPlugins\Commands\CoreCommands\CoreCommands.csproj">
-      <Project>{bf963a63-6d57-4a12-a24a-c82d296c4e3a}</Project>
+      <Project>{BF963A63-6D57-4A12-A24A-C82D296C4E3A}</Project>
       <Name>CoreCommands</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NoisedLogging\NoisedLogging.csproj">
+      <Project>{89E504E4-0EE9-4F62-8077-8C874836BF55}</Project>
+      <Name>NoisedLogging</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

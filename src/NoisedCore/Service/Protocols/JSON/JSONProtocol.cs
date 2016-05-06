@@ -20,7 +20,7 @@ namespace Noised.Core.Service.Protocols.JSON
         /// <param name="logging">Logging object</param>
         /// <param name = "commandFactory">The command factory</param>
         public JSONProtocol(ILogging logging,
-                            ICommandFactory commandFactory)
+            ICommandFactory commandFactory)
         {
             this.logging = logging;
             this.commandFactory = commandFactory;
@@ -45,12 +45,12 @@ namespace Noised.Core.Service.Protocols.JSON
             var parameters = new List<object>();
             parameters.Add(context);
             //injection the other arguments
-            if(commandMetaData.Parameters != null)
+            if (commandMetaData.Parameters != null)
             {
-                foreach(object parameter in commandMetaData.Parameters)
+                foreach (object parameter in commandMetaData.Parameters)
                 {
                     var arrayParameter = parameter as JArray;
-                    if(arrayParameter != null)
+                    if (arrayParameter != null)
                     {
                         parameters.Add(arrayParameter.ToObject<List<Object>>());
                     }
@@ -71,6 +71,7 @@ namespace Noised.Core.Service.Protocols.JSON
                 JsonConvert.SerializeObject(responseData, Formatting.Indented);
             return Encoding.UTF8.GetBytes(json);
         }
+
         #endregion
     };
 }

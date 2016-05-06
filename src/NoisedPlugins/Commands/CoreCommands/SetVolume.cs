@@ -1,6 +1,5 @@
 ﻿using System;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -11,7 +10,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         private readonly int volume;
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="context">The command's context</param>
         /// <param name="volume">Volume to set+</param>
@@ -31,11 +30,11 @@ namespace Noised.Plugins.Commands.CoreCommands
         #region Overrides of AbstractCommand
 
         /// <summary>
-        /// Defines the command's behaviour
+        ///     Defines the command's behaviour
         /// </summary>
         protected override void Execute()
         {
-            IocContainer.Get<IMediaManager>().Volume = volume;
+            Context.DIContainer.Get<IMediaManager>().Volume = volume;
         }
 
         #endregion

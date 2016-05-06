@@ -1,6 +1,5 @@
 ﻿using System;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -15,7 +14,6 @@ namespace Noised.Plugins.Commands.CoreCommands
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-
             this.shuffleStatus = shuffleStatus;
         }
 
@@ -23,7 +21,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-            IocContainer.Get<IMediaManager>().Shuffle = shuffleStatus;
+            Context.DIContainer.Get<IMediaManager>().Shuffle = shuffleStatus;
         }
 
         #endregion

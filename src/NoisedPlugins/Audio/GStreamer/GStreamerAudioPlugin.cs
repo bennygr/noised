@@ -28,15 +28,15 @@ namespace Noised.Plugins.Audio.GStreamer
 #elif WINDOWS
                 { gStreamerAccess = new GStreamerAccessWindows(); }
 #else 
-    #error "Unsupported Operating System"
+                #error "Unsupported Operating System"
 #endif
                 gStreamerAccess.AbsInitialize();
                 gStreamerAccess.AbsSetSongFinishedCallback(Callback);
                 plugin = this;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                if(this.logging != null)	
+                if (this.logging != null)
                 {
                     this.logging.Error(e.ToString());
                 }
@@ -53,10 +53,10 @@ namespace Noised.Plugins.Audio.GStreamer
 
         #region Methods
 
-		/// <summary>
-		///		Internal Callback method
-		/// </summary>
-		/// <remarks> !! NEEDS TO BE STATIC !! </remarks>
+        /// <summary>
+        ///		Internal Callback method
+        /// </summary>
+        /// <remarks> !! NEEDS TO BE STATIC !! </remarks>
         private static void Callback()
         {
             try
@@ -83,10 +83,10 @@ namespace Noised.Plugins.Audio.GStreamer
             if (handler != null)
             {
                 handler(this,
-                        new AudioEventArgs()
-                        {
-                            MediaItem = mediaItem
-                        });
+                    new AudioEventArgs()
+                    {
+                        MediaItem = mediaItem
+                    });
             }
         }
 
@@ -142,9 +142,9 @@ namespace Noised.Plugins.Audio.GStreamer
 
         public void Play(MediaItem item)
         {
-			logging.Info("Playing song using GStreamer " + item.Uri);
+            logging.Info("Playing song using GStreamer " + item.Uri);
             if (gStreamerAccess.AbsIsPlaying() ||
-               gStreamerAccess.AbsIsPaused())
+                gStreamerAccess.AbsIsPaused())
             {
                 gStreamerAccess.AbsStop();
             }
@@ -191,14 +191,14 @@ namespace Noised.Plugins.Audio.GStreamer
 
         public int Volume
         {
-            get 
-			{ 
-				return (int)(gStreamerAccess.AbsGetVolume() * 100.0d);
-			}
-            set 
-			{
-				gStreamerAccess.AbsSetVolume((double)value/100.0d); 
-			}
+            get
+            { 
+                return (int)(gStreamerAccess.AbsGetVolume() * 100.0d);
+            }
+            set
+            {
+                gStreamerAccess.AbsSetVolume((double)value / 100.0d); 
+            }
         }
 
         #endregion

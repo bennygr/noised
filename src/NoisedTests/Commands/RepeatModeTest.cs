@@ -1,36 +1,28 @@
 ﻿using System;
 using Moq;
-using Noised.Core.Commands;
-using Noised.Core.IOC;
-using Noised.Core.Media;
-using Noised.Core.Service;
-using Noised.Plugins.Commands.CoreCommands;
 using NUnit.Framework;
-using Should;
+using Noised.Core.Commands;
+using Noised.Core.Media;
+using Noised.Plugins.Commands.CoreCommands;
 
 namespace NoisedTests.Commands
 {
     [TestFixture]
-    public class RepeatModeTest
+    public class RepeatModeTest : AbstractCommandTest
     {
-        [TestFixtureSetUp]
-        public void RepeatModeTestSetUp()
-        {
-            IocContainer.Build();
-        }
 
         [Test]
-        public void GetRepeatMode()
+        public void GetRepeatModeCommandShouldReturnRepeatMode()
         {
-            IMediaManager mediaManager = IocContainer.Get<IMediaManager>();
+            var mediaManager = new Mock<IMediaManager>();
+            RegisterToDIMock<IMediaManager>(mediaManager.Object);
 
-            ResponseMetaData responseMetaData = new ResponseMetaData();
-            Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
-            serviceConnectionMock.Setup(x => x.SendResponse(It.IsAny<ResponseMetaData>())).Callback((ResponseMetaData r) => responseMetaData = r);
+            new GetRepeatMode(ContextMock.Object).ExecuteCommand();
 
-            new GetRepeatMode(serviceConnectionMock.Object).ExecuteCommand();
-
-            responseMetaData.Parameters[0].ShouldEqual(mediaManager.Repeat, "GetRepeatMode command should return the IMediaManagers repeat mode.");
+            mediaManager.VerifyGet(mm => mm.Repeat);
+            string expectedResponseName = "Noised.Plugins.Commands.CoreCommands.GetRepeatMode";
+            ContextMock.Verify(ctx => ctx.SendResponse(
+                        It.Is<ResponseMetaData>(r => r.Name == expectedResponseName)));
         }
 
         [Test]
@@ -41,28 +33,31 @@ namespace NoisedTests.Commands
         }
 
         [Test]
-        public void SetRepeatMode()
+        public void SetRepeatSongModeShouldSetRepeatMode()
         {
-            IMediaManager mediaManager = IocContainer.Get<IMediaManager>();
 
-            Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
+            var mediaManager = new Mock<IMediaManager>();
+            RegisterToDIMock<IMediaManager>(mediaManager.Object);
 
-            new SetRepeatMode(serviceConnectionMock.Object, "RepeatSong").ExecuteCommand();
-            mediaManager.Repeat.ShouldEqual(RepeatMode.RepeatSong);
+            new SetRepeatMode(ContextMock.Object, "RepeatSong").ExecuteCommand();
+            mediaManager.VerifySet(mm => mm.Repeat = RepeatMode.RepeatSong); 
+        }
 
-            new SetRepeatMode(serviceConnectionMock.Object, "RepeatPlaylist").ExecuteCommand();
-            mediaManager.Repeat.ShouldEqual(RepeatMode.RepeatPlaylist);
+        [Test]
+        public void SetRepeatPlaylistModeShouldSetRepeatMode()
+        {
+            var mediaManager = new Mock<IMediaManager>();
+            RegisterToDIMock<IMediaManager>(mediaManager.Object);
 
-            new SetRepeatMode(serviceConnectionMock.Object, "None").ExecuteCommand();
-            mediaManager.Repeat.ShouldEqual(RepeatMode.None);
+            new SetRepeatMode(ContextMock.Object, "RepeatPlaylist").ExecuteCommand();
+            mediaManager.VerifySet(mm => mm.Repeat = RepeatMode.RepeatPlaylist); 
         }
 
         [Test]
         [ExpectedException(typeof (ArgumentException), UserMessage = "Trying to set an invalid RepeatMode should result in an ArgumentException.")]
         public void SetRepeatModeArgumentException()
         {
-            Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
-            new SetRepeatMode(serviceConnectionMock.Object, "InvalidRepeatMode");
+            new SetRepeatMode(ContextMock.Object, "InvalidRepeatMode");
         }
 
         [Test]

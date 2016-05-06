@@ -29,8 +29,9 @@ namespace Noised.Core.DB.Sqlite
                 PluginsSql.CREATE_TABLE_STMT,
                 PluginFilesSql.CREATE_TABLE_STMT,
                 PlaylistsSql.CreateTableStmt,
-                UserSql.CreateTableStmt,
-                MetaFilesSql.CreateTableStmt
+                PlaylistsSql.CreateItemsTableStmt,
+                MetaFilesSql.CreateTableStmt,
+                UserSql.CreateTableStmt
             };
         }
 
@@ -49,7 +50,7 @@ namespace Noised.Core.DB.Sqlite
                 }
                 else
                 {
-                    ILogging log = IocContainer.Get<ILogging>();
+                    ILogging log = IoC.Get<ILogging>();
                     log.Error("Unable to extract SQLite library: unable to locate assembly.");
                 }
             }

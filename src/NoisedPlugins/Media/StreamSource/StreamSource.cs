@@ -56,7 +56,7 @@ namespace Noised.Plugins.Media.StreamSource
         public void Refresh()
         {
             // Get configured StreamSource-Files
-            string configValue = initalizer.Get<IConfig>().GetProperty("noised.plugins.media.filesystemsource.streams");
+            string configValue = initalizer.DIContainer.Get<IConfig>().GetProperty("noised.plugins.media.filesystemsource.streams");
 
             if (String.IsNullOrWhiteSpace(configValue))
             {

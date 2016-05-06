@@ -29,7 +29,7 @@ namespace Noised.Core
         public Core()
         {
             commandQueue = new Queue<AbstractCommand>();
-            logging = IocContainer.Get<ILogging>();
+            logging = IoC.Get<ILogging>();
         }
 
         #endregion
@@ -71,11 +71,14 @@ namespace Noised.Core
             {
                 logging.Debug("Core is executing command " + command);
                 command.ExecuteCommand();
+				logging.Debug("Command " + command + " has been executed by the core");
+
             }
             catch (Exception e)
             {
                 logging.Error(String.Format("Error while executing command: {0}",
                         e.Message));
+				logging.Error (e.StackTrace);
                 try
                 {
                     command.Context.SendResponse(new ErrorResponse(e));

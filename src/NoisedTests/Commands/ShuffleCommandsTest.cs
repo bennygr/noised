@@ -1,56 +1,47 @@
 ﻿using System;
 using Moq;
-using Noised.Core.Commands;
-using Noised.Core.IOC;
-using Noised.Core.Media;
-using Noised.Core.Service;
-using Noised.Plugins.Commands.CoreCommands;
 using NUnit.Framework;
+using Noised.Core.Commands;
+using Noised.Core.Media;
+using Noised.Plugins.Commands.CoreCommands;
 using Should;
 
 namespace NoisedTests.Commands
 {
     [TestFixture]
-    public class ShuffleCommandsTest
+    public class ShuffleCommandsTest : AbstractCommandTest
     {
-        [TestFixtureSetUp]
-        public void ShuffleStatusTestSetUp()
-        {
-            IocContainer.Build();
-        }
-
         [Test]
-        public void SetShuffleStatusSwitchShuffleStatus()
+        public void SetShuffleStatusCommandShouldSetShuffleMode()
         {
-            Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
+            var mediaManager = new Mock<IMediaManager>();
+            RegisterToDIMock<IMediaManager>(mediaManager.Object);
 
-            IMediaManager mediaManager = IocContainer.Get<IMediaManager>();
-
-            new SetShuffleStatus(serviceConnectionMock.Object, false).ExecuteCommand();
-            mediaManager.Shuffle.ShouldBeFalse("ShuffleStatus should be false after executing SetShuffleStatus command with parameter false.");
-            new SetShuffleStatus(serviceConnectionMock.Object, true).ExecuteCommand();
-            mediaManager.Shuffle.ShouldBeTrue("ShuffleStatus should be true after executing SetShuffleStatus command with parameter true.");
+            new SetShuffleStatus(ContextMock.Object, false).ExecuteCommand();
+            mediaManager.VerifySet(mm => mm.Shuffle = false, "Shufle status should have been set to false");
+            new SetShuffleStatus(ContextMock.Object, true).ExecuteCommand();
+            mediaManager.VerifySet(mm => mm.Shuffle = true, "Shufle status should have been set to false");
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException), UserMessage = "SetShuffleStatus command should throw an ArgumentNullException when invoked without IServiceConnectionContext.")]
-        public void SetShuffleStatusArgumentNullException()
+        public void SetShuffleStatusCommandArgumentNullException()
         {
             new SetShuffleStatus(null, false);
         }
 
         [Test]
-        public void GetShuffleStatusAfterSwitch()
+        public void GetShuffleStatusCommandShouldGetShuffleMode()
         {
-            IMediaManager mediaManager = IocContainer.Get<IMediaManager>();
+            var mediaManager = new Mock<IMediaManager>();
+            RegisterToDIMock<IMediaManager>(mediaManager.Object);
 
-            ResponseMetaData responseMetaData = new ResponseMetaData();
-            Mock<IServiceConnectionContext> serviceConnectionMock = new Mock<IServiceConnectionContext>();
-            serviceConnectionMock.Setup(x => x.SendResponse(It.IsAny<ResponseMetaData>())).Callback((ResponseMetaData r) => responseMetaData = r);
+            new GetShuffleStatus(ContextMock.Object).ExecuteCommand();
 
-            new GetShuffleStatus(serviceConnectionMock.Object).ExecuteCommand();
-
-            responseMetaData.Parameters[0].ShouldEqual(mediaManager.Shuffle, "GetShuffleStatus command should return the IMediaManagers shuffle status.");
+            mediaManager.VerifyGet(mm => mm.Shuffle);
+            string expectedResponseName = "Noised.Plugins.Commands.CoreCommands.GetShuffleStatus";
+            ContextMock.Verify(ctx => ctx.SendResponse(
+                        It.Is<ResponseMetaData>(r => r.Name == expectedResponseName)));
         }
 
         [Test]

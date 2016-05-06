@@ -11,11 +11,11 @@ namespace Noised.Plugins.Commands.CoreCommands
     {
         private readonly IList<object> mediaItemURIs;
 
-		/// <summary>
-		///		Constructor
-		/// </summary>
-		/// <param name="context">The command's context</param>
-		/// <param name="mediaItemURIs">A list of item URIs to add to the queue</param>
+        /// <summary>
+        ///	Constructor
+        /// </summary>
+        /// <param name="context">The command's context</param>
+        /// <param name="mediaItemURIs">A list of item URIs to add to the queue</param>
         public Enqueue(ServiceConnectionContext context, IList<object> mediaItemURIs)
             : base(context)
         {
@@ -26,18 +26,17 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-			var sources = IocContainer.Get<IMediaSourceAccumulator>();
-			var queue = IocContainer.Get<IQueue>();
-			foreach(string uriObject in mediaItemURIs)
-			{
-				var uriString = uriObject as String;
-				var mediaItem = sources.Get(new Uri(uriString));
-				if(mediaItem != null)
-				{
-					queue.Enqueue(new Listable<MediaItem>(mediaItem));	
-					Context.Logging.Info(String.Format("Enqueued {0}", uriString));
-				}
-			}
+            var sources = Context.DIContainer.Get<IMediaSourceAccumulator>();
+            var queue = Context.DIContainer.Get<IQueue>();
+            foreach (string uriString in mediaItemURIs)
+            {
+                var mediaItem = sources.Get(new Uri(uriString));
+                if (mediaItem != null)
+                {
+                    queue.Enqueue(new Listable<MediaItem>(mediaItem));	
+                    Context.Logging.Info(String.Format("Enqueued {0}", uriString));
+                }
+            }
         }
 
         #endregion

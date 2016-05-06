@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
-using Noised.Core.Media;
+using Noised.Core.DB;
 using Noised.Core.Service;
 
 namespace Noised.Plugins.Commands.CoreCommands
@@ -10,7 +9,7 @@ namespace Noised.Plugins.Commands.CoreCommands
     public class GetPlaylists : AbstractCommand
     {
         /// <summary>
-        ///		Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="context">The command's context</param>
         public GetPlaylists(ServiceConnectionContext context)
@@ -23,15 +22,18 @@ namespace Noised.Plugins.Commands.CoreCommands
         #region Overrides of AbstractCommand
 
         /// <summary>
-        ///		Defines the command's behaviour
+        ///    Defines the command's behaviour
         /// </summary>
         protected override void Execute()
         {
-            Context.SendResponse(new ResponseMetaData
+            using (IUnitOfWork unitOfWork = Context.DIContainer.Get<IUnitOfWork>())
             {
-                Name = "Noised.Commands.Core.GetPlaylists",
-                Parameters = new List<object>(IocContainer.Get<IPlaylistManager>().Playlists)
-            });
+                Context.SendResponse(new ResponseMetaData
+                    {
+                        Name = "Noised.Commands.Core.GetPlaylists",
+                        Parameters = new List<object>(unitOfWork.PlaylistRepository.GetAll())
+                    });
+            }
         }
 
         #endregion

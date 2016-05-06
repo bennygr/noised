@@ -1,5 +1,4 @@
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -8,7 +7,7 @@ namespace Noised.Plugins.Commands.CoreCommands
     public class Stop : AbstractCommand
     {
         /// <summary>
-        ///		Constructor
+        ///	Constructor
         /// </summary>
         /// <param name="context">Connection context</param>
         public Stop(ServiceConnectionContext context)
@@ -18,8 +17,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-            var mediaManager = IocContainer.Get<IMediaManager>();
-            mediaManager.Stop();
+            Context.DIContainer.Get<IMediaManager>().Stop();
         }
 
         #endregion

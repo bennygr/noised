@@ -1,5 +1,4 @@
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -8,7 +7,7 @@ namespace Noised.Plugins.Commands.CoreCommands
     public class Next : AbstractCommand
     {
         /// <summary>
-        ///		Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="context">Connection context</param>
         public Next(ServiceConnectionContext context)
@@ -20,7 +19,7 @@ namespace Noised.Plugins.Commands.CoreCommands
 
         protected override void Execute()
         {
-            IocContainer.Get<IMediaManager>().ProcessNext();
+            Context.DIContainer.Get<IMediaManager>().ProcessNext();
         }
 
         #endregion

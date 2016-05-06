@@ -25,7 +25,8 @@ namespace Noised.Core.UserManagement
         /// </summary>
         /// <param name="username">Username</param>
         /// <param name="password">Pswword</param>
-        void CreateUser(string username, string password);
+        /// <returns>The new created user</returns>
+        User CreateUser(string username, string password);
 
         /// <summary>
         /// Deletes an User

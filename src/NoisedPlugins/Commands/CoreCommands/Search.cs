@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Noised.Core.Commands;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -23,7 +22,8 @@ namespace Noised.Plugins.Commands.CoreCommands
         /// <param name="searchPattern">What to search for</param>
         public Search(ServiceConnectionContext context, string searchPattern)
             : this(context, searchPattern, null)
-        { }
+        {
+        }
 
         /// <summary>
         /// Command that executes a search for MediaItems
@@ -51,15 +51,15 @@ namespace Noised.Plugins.Commands.CoreCommands
         protected override void Execute()
         {
             Context.SendResponse(new ResponseMetaData
-            {
-                Name = "Noised.Commands.Core.Search",
-                Parameters =
+                {
+                    Name = "Noised.Commands.Core.Search",
+                    Parameters =
                     new List<Object>
                     {
-                        IocContainer.Get<IMediaSourceAccumulator>()
+                        Context.DIContainer.Get<IMediaSourceAccumulator>()
                             .Search(searchPattern, sourceIdentifiers.OfType<string>())
                     }
-            });
+                });
         }
 
         #endregion

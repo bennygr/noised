@@ -35,7 +35,7 @@ namespace Noised.Core.DB.Sqlite
                 cmd.CommandType = CommandType.Text;
 
                 cmd.Parameters.Add(new SqliteParameter("@Username", user.Name));
-                cmd.Parameters.Add(new SqliteParameter("@Password", user.Password));
+                cmd.Parameters.Add(new SqliteParameter("@Password", user.PasswordHash));
 
                 cmd.ExecuteNonQuery();
             }
@@ -91,7 +91,7 @@ namespace Noised.Core.DB.Sqlite
 
             return new User(userTable.Rows[0]["Username"].ToString())
             {
-                Password = userTable.Rows[0]["Password"].ToString()
+                PasswordHash = userTable.Rows[0]["Password"].ToString()
             };
         }
 

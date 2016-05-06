@@ -4,13 +4,14 @@ using System.Data;
 using Mono.Data.Sqlite;
 using Noised.Core.IOC;
 using Noised.Core.Media;
+using System.Linq;
 
 namespace Noised.Core.DB.Sqlite
 {
     /// <summary>
     /// IPlaylistRepository implementation for Sqlite
     /// </summary>
-    internal class SqlitePlaylistRepository : IPlaylistRepository
+    class SqlitePlaylistRepository : IPlaylistRepository
     {
         private readonly SqliteConnection connection;
 
@@ -26,25 +27,49 @@ namespace Noised.Core.DB.Sqlite
             this.connection = connection;
         }
 
+        private IEnumerable<Listable<MediaItem>> GetItemsForList(long listId)
+        {
+            var factory = IoC.Get<IMediaSourceAccumulator>();
+            using (SqliteCommand cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = PlaylistsSql.SelectPlaylistItems;
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqliteParameter("@ID", listId));
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var uri = new Uri((string)reader["MediaItemUri"]);
+                    yield return new Listable<MediaItem>(factory.Get(uri));
+                }
+            }
+        }
+
         #region Implementation of IPlaylistRepository
 
-        /// <summary>
-        /// Creates a new Playlist
-        /// </summary>
-        /// <param name="playlist">Playlist to create</param>
-        public void CreatePlaylist(Playlist playlist)
+        public void Create(Playlist playlist)
         {
             if (playlist == null)
                 throw new ArgumentNullException("playlist");
 
+            //Adding the playlist to the DB
+            using (SqliteCommand cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = PlaylistsSql.InsertPlaylistStatement;
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqliteParameter("@Name", playlist.Name));
+                cmd.ExecuteNonQuery();
+            }
+            playlist.Id = SqliteUtils.GetLastInsertRowId(connection, "Playlists");
+
+            //Writing the playlist's items
             foreach (Listable<MediaItem> mediaItem in playlist.Items)
             {
                 using (SqliteCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = PlaylistsSql.InsertPlaylistStatement;
+                    cmd.CommandText = PlaylistsSql.InsertPlaylistItemStatement;
                     cmd.CommandType = CommandType.Text;
 
-                    cmd.Parameters.Add(new SqliteParameter("@Name", playlist.Name));
+                    cmd.Parameters.Add(new SqliteParameter("@ID", playlist.Id));
                     cmd.Parameters.Add(new SqliteParameter("@MediaItemUri", mediaItem.Item.Uri));
 
                     cmd.ExecuteNonQuery();
@@ -52,74 +77,84 @@ namespace Noised.Core.DB.Sqlite
             }
         }
 
-        /// <summary>
-        /// Updates an existing Playlist
-        /// </summary>
-        /// <param name="playlist">Playlist to update</param>
-        public void UpdatePlaylist(Playlist playlist)
+        public void Update(Playlist playlist)
         {
             if (playlist == null)
                 throw new ArgumentNullException("playlist");
 
-            DeletePlaylist(playlist);
-            CreatePlaylist(playlist);
+            Delete(playlist);
+            Create(playlist);
         }
 
-        /// <summary>
-        /// Deletes a Playlist
-        /// </summary>
-        /// <param name="playlist">Playlist to delete</param>
-        public void DeletePlaylist(Playlist playlist)
+        public void Delete(Playlist playlist)
         {
             if (playlist == null)
                 throw new ArgumentNullException("playlist");
 
+            //Removing the playlist's items
+            using (SqliteCommand cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = PlaylistsSql.DeletePlaylistItemsStatement;
+                cmd.CommandType = CommandType.Text;
+
+                cmd.Parameters.Add(new SqliteParameter("@ID", playlist.Id));
+                cmd.ExecuteNonQuery();
+            }
+
+            //removing the playlist
             using (SqliteCommand cmd = connection.CreateCommand())
             {
                 cmd.CommandText = PlaylistsSql.DeletePlaylistStatement;
                 cmd.CommandType = CommandType.Text;
 
-                cmd.Parameters.Add(new SqliteParameter("@Name", playlist.Name));
-
+                cmd.Parameters.Add(new SqliteParameter("@ID", playlist.Id));
                 cmd.ExecuteNonQuery();
             }
         }
 
-        /// <summary>
-        /// Gets all Playlists
-        /// </summary>
-        public IList<Playlist> AllPlaylists
+        public IList<Playlist> GetAll()
         {
-            get
+            var ret = new List<Playlist>();
+            using (var cmd = connection.CreateCommand())
             {
-                DataTable playlistTable = new DataTable();
-
-                using (SqliteCommand cmd = connection.CreateCommand())
+                cmd.CommandText = PlaylistsSql.SelectAllPlaylists;
+                cmd.CommandType = CommandType.Text;
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    cmd.CommandText = PlaylistsSql.SelectAllPlaylists;
-                    cmd.CommandType = CommandType.Text;
-
-                    playlistTable.Load(cmd.ExecuteReader());
+                    var name = (string)reader["Name"];
+                    var id = (Int64)reader["ID"];
+                    var playlist = new Playlist(name){ Id = id };
+                    ret.Add(playlist);
                 }
-
-                List<Playlist> playlists = new List<Playlist>();
-                Playlist p;
-                IMediaSourceAccumulator mediaSourceAccumulator = IocContainer.Get<IMediaSourceAccumulator>();
-                foreach (DataRow row in playlistTable.Rows)
-                {
-                    p = playlists.Find(x => x.Name == row["Name"].ToString());
-
-                    if (p == null)
-                    {
-                        p = new Playlist(row["Name"].ToString());
-                        playlists.Add(p);
-                    }
-
-                    p.Add(new Listable<MediaItem>(mediaSourceAccumulator.Get(new Uri(row["MediaItemUri"].ToString()))));
-                }
-
-                return playlists;
             }
+            foreach(Playlist playlist in ret)
+            {
+                playlist.Add(GetItemsForList(playlist.Id).ToArray());
+            }
+            return ret;
+        }
+
+        public Playlist GetById(Int64 id)
+        {
+            Playlist playlist = null;
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = PlaylistsSql.SelectPlaylist;
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqliteParameter("@ID", id));
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    var name = (string)reader["Name"];
+                    playlist = new Playlist(name){ Id = id };
+                }
+            }
+            if(playlist != null)
+            {
+                playlist.Add(GetItemsForList(playlist.Id).ToArray());
+            }
+            return playlist;
         }
 
         #endregion

@@ -1,7 +1,7 @@
 namespace Noised.Core.Commands
 {
-	interface ICommandFactory
-	{
-		AbstractCommand CreateCommand(CommandMetaData commandMetaData);
-	};
+    interface ICommandFactory
+    {
+        AbstractCommand CreateCommand(CommandMetaData commandMetaData);
+    };
 }
