@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Noised.Core.Commands;
 using Noised.Core.DB;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -45,7 +44,7 @@ namespace Noised.Plugins.Commands.CoreCommands
         #region Overrides of AbstractCommand
 
         /// <summary>
-        ///		Defines the command's behaviour
+        ///     Defines the command's behaviour
         /// </summary>
         protected override void Execute()
         {

@@ -26,8 +26,7 @@ namespace Noised.Plugins.Commands.CoreCommands
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            if (mediaItemUris == null ||
-                !mediaItemUris.Any())
+            if (mediaItemUris == null)
             {
                 var argumentNullException = new ArgumentNullException("mediaItemUris");
                 Context.SendResponse(new ErrorResponse(argumentNullException)
