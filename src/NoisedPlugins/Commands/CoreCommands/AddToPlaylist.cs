@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Noised.Core.Commands;
 using Noised.Core.DB;
-using Noised.Core.IOC;
 using Noised.Core.Media;
 using Noised.Core.Service;
 
@@ -47,20 +45,25 @@ namespace Noised.Plugins.Commands.CoreCommands
         /// </summary>
         protected override void Execute()
         {
-            var playlistRepository = Context.DIContainer.Get<IPlaylistRepository>();
-            foreach (string mediaItemUri in mediaItemUris)
+            using (IUnitOfWork unitOfWork = Context.DIContainer.Get<IUnitOfWork>())
             {
-                var playlist = playlistRepository.GetById(playlistId);
-                if (playlist != null)
+                var playlistRepository = unitOfWork.PlaylistRepository;
+                foreach (string mediaItemUri in mediaItemUris)
                 {
-                    playlist.Add(new Listable<MediaItem>(Context.DIContainer.Get<IMediaSourceAccumulator>().Get(new Uri(mediaItemUri))));
-                }
-                else
-                {
-                    Context.SendResponse(new ErrorResponse("Playlist not found")
+                    var playlist = playlistRepository.GetById(playlistId);
+                    if (playlist != null)
+                    {
+                        playlist.Add(
+                            new Listable<MediaItem>(
+                                Context.DIContainer.Get<IMediaSourceAccumulator>().Get(new Uri(mediaItemUri))));
+                    }
+                    else
+                    {
+                        Context.SendResponse(new ErrorResponse("Playlist not found")
                         {
                             Name = "Noised.Commands.Core.AddToPlaylist",
                         });
+                    }
                 }
             }
         }
