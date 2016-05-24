@@ -88,6 +88,7 @@
     <Compile Include="etc\CoreConfigProperties.cs" />
     <Compile Include="Media\IMediaManager.cs" />
     <Compile Include="Media\IMediaSourceAccumulator.cs" />
+    <Compile Include="Media\IMetaFile.cs" />
     <Compile Include="Media\IMetaFileAccumulator.cs" />
     <Compile Include="Media\IMetaFileWriter.cs" />
     <Compile Include="Media\IPlaylistManager.cs" />

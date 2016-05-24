@@ -5,7 +5,7 @@ namespace Noised.Core.Media
     /// <summary>
     /// A file consisting meta informations about media entities like album covers and artist pictures
     /// </summary>
-    public class MetaFile
+    public class MetaFile : IMetaFile
     {
         private MetaFileType type;
         private MetaFileCategory category;

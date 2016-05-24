@@ -27,7 +27,7 @@ namespace Noised.Core.Media
         /// The method which writes the MetaFile to the disk
         /// </summary>
         /// <param name="metaFile">The MetaFile which should be written to the disk</param>
-        public void WriteMetaFileToDisk(MetaFile metaFile)
+        public void WriteMetaFileToDisk(IMetaFile metaFile)
         {
             // always append the artist
             string fullPath = Path.Combine(metaFilePath, metaFile.Artist);

@@ -9,6 +9,6 @@
         /// The method which writes the MetaFile to the disk
         /// </summary>
         /// <param name="metaFile">The MetaFile which should be written to the disk</param>
-        void WriteMetaFileToDisk(MetaFile metaFile);
+        void WriteMetaFileToDisk(IMetaFile metaFile);
     }
 }
