@@ -20,7 +20,6 @@ namespace Noised.Core.Media
         private readonly IMediaSourceAccumulator mediaSourceAccumulator;
         // TODO: remove this locking and make underlying classes threadsafe
         private readonly Object lockUnitOfWork = new Object();
-        private readonly Object lockMetaFileWriter = new Object();
 
         /// <summary>
         /// Access to all MetaFiles sources
@@ -110,9 +109,8 @@ namespace Noised.Core.Media
             {
                 foreach (MetaFile mf in scraper.GetAlbumCover(album))
                 {
+                    mfw.WriteMetaFileToDisk(mf);
                     // TODO: remove this locking and make underlying classes threadsafe
-                    lock (lockMetaFileWriter)
-                        mfw.WriteMetaFileToDisk(mf);
                     lock (lockUnitOfWork)
                     {
                         using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
@@ -138,9 +136,8 @@ namespace Noised.Core.Media
             {
                 foreach (MetaFile mf in scraper.GetArtistPictures(artist))
                 {
+                    mfw.WriteMetaFileToDisk(mf);
                     // TODO: remove this locking and make underlying classes threadsafe
-                    lock (lockMetaFileWriter)
-                        mfw.WriteMetaFileToDisk(mf);
                     lock (lockUnitOfWork)
                     {
                         using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
