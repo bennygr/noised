@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using Mono.Data.Sqlite;
 using Noised.Core.Media;
 
@@ -58,7 +59,30 @@ namespace Noised.Core.DB.Sqlite
         /// <returns></returns>
         public IEnumerable<MetaFile> GetMetaFiles(string artist, string album)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrWhiteSpace(artist))
+                throw new ArgumentException("artist");
+            if (String.IsNullOrWhiteSpace(album))
+                throw new ArgumentException("album");
+
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = MetaFilesSql.SelectStmt;
+                cmd.CommandType = CommandType.Text;
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string uriString = reader["Uri"].ToString();
+                    Uri uri = new Uri(uriString);
+                    byte[] file = File.ReadAllBytes(uri.LocalPath);
+                    string extension = Path.GetExtension(uriString);
+                    yield return
+                        new MetaFile(reader["Artist"].ToString(), reader["Album"].ToString(), reader["Type"].ToString(),
+                            uri, file, extension, reader["Category"].ToString(),
+                            Path.GetFileNameWithoutExtension(uriString));
+                }
+            }
         }
 
         /// <summary>
