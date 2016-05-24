@@ -107,6 +107,12 @@ namespace Noised.Core.Media
             // Get all Artistpictures from IMetaFileScraper
             foreach (ScraperAlbumInformation album in albums)
             {
+                using (var uow = dbFactory.GetUnitOfWork())
+                {
+                    if (uow.MetaFileRepository.GetMetaFiles(album.Artist, album.Album).Any())
+                        return;
+                }
+
                 foreach (MetaFile mf in scraper.GetAlbumCover(album))
                 {
                     mfw.WriteMetaFileToDisk(mf);
