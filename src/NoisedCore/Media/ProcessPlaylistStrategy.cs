@@ -1,5 +1,3 @@
-using Noised.Core.Media;
-
 namespace Noised.Core.Media
 {
     /// <summary>
@@ -8,7 +6,7 @@ namespace Noised.Core.Media
     class ProcessPlaylistStrategy : IProcessPlaylistStrategy
     {
         private readonly IMediaManager mediaManager;
-    
+
         /// <summary>
         ///     Constructor
         /// </summary>
@@ -21,7 +19,7 @@ namespace Noised.Core.Media
         }
 
         #region IProcessPlaylistStrategy
-        
+
         public Listable<MediaItem> GetNextItem(Playlist playlist)
         {
             if (playlist.HasUnreturnedItems())
@@ -37,7 +35,7 @@ namespace Noised.Core.Media
             }
             return null;
         }
-        
+
         #endregion
     };
 }
