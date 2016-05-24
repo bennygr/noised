@@ -11,5 +11,7 @@
                                                 "[Category] TEXT NOT NULL);";
 
         internal const string InsertStmt = "INSERT INTO MetaFiles (Artist, Album, Type, Uri, Category) VALUES (@Artist, @Album, @Type, @Uri, @Category)";
+
+        internal const string SelectStmt = "SELECT Artist, Album, Type, Uri, Category FROM MetaFiles";
     }
 }
