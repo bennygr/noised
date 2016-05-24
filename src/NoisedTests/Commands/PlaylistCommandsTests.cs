@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Moq;
-using NUnit.Framework;
 using Noised.Core.Commands;
 using Noised.Core.DB;
 using Noised.Core.Media;
 using Noised.Plugins.Commands.CoreCommands;
+using NUnit.Framework;
 using Should;
 
 namespace NoisedTests.Commands
@@ -13,7 +13,6 @@ namespace NoisedTests.Commands
     [TestFixture]
     public class PlaylistCommandsTests : AbstractCommandTest
     {
-
         [Test]
         public void CreatePlaylistCommandShouldPutPlaylistInRepository()
         {
@@ -57,7 +56,7 @@ namespace NoisedTests.Commands
         public void DeletePlaylistCommandTest()
         {
             var playlistRepository = new Mock<IPlaylistRepository>();
-            playlistRepository.Setup(r => r.GetById(117)).Returns(new Playlist("testList"){ Id = 117 });
+            playlistRepository.Setup(r => r.GetById(117)).Returns(new Playlist("testList") { Id = 117 });
             var unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(m => m.PlaylistRepository).Returns(playlistRepository.Object);
             RegisterToDIMock<IUnitOfWork>(unitOfWork.Object);
