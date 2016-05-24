@@ -62,6 +62,9 @@ namespace Noised.Core.DB.Sqlite
             }
         }
 
+        /// <summary>
+        /// Repository for MetaFiles
+        /// </summary>
         public IMetaFileRepository MetaFileRepository
         {
             get
