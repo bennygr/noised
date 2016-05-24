@@ -16,6 +16,7 @@ namespace Noised.Core
     public class CoreStarter
     {
         private readonly string[] args;
+        private ILogging logger;
 
         /// <summary>
         ///	Constructor
@@ -29,10 +30,10 @@ namespace Noised.Core
         /// <summary>
         ///	Internal method to handle noised command line arguments
         /// </summary>
-        private int HandleArgs(string[] arguments)
+        private static int HandleArgs(string[] arguments)
         {
             //TODO: Refactor: Put Parsing in it's own class; Put Argument handling in it's own class
-            ILogging logger = IoC.Get<ILogging>();
+            ILogging logging = IoC.Get<ILogging>();
 
             if (arguments.Length == 1)
             {
@@ -42,7 +43,7 @@ namespace Noised.Core
 
                     if (string.IsNullOrWhiteSpace(realArgs))
                     {
-                        logger.Error("CreateUser command was invoked without a parameter");
+                        logging.Error("CreateUser command was invoked without a parameter");
                         return -2;
                     }
 
@@ -50,14 +51,14 @@ namespace Noised.Core
 
                     IoC.Get<IUserManager>().CreateUser(realArgArr[0], realArgArr[1]);
 
-                    logger.Info("\"" + realArgArr[0] + "\" can now rock this noised!\nPress Enter to continue!");
+                    logging.Info("\"" + realArgArr[0] + "\" can now rock this noised!\nPress Enter to continue!");
                     Console.ReadLine();
 
                     return 0;
                 }
             }
 
-            logger.Error("NoisedServer was invoked with an invalid number of arguments or an unknown argument");
+            logging.Error("NoisedServer was invoked with an invalid number of arguments or an unknown argument");
             return -1;
         }
 
@@ -67,7 +68,7 @@ namespace Noised.Core
         public int Start()
         {
             IoC.Build();
-            ILogging logger = IoC.Get<ILogging>();
+            logger = IoC.Get<ILogging>();
             logger.AddLogger(new ConsoleLogger());
 
             if (args != null && args.Length != 0)
@@ -109,12 +110,18 @@ namespace Noised.Core
 
             // Refresh metafiles
             logger.Info("Refreshing Metafiles...");
-            IoC.Get<IMetaFileAccumulator>().Refresh();
-            logger.Info("Done refreshing Metafiles.");
+            IMetaFileAccumulator metaFileAccumulator = IoC.Get<IMetaFileAccumulator>();
+            metaFileAccumulator.RefreshAsyncFinished += MetaFileAccumulatorRefreshAsyncFinished;
+            metaFileAccumulator.RefreshAsync();
 
             logger.Info("Noised has been started.");
 
             return 0;
+        }
+
+        private void MetaFileAccumulatorRefreshAsyncFinished()
+        {
+            logger.Info("Done refreshing Metafiles.");
         }
     };
 }
