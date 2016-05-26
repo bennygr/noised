@@ -59,7 +59,7 @@ namespace NoisedTests.Commands
             playlistRepository.Setup(r => r.GetById(117)).Returns(new Playlist("testList") { Id = 117 });
             var unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(m => m.PlaylistRepository).Returns(playlistRepository.Object);
-            RegisterToDIMock<IUnitOfWork>(unitOfWork.Object);
+            RegisterToDIMock(unitOfWork.Object);
 
             new DeletePlaylist(ContextMock.Object, 117).ExecuteCommand();
 
@@ -125,6 +125,26 @@ namespace NoisedTests.Commands
 
             String expectedErrorResponse = "Noised.Plugins.Commands.CoreCommands.RemoveFromPlaylist";
             ContextMock.Verify(c => c.SendResponse(It.Is<ErrorResponse>(e => e.Name == expectedErrorResponse)));
+        }
+
+        [Test]
+        public void AddToPlaylistShouldAddAnItemToAPlaylist()
+        {
+            var playlistRepository = new Mock<IPlaylistRepository>();
+            Playlist playlist = new Playlist("testList") { Id = 1337 };
+            playlistRepository.Setup(r => r.GetById(1337)).Returns(playlist);
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(m => m.PlaylistRepository).Returns(playlistRepository.Object);
+            RegisterToDIMock<IUnitOfWork>(unitOfWork.Object);
+            var msa = new Mock<IMediaSourceAccumulator>();
+            string path = @"C:\test\test.mp3";
+            msa.Setup(x => x.Get(new Uri(path))).Returns(new MediaItem(new Uri(path), String.Empty));
+            RegisterToDIMock(msa.Object);
+
+
+            new AddToPlaylist(ContextMock.Object, 1337, new List<object> { path }).ExecuteCommand();
+
+
         }
     }
 }
