@@ -77,6 +77,9 @@ namespace Noised.Core.DB.Sqlite
                     Uri uri = new Uri(uriString);
                     byte[] file = File.ReadAllBytes(uri.LocalPath);
                     string extension = Path.GetExtension(uriString);
+
+                    // TODO: Check if file is still present and if not remove DB entry
+
                     yield return
                         new MetaFile(reader["Artist"].ToString(), reader["Album"].ToString(), reader["Type"].ToString(),
                             uri, file, extension, reader["Category"].ToString(),
