@@ -7,6 +7,7 @@ using Noised.Core.Crypto;
 using Noised.Core.DB;
 using Noised.Core.DB.Sqlite;
 using Noised.Core.Media;
+using Noised.Core.Media.NoisedMetaFile;
 using Noised.Core.Plugins;
 using Noised.Core.Service;
 using Noised.Core.Service.Protocols;

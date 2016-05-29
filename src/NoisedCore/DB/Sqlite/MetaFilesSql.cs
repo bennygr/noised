@@ -13,5 +13,9 @@
         internal const string InsertStmt = "INSERT INTO MetaFiles (Artist, Album, Type, Uri, Category) VALUES (@Artist, @Album, @Type, @Uri, @Category)";
 
         internal const string SelectStmt = "SELECT Artist, Album, Type, Uri, Category FROM MetaFiles";
+
+        internal const string SelectWhereStmt = "SELECT Artist, Album, Type, Uri, Category FROM MetaFiles where Artist = @Artist and Album = @Album";
+
+        internal const string DeleteStmnt = "DELETE FROM MetaFiles where Uri = @Uri";
     }
 }

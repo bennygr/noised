@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Noised.Core.Media
+namespace Noised.Core.Media.NoisedMetaFile
 {
     /// <summary>
     /// A file consisting meta informations about media entities like album covers and artist pictures
@@ -83,8 +83,8 @@ namespace Noised.Core.Media
                 throw new ArgumentNullException("type");
             if (uri == null)
                 throw new ArgumentNullException("uri");
-            if (data == null)
-                throw new ArgumentNullException("data");
+            //if (data == null)
+            //    throw new ArgumentNullException("data");
             if (String.IsNullOrWhiteSpace(originalFilename))
                 throw new ArgumentNullException("originalFilename");
             if (String.IsNullOrWhiteSpace(extension))

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Noised.Core.Media
+namespace Noised.Core.Media.NoisedMetaFile
 {
     /// <summary>
     /// Interace for access to all MetaFile sources

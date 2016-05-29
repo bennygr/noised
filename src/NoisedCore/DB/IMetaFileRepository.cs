@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Noised.Core.Media;
+using Noised.Core.Media.NoisedMetaFile;
 
 namespace Noised.Core.DB
 {
@@ -27,5 +27,11 @@ namespace Noised.Core.DB
         /// </summary>
         /// <param name="mf">MetaFile to delete</param>
         void DeleteMetaFile(MetaFile mf);
+
+        /// <summary>
+        /// Gets all MetaFiles
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<MetaFile> GetAllMetaFiles();
     }
 }

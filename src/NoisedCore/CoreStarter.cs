@@ -3,6 +3,7 @@ using Noised.Core.Config;
 using Noised.Core.DB;
 using Noised.Core.IOC;
 using Noised.Core.Media;
+using Noised.Core.Media.NoisedMetaFile;
 using Noised.Core.Plugins;
 using Noised.Core.Service;
 using Noised.Core.UserManagement;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using Mono.Data.Sqlite;
-using Noised.Core.Media;
+using Noised.Core.Media.NoisedMetaFile;
 
 namespace Noised.Core.DB.Sqlite
 {
@@ -66,8 +66,11 @@ namespace Noised.Core.DB.Sqlite
 
             using (var cmd = connection.CreateCommand())
             {
-                cmd.CommandText = MetaFilesSql.SelectStmt;
+                cmd.CommandText = MetaFilesSql.SelectWhereStmt;
                 cmd.CommandType = CommandType.Text;
+
+                cmd.Parameters.Add(new SqliteParameter("@Artist", artist));
+                cmd.Parameters.Add(new SqliteParameter("@Album", album));
 
                 var reader = cmd.ExecuteReader();
 
@@ -77,8 +80,6 @@ namespace Noised.Core.DB.Sqlite
                     Uri uri = new Uri(uriString);
                     byte[] file = File.ReadAllBytes(uri.LocalPath);
                     string extension = Path.GetExtension(uriString);
-
-                    // TODO: Check if file is still present and if not remove DB entry
 
                     yield return
                         new MetaFile(reader["Artist"].ToString(), reader["Album"].ToString(), reader["Type"].ToString(),
@@ -94,7 +95,45 @@ namespace Noised.Core.DB.Sqlite
         /// <param name="mf">MetaFile to delete</param>
         public void DeleteMetaFile(MetaFile mf)
         {
-            throw new NotImplementedException();
+            if (mf == null)
+                throw new ArgumentNullException("mf");
+
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = MetaFilesSql.DeleteStmnt;
+                cmd.CommandType = CommandType.Text;
+
+                cmd.Parameters.Add(new SqliteParameter("@Uri", mf.Uri));
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        /// <summary>
+        /// Gets all MetaFiles without the actual file (db entry only)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MetaFile> GetAllMetaFiles()
+        {
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = MetaFilesSql.SelectStmt;
+                cmd.CommandType = CommandType.Text;
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string uriString = reader["Uri"].ToString();
+                    Uri uri = new Uri(uriString);
+                    string extension = Path.GetExtension(uriString);
+
+                    yield return
+                        new MetaFile(reader["Artist"].ToString(), reader["Album"].ToString(), reader["Type"].ToString(),
+                            uri, null, extension, reader["Category"].ToString(),
+                            Path.GetFileNameWithoutExtension(uriString));
+                }
+            }
         }
 
         #endregion

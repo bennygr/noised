@@ -7,7 +7,7 @@ using Noised.Core.DB;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Media;
 
-namespace Noised.Core.Media
+namespace Noised.Core.Media.NoisedMetaFile
 {
     /// <summary>
     /// Access to all MetaFiles sources
@@ -50,6 +50,9 @@ namespace Noised.Core.Media
         /// <param name="metaDataCollection">The input for the scraper</param>
         private void RefreshAsyncInternal(IMetaFileScraper scraper, DistinctMetaDataCollection metaDataCollection)
         {
+            // Cleanup
+            new MetaFileCleaner().CleanUpMetaFiles();
+
             // Get all AlbumCovers from IMetaFileScraper
             RefreshAlbumCovers(scraper, metaDataCollection.Albums, metaFileWriter);
 

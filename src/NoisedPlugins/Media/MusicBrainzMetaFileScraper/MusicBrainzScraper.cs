@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using CoverArtArchive;
 using MusicBrainz.Data;
-using Noised.Core.Media;
+using Noised.Core.Media.NoisedMetaFile;
 using Noised.Core.Plugins;
 using Noised.Core.Plugins.Media;
 using Noised.Logging;

@@ -1,4 +1,4 @@
-﻿namespace Noised.Core.Media
+﻿namespace Noised.Core.Media.NoisedMetaFile
 {
     /// <summary>
     /// Interface for a way to write a MetaFile to the disk

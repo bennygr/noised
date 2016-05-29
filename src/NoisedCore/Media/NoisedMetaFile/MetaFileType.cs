@@ -1,4 +1,4 @@
-﻿namespace Noised.Core.Media
+﻿namespace Noised.Core.Media.NoisedMetaFile
 {
     /// <summary>
     /// Type of the MetaFile

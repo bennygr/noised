@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Noised.Core.Media;
+using Noised.Core.Media.NoisedMetaFile;
 
 namespace Noised.Core.Plugins.Media
 {
