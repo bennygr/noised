@@ -7,8 +7,8 @@ namespace Noised.Core.Media.NoisedMetaFile
     /// </summary>
     public class MetaFile : IMetaFile
     {
-        private MetaFileType type;
-        private MetaFileCategory category;
+        private readonly MetaFileType type;
+        private readonly MetaFileCategory category;
 
         /// <summary>
         /// The Artist corresponding to this MetaFile
@@ -28,7 +28,7 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// <summary>
         /// The MetaFile in memory
         /// </summary>
-        public byte[] Data { get; private set; }
+        public byte[] Data { get; set; }
 
         /// <summary>
         /// The file extension of the MetaFile
@@ -77,14 +77,10 @@ namespace Noised.Core.Media.NoisedMetaFile
         {
             if (String.IsNullOrWhiteSpace(artist))
                 throw new ArgumentNullException("artist");
-            if (String.IsNullOrWhiteSpace(album))
-                throw new ArgumentNullException("album");
             if (String.IsNullOrWhiteSpace(type))
                 throw new ArgumentNullException("type");
             if (uri == null)
                 throw new ArgumentNullException("uri");
-            //if (data == null)
-            //    throw new ArgumentNullException("data");
             if (String.IsNullOrWhiteSpace(originalFilename))
                 throw new ArgumentNullException("originalFilename");
             if (String.IsNullOrWhiteSpace(extension))
