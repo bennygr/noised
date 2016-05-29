@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Moq;
 using Noised.Core.Config;
 using Noised.Core.etc;
@@ -54,7 +55,8 @@ namespace NoisedTests.Media
         public void WriteMetaFileToDisk_Successful()
         {
             var cfgMock = new Mock<IConfig>();
-            cfgMock.Setup(x => x.GetProperty(CoreConfigProperties.MetaFileDirectory, null)).Returns(@"C:\test\");
+            string basePathc = Path.Combine("C:\\", "test");
+            cfgMock.Setup(x => x.GetProperty(CoreConfigProperties.MetaFileDirectory, null)).Returns(basePathc);
 
             var ioMock = new Mock<IMetaFileIOHandler>();
             ioMock.Setup(x => x.MetaFileExists(It.IsAny<string>())).Returns(false);
@@ -70,17 +72,22 @@ namespace NoisedTests.Media
 
             var mfw = new MetaFileWriter(cfgMock.Object, ioMock.Object);
 
+            var artist = "MockArtist";
+            var album = "MockAlbum";
+            var filename = "MockFilename.mck";
+
             var mfMock = new Mock<IMetaFile>();
-            mfMock.Setup(x => x.Artist).Returns("MockArtist");
-            mfMock.Setup(x => x.Album).Returns("MockAlbum");
-            mfMock.Setup(x => x.OriginalFilename).Returns("MockFilename.mck");
+
+            mfMock.Setup(x => x.Artist).Returns(artist);
+            mfMock.Setup(x => x.Album).Returns(album);
+            mfMock.Setup(x => x.OriginalFilename).Returns(filename);
             var mockData = new byte[] { 1, 2, 3 };
             mfMock.Setup(x => x.Data).Returns(mockData);
 
             mfw.WriteMetaFileToDisk(mfMock.Object);
 
             Assert.IsTrue(callsWriteMethod);
-            StringAssert.AreEqualIgnoringCase(@"C:\test\MockArtist\MockAlbum\MockFilename.mck", fullPath);
+            StringAssert.AreEqualIgnoringCase(Path.Combine(basePathc, artist, album, filename), fullPath);
             Assert.AreSame(mockData, data);
         }
     }
