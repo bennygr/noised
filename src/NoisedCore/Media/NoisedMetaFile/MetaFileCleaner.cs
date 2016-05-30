@@ -13,12 +13,17 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// </summary>
         public void CleanUpMetaFiles()
         {
-            var metaFileRepository = IoC.Get<IUnitOfWork>().MetaFileRepository;
-
-            foreach (var metaFile in metaFileRepository.GetAllMetaFiles())
+            using (var repo = IoC.Get<IUnitOfWork>())
             {
-                if (!File.Exists(metaFile.Uri.AbsolutePath))
-                    metaFileRepository.DeleteMetaFile(metaFile);
+                var metaFileRepository = repo.MetaFileRepository;
+
+                foreach (var metaFile in metaFileRepository.GetAllMetaFiles())
+                {
+                    if (!File.Exists(metaFile.Uri.AbsolutePath))
+                        metaFileRepository.DeleteMetaFile(metaFile);
+                }
+
+                repo.SaveChanges();
             }
         }
 
