@@ -68,7 +68,8 @@ namespace Noised.Core.IOC
             builder.Register<IMediaManager, MediaManager>().
                 ControlledBy<SingletonLifecycle>();
             builder.Register<IMetaFileAccumulator, MetaFileAccumulator>().ControlledBy<SingletonLifecycle>();
-            builder.Register<IMetaFileWriter, MetaFileWriter>().ControlledBy<SingletonLifecycle>();
+            builder.Register<IMetaFileIOHandler, MetaFileIOHandler>();
+            builder.Register<IMetaFileWriter, MetaFileWriter>();
 
             //Crypto
             builder.Register<IChecksum, MD5Checksum>();
