@@ -25,7 +25,9 @@ namespace NoisedTests.Media
         [Test]
         public void WriteMetaFileToDisk_FileAlreadyExists()
         {
-            var cfgMock = new Mock<IConfig>();
+            var cfgMock = new Mock<IConfig>(); 
+            string basePathc = Path.Combine("C:\\", "test");
+            cfgMock.Setup(x => x.GetProperty(CoreConfigProperties.MetaFileDirectory, null)).Returns(basePathc);
 
             var ioMock = new Mock<IMetaFileIOHandler>();
             ioMock.Setup(x => x.MetaFileExists(It.IsAny<string>())).Returns(true);
