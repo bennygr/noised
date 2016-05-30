@@ -12,7 +12,7 @@ namespace NoisedTests.Media
     public class MetaFileWriterTests
     {
         [Test]
-        public void Constructor_InstatiateSuccessful()
+        public void MetaFileWriter_Constructor_CanCreateInstance()
         {
             var cfgMock = new Mock<IConfig>();
             var ioMock = new Mock<IMetaFileIOHandler>();
@@ -23,7 +23,7 @@ namespace NoisedTests.Media
         }
 
         [Test]
-        public void WriteMetaFileToDisk_FileAlreadyExists()
+        public void MetaFileWriter_WriteMetaFileToDiskFileAlreadyExists_MethodNotCalled()
         {
             var cfgMock = new Mock<IConfig>(); 
             string basePathc = Path.Combine("C:\\", "test");
@@ -51,7 +51,7 @@ namespace NoisedTests.Media
         }
 
         [Test]
-        public void WriteMetaFileToDisk_Successful()
+        public void MetaFileWriter_WriteMetaFileToDisk_Successful()
         {
             var cfgMock = new Mock<IConfig>();
             string basePathc = Path.Combine("C:\\", "test");
