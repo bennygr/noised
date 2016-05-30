@@ -102,5 +102,13 @@ namespace NoisedTests.Media
                 Assert.AreSame("category", e.ParamName);
             }
         }
+
+        [Test]
+        public void MetaFile_Constructor_CanCreateInstance()
+        {
+            var metaFile = new MetaFile("Artist", "Album", MetaFileType.AlbumCover, new Uri("http://www.uri.com"), null, "ext", MetaFileCategory.Gallery, "oriFileName");
+
+            Assert.IsNotNull(metaFile);
+        }
     }
 }
