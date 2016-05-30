@@ -8,7 +8,7 @@ namespace NoisedTests.Media
     public class MetaFileTests
     {
         [Test]
-        public void Constructor_Without_Artist()
+        public void MetaFile_ConstructorWithoutArtist_ShouldThrowException()
         {
             try
             {
@@ -24,7 +24,7 @@ namespace NoisedTests.Media
         }
 
         [Test]
-        public void Constructor_Without_Type()
+        public void MetaFile_ConstructorWithoutType_ShouldThrowException()
         {
             try
             {
@@ -40,7 +40,7 @@ namespace NoisedTests.Media
         }
 
         [Test]
-        public void Constructor_Without_Uri()
+        public void MetaFile_ConstructorWithoutUri_ShouldThrowException()
         {
             try
             {
@@ -56,7 +56,7 @@ namespace NoisedTests.Media
         }
 
         [Test]
-        public void Constructor_Without_OriginalFilename()
+        public void MetaFile_ConstructorWithoutOriginalFilename_ShouldThrowException()
         {
             try
             {
@@ -72,7 +72,7 @@ namespace NoisedTests.Media
         }
 
         [Test]
-        public void Constructor_Without_Extension()
+        public void MetaFile_ConstructorWithoutExtension_ShouldThrowException()
         {
             try
             {
@@ -88,7 +88,7 @@ namespace NoisedTests.Media
         }
 
         [Test]
-        public void Constructor_Without_Category()
+        public void MetaFile_ConstructorWithoutCategory_ShouldThrowException()
         {
             try
             {
