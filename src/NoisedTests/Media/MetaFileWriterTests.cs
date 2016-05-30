@@ -15,8 +15,6 @@ namespace NoisedTests.Media
         public void Constructor_InstatiateSuccessful()
         {
             var cfgMock = new Mock<IConfig>();
-            cfgMock.Setup(x => x.GetProperty(CoreConfigProperties.MetaFileDirectory, null)).Returns(@"C:\test\");
-
             var ioMock = new Mock<IMetaFileIOHandler>();
 
             var result = new MetaFileWriter(cfgMock.Object, ioMock.Object);
@@ -28,7 +26,6 @@ namespace NoisedTests.Media
         public void WriteMetaFileToDisk_FileAlreadyExists()
         {
             var cfgMock = new Mock<IConfig>();
-            cfgMock.Setup(x => x.GetProperty(CoreConfigProperties.MetaFileDirectory, null)).Returns(@"C:\test\");
 
             var ioMock = new Mock<IMetaFileIOHandler>();
             ioMock.Setup(x => x.MetaFileExists(It.IsAny<string>())).Returns(true);
