@@ -10,17 +10,21 @@ namespace Noised.Core.Media.NoisedMetaFile
     /// </summary>
     public class MetaFileWriter : IMetaFileWriter
     {
+        private readonly IConfig configuration;
         private readonly IMetaFileIOHandler ioHandler;
-        private readonly string metaFilePath;
 
         /// <summary>
         /// A class which can write a MetaFile to the designated directory
         /// </summary>
         public MetaFileWriter(IConfig configuration, IMetaFileIOHandler ioHandler)
         {
+            if (configuration == null)
+                throw new ArgumentNullException("configuration");
+            if (ioHandler == null)
+                throw new ArgumentNullException("ioHandler");
+
+            this.configuration = configuration;
             this.ioHandler = ioHandler;
-            metaFilePath = configuration.GetProperty(CoreConfigProperties.MetaFileDirectory);
-            CreateDirectoryIfNotExists(metaFilePath);
         }
 
         #region Implementation of IMetaFileWriter
@@ -61,7 +65,7 @@ namespace Noised.Core.Media.NoisedMetaFile
         private string GetMetaFileDirectory(IMetaFile metaFile)
         {
             // always append the artist
-            string fullPath = Path.Combine(metaFilePath, metaFile.Artist);
+            string fullPath = Path.Combine(configuration.GetProperty(CoreConfigProperties.MetaFileDirectory), metaFile.Artist);
 
             // if the metafile has an album append the album
             if (!String.IsNullOrWhiteSpace(metaFile.Album))
