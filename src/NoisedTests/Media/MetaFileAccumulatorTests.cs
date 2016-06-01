@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Moq;
 using Noised.Core.DB;
 using Noised.Core.Media;
@@ -27,7 +23,7 @@ namespace NoisedTests.Media
                 new MetaFileAccumulator(null, dbFactoryMock.Object, metaFileWriterMock.Object, mediaSourceAccumulator.Object);
                 Assert.Fail("Expected ArgumentNullException.");
             }
-            catch(ArgumentNullException e)
+            catch (ArgumentNullException e)
             {
                 Assert.AreSame("pluginLoader", e.ParamName);
             }
@@ -45,7 +41,7 @@ namespace NoisedTests.Media
                 new MetaFileAccumulator(pluginLoaderMock.Object, null, metaFileWriterMock.Object, mediaSourceAccumulator.Object);
                 Assert.Fail("Expected ArgumentNullException.");
             }
-            catch(ArgumentNullException e)
+            catch (ArgumentNullException e)
             {
                 Assert.AreSame("dbFactory", e.ParamName);
             }
@@ -63,7 +59,7 @@ namespace NoisedTests.Media
                 new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, null, mediaSourceAccumulator.Object);
                 Assert.Fail("Expected ArgumentNullException.");
             }
-            catch(ArgumentNullException e)
+            catch (ArgumentNullException e)
             {
                 Assert.AreSame("metaFileWriter", e.ParamName);
             }
@@ -81,7 +77,7 @@ namespace NoisedTests.Media
                 new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, metaFileWriterMock.Object, null);
                 Assert.Fail("Expected ArgumentNullException.");
             }
-            catch(ArgumentNullException e)
+            catch (ArgumentNullException e)
             {
                 Assert.AreSame("mediaSourceAccumulator", e.ParamName);
             }
@@ -89,6 +85,14 @@ namespace NoisedTests.Media
 
         [Test]
         public void MetaFileAccumulator_Constructor_CanCreateInstance()
-        { }
+        {
+            var pluginLoaderMock = new Mock<IPluginLoader>();
+            var dbFactoryMock = new Mock<IDbFactory>();
+            var metaFileWriterMock = new Mock<IMetaFileWriter>();
+            var mediaSourceAccumulator = new Mock<IMediaSourceAccumulator>();
+
+            new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, metaFileWriterMock.Object,
+                mediaSourceAccumulator.Object);
+        }
     }
 }
