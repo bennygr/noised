@@ -22,11 +22,12 @@ namespace NoisedTests.Media
                 var dbFactoryMock = new Mock<IDbFactory>();
                 var metaFileWriterMock = new Mock<IMetaFileWriter>();
                 var mediaSourceAccumulator = new Mock<IMediaSourceAccumulator>();
+                var metaFileCleaner = new Mock<IMetaFileCleaner>();
 
-                new MetaFileAccumulator(null, dbFactoryMock.Object, metaFileWriterMock.Object, mediaSourceAccumulator.Object);
+                new MetaFileAccumulator(null, dbFactoryMock.Object, metaFileWriterMock.Object, mediaSourceAccumulator.Object, metaFileCleaner.Object);
                 Assert.Fail("Expected ArgumentNullException.");
             }
-            catch (ArgumentNullException e)
+            catch(ArgumentNullException e)
             {
                 Assert.AreSame("pluginLoader", e.ParamName);
             }
@@ -40,11 +41,12 @@ namespace NoisedTests.Media
                 var pluginLoaderMock = new Mock<IPluginLoader>();
                 var metaFileWriterMock = new Mock<IMetaFileWriter>();
                 var mediaSourceAccumulator = new Mock<IMediaSourceAccumulator>();
+                var metaFileCleaner = new Mock<IMetaFileCleaner>();
 
-                new MetaFileAccumulator(pluginLoaderMock.Object, null, metaFileWriterMock.Object, mediaSourceAccumulator.Object);
+                new MetaFileAccumulator(pluginLoaderMock.Object, null, metaFileWriterMock.Object, mediaSourceAccumulator.Object, metaFileCleaner.Object);
                 Assert.Fail("Expected ArgumentNullException.");
             }
-            catch (ArgumentNullException e)
+            catch(ArgumentNullException e)
             {
                 Assert.AreSame("dbFactory", e.ParamName);
             }
@@ -58,11 +60,12 @@ namespace NoisedTests.Media
                 var pluginLoaderMock = new Mock<IPluginLoader>();
                 var dbFactoryMock = new Mock<IDbFactory>();
                 var mediaSourceAccumulator = new Mock<IMediaSourceAccumulator>();
+                var metaFileCleaner = new Mock<IMetaFileCleaner>();
 
-                new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, null, mediaSourceAccumulator.Object);
+                new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, null, mediaSourceAccumulator.Object, metaFileCleaner.Object);
                 Assert.Fail("Expected ArgumentNullException.");
             }
-            catch (ArgumentNullException e)
+            catch(ArgumentNullException e)
             {
                 Assert.AreSame("metaFileWriter", e.ParamName);
             }
@@ -76,13 +79,33 @@ namespace NoisedTests.Media
                 var pluginLoaderMock = new Mock<IPluginLoader>();
                 var dbFactoryMock = new Mock<IDbFactory>();
                 var metaFileWriterMock = new Mock<IMetaFileWriter>();
+                var metaFileCleaner = new Mock<IMetaFileCleaner>();
 
-                new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, metaFileWriterMock.Object, null);
+                new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, metaFileWriterMock.Object, null, metaFileCleaner.Object);
                 Assert.Fail("Expected ArgumentNullException.");
             }
-            catch (ArgumentNullException e)
+            catch(ArgumentNullException e)
             {
                 Assert.AreSame("mediaSourceAccumulator", e.ParamName);
+            }
+        }
+
+        [Test]
+        public void MetaFileAccumulator_Constructor_WithoutMetaFileCleaner_ShouldThrowException()
+        {
+            try
+            {
+                var pluginLoaderMock = new Mock<IPluginLoader>();
+                var dbFactoryMock = new Mock<IDbFactory>();
+                var metaFileWriterMock = new Mock<IMetaFileWriter>();
+                var mediaSourceAccumulator = new Mock<IMediaSourceAccumulator>();
+
+                new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, metaFileWriterMock.Object, mediaSourceAccumulator.Object, null);
+                Assert.Fail("Expected ArgumentNullException.");
+            }
+            catch(ArgumentNullException e)
+            {
+                Assert.AreSame("metaFileCleaner", e.ParamName);
             }
         }
 
@@ -93,9 +116,10 @@ namespace NoisedTests.Media
             var dbFactoryMock = new Mock<IDbFactory>();
             var metaFileWriterMock = new Mock<IMetaFileWriter>();
             var mediaSourceAccumulator = new Mock<IMediaSourceAccumulator>();
+            var metaFileCleaner = new Mock<IMetaFileCleaner>();
 
             new MetaFileAccumulator(pluginLoaderMock.Object, dbFactoryMock.Object, metaFileWriterMock.Object,
-                mediaSourceAccumulator.Object);
+                mediaSourceAccumulator.Object, metaFileCleaner.Object);
         }
 
         [Test]
@@ -118,7 +142,7 @@ namespace NoisedTests.Media
             };
 
             var metaDataList = new List<MetaData>();
-            foreach (var item in testData)
+            foreach(var item in testData)
             {
                 metaDataList.Add(new MetaData
                 {
@@ -129,7 +153,7 @@ namespace NoisedTests.Media
             }
 
             var mediaItemList = new List<MediaItem>();
-            foreach (var item in metaDataList)
+            foreach(var item in metaDataList)
                 mediaItemList.Add(new MediaItem(new Uri("file://"), "checksum") { MetaData = item });
 
             var searchResult = new MediaSourceSearchResult("mockSource", mediaItemList);
@@ -158,20 +182,22 @@ namespace NoisedTests.Media
             pL.Setup(x => x.GetPlugins<IMetaFileScraper>()).Returns(new List<IMetaFileScraper> { mfScraper.Object });
 
             var uow = new Mock<IUnitOfWork>();
-            uow.Setup(x => x.MetaFileRepository.CreateMetaFile(It.IsAny<MetaFile>())).Callback(() => { });
-            uow.Setup(x => x.SaveChanges()).Callback(() => { });
+            uow.Setup(x => x.MetaFileRepository.CreateMetaFile(It.IsAny<MetaFile>()));
+            uow.Setup(x => x.SaveChanges());
 
             var dbFac = new Mock<IDbFactory>();
             dbFac.Setup(x => x.GetUnitOfWork()).Returns(uow.Object);
 
             var mfWriter = new Mock<IMetaFileWriter>();
-            mfWriter.Setup(x => x.WriteMetaFileToDisk(It.IsAny<IMetaFile>())).Callback(() => { });
+            mfWriter.Setup(x => x.WriteMetaFileToDisk(It.IsAny<IMetaFile>()));
 
             var msAcc = new Mock<IMediaSourceAccumulator>();
             msAcc.Setup(x => x.Search(It.IsAny<string>())).Returns(new List<MediaSourceSearchResult> { searchResult });
+            
+            var metaFileCleaner = new Mock<IMetaFileCleaner>();
 
             // Act
-            var mfa = new MetaFileAccumulator(pL.Object, dbFac.Object, mfWriter.Object, msAcc.Object);
+            var mfa = new MetaFileAccumulator(pL.Object, dbFac.Object, mfWriter.Object, msAcc.Object, metaFileCleaner.Object);
             mfa.Refresh();
 
             // Assert

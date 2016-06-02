@@ -18,6 +18,7 @@ namespace Noised.Core.Media.NoisedMetaFile
         private readonly IDbFactory dbFactory;
         private readonly IMetaFileWriter metaFileWriter;
         private readonly IMediaSourceAccumulator mediaSourceAccumulator;
+        private readonly IMetaFileCleaner metaFileCleaner;
         // TODO: remove this locking and make underlying classes threadsafe
         private readonly Object lockUnitOfWork = new Object();
 
@@ -28,7 +29,7 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// <param name="dbFactory">Database factory</param>
         /// <param name="metaFileWriter">MetaFileWriter</param>
         /// <param name="mediaSourceAccumulator">MediaSourceAccumulator</param>
-        public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory, IMetaFileWriter metaFileWriter, IMediaSourceAccumulator mediaSourceAccumulator)
+        public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory, IMetaFileWriter metaFileWriter, IMediaSourceAccumulator mediaSourceAccumulator, IMetaFileCleaner metaFileCleaner)
         {
             if (pluginLoader == null)
                 throw new ArgumentNullException("pluginLoader");
@@ -38,11 +39,14 @@ namespace Noised.Core.Media.NoisedMetaFile
                 throw new ArgumentNullException("metaFileWriter");
             if (mediaSourceAccumulator == null)
                 throw new ArgumentNullException("mediaSourceAccumulator");
+            if(metaFileCleaner==null)
+                throw new ArgumentNullException("metaFileCleaner");
 
             this.pluginLoader = pluginLoader;
             this.dbFactory = dbFactory;
             this.metaFileWriter = metaFileWriter;
             this.mediaSourceAccumulator = mediaSourceAccumulator;
+            this.metaFileCleaner = metaFileCleaner;
         }
 
         #region Methods
@@ -174,7 +178,7 @@ namespace Noised.Core.Media.NoisedMetaFile
 
             // Cleanup
             lock (lockUnitOfWork)
-                new MetaFileCleaner(dbFactory.GetUnitOfWork()).CleanUpMetaFiles();
+                metaFileCleaner.CleanUpMetaFiles();
 
             foreach (IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
             {
