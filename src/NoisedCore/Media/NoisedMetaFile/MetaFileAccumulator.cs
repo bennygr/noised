@@ -30,13 +30,13 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// <param name="mediaSourceAccumulator">MediaSourceAccumulator</param>
         public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory, IMetaFileWriter metaFileWriter, IMediaSourceAccumulator mediaSourceAccumulator)
         {
-            if(pluginLoader == null)
+            if (pluginLoader == null)
                 throw new ArgumentNullException("pluginLoader");
-            if(dbFactory == null)
+            if (dbFactory == null)
                 throw new ArgumentNullException("dbFactory");
-            if(metaFileWriter == null)
+            if (metaFileWriter == null)
                 throw new ArgumentNullException("metaFileWriter");
-            if(mediaSourceAccumulator == null)
+            if (mediaSourceAccumulator == null)
                 throw new ArgumentNullException("mediaSourceAccumulator");
 
             this.pluginLoader = pluginLoader;
@@ -54,9 +54,6 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// <param name="metaDataCollection">The input for the scraper</param>
         private void RefreshAsyncInternal(IMetaFileScraper scraper, DistinctMetaDataCollection metaDataCollection)
         {
-            // Cleanup
-            new MetaFileCleaner().CleanUpMetaFiles();
-
             // Get all AlbumCovers from IMetaFileScraper
             RefreshAlbumCovers(scraper, metaDataCollection.Albums, metaFileWriter);
 
@@ -78,16 +75,16 @@ namespace Noised.Core.Media.NoisedMetaFile
             Parallel.ForEach(mediaSourceAccumulator.Search("*"), searchResult =>
             {
                 // iterate over all MediaItems of all serachresults
-                foreach(MediaItem mediaItem in searchResult.MediaItems)
+                foreach (MediaItem mediaItem in searchResult.MediaItems)
                 {
                     // iterate over all Artists and all AlbumArtists of the MediaItem
-                    foreach(string artist in mediaItem.MetaData.Artists.Concat(mediaItem.MetaData.AlbumArtists))
+                    foreach (string artist in mediaItem.MetaData.Artists.Concat(mediaItem.MetaData.AlbumArtists))
                     {
                         // Add every artist to artists
                         artists.Add(artist);
 
                         // if combination is already known just continue
-                        if(albums.Any(y => y.Artist == artist && y.Album == mediaItem.MetaData.Album))
+                        if (albums.Any(y => y.Artist == artist && y.Album == mediaItem.MetaData.Album))
                             continue;
 
                         // otherwise create new ScraperAlbumInformation from artist and Album
@@ -112,21 +109,21 @@ namespace Noised.Core.Media.NoisedMetaFile
         private void RefreshAlbumCovers(IMetaFileScraper scraper, List<ScraperAlbumInformation> albums, IMetaFileWriter mfw)
         {
             // Get all Artistpictures from IMetaFileScraper
-            foreach(ScraperAlbumInformation album in albums)
+            foreach (ScraperAlbumInformation album in albums)
             {
-                using(var uow = dbFactory.GetUnitOfWork())
+                using (var uow = dbFactory.GetUnitOfWork())
                 {
-                    if(uow.MetaFileRepository.GetMetaFiles(album.Artist, album.Album).Any())
+                    if (uow.MetaFileRepository.GetMetaFiles(album.Artist, album.Album).Any())
                         return;
                 }
 
-                foreach(MetaFile mf in scraper.GetAlbumCover(album))
+                foreach (MetaFile mf in scraper.GetAlbumCover(album))
                 {
                     mfw.WriteMetaFileToDisk(mf);
                     // TODO: remove this locking and make underlying classes threadsafe
-                    lock(lockUnitOfWork)
+                    lock (lockUnitOfWork)
                     {
-                        using(IUnitOfWork uow = dbFactory.GetUnitOfWork())
+                        using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
                         {
                             uow.MetaFileRepository.CreateMetaFile(mf);
                             uow.SaveChanges();
@@ -145,15 +142,15 @@ namespace Noised.Core.Media.NoisedMetaFile
         private void RefreshArtistImages(IMetaFileScraper scraper, List<string> artists, IMetaFileWriter mfw)
         {
             // Get all Artistpictures from IMetaFileScraper
-            foreach(string artist in artists)
+            foreach (string artist in artists)
             {
-                foreach(MetaFile mf in scraper.GetArtistPictures(artist))
+                foreach (MetaFile mf in scraper.GetArtistPictures(artist))
                 {
                     mfw.WriteMetaFileToDisk(mf);
                     // TODO: remove this locking and make underlying classes threadsafe
-                    lock(lockUnitOfWork)
+                    lock (lockUnitOfWork)
                     {
-                        using(IUnitOfWork uow = dbFactory.GetUnitOfWork())
+                        using (IUnitOfWork uow = dbFactory.GetUnitOfWork())
                         {
                             uow.MetaFileRepository.CreateMetaFile(mf);
                             uow.SaveChanges();
@@ -175,7 +172,11 @@ namespace Noised.Core.Media.NoisedMetaFile
             // Get Collection of all Album/Artist combinations and all Artists
             DistinctMetaDataCollection metaData = GetDistinctMetaData();
 
-            foreach(IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
+            // Cleanup
+            lock (lockUnitOfWork)
+                new MetaFileCleaner(dbFactory.GetUnitOfWork()).CleanUpMetaFiles();
+
+            foreach (IMetaFileScraper scraper in pluginLoader.GetPlugins<IMetaFileScraper>())
             {
                 RefreshArtistImages(scraper, metaData.Artists, metaFileWriter);
                 RefreshAlbumCovers(scraper, metaData.Albums, metaFileWriter);
@@ -192,9 +193,14 @@ namespace Noised.Core.Media.NoisedMetaFile
                 {
                     // Get Collection of all Album/Artist combinations and all Artists
                     DistinctMetaDataCollection metaData = GetDistinctMetaData();
+
+                    // Cleanup
+                    lock (lockUnitOfWork)
+                        new MetaFileCleaner(dbFactory.GetUnitOfWork()).CleanUpMetaFiles();
+
                     // Iterate over all registered IMetaFileScapers and execute them asynchronously
                     Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => RefreshAsyncInternal(x, metaData));
-                    if(RefreshAsyncFinished != null)
+                    if (RefreshAsyncFinished != null)
                         RefreshAsyncFinished();
                 });
         }
@@ -221,9 +227,9 @@ namespace Noised.Core.Media.NoisedMetaFile
             /// <param name="artists">A List of Artists (names)</param>
             internal DistinctMetaDataCollection(List<ScraperAlbumInformation> albums, List<string> artists)
             {
-                if(albums == null)
+                if (albums == null)
                     throw new ArgumentNullException("albums");
-                if(artists == null)
+                if (artists == null)
                     throw new ArgumentNullException("artists");
                 Albums = albums;
                 Artists = artists;

@@ -1,11 +1,17 @@
 ﻿using System.IO;
 using Noised.Core.DB;
-using Noised.Core.IOC;
 
 namespace Noised.Core.Media.NoisedMetaFile
 {
     internal class MetaFileCleaner : IMetaFileCleaner
     {
+        private readonly IUnitOfWork unitOfWork;
+
+        public MetaFileCleaner(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
+
         #region Implementation of IMetaFileCleaner
 
         /// <summary>
@@ -13,7 +19,7 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// </summary>
         public void CleanUpMetaFiles()
         {
-            using (var repo = IoC.Get<IUnitOfWork>())
+            using (var repo = unitOfWork)
             {
                 var metaFileRepository = repo.MetaFileRepository;
 
