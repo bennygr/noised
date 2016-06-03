@@ -52,6 +52,7 @@
     <Compile Include="Commands\VolumeCommandTests.cs" />
     <Compile Include="Core\UserManagement\UserManagerTest.cs" />
     <Compile Include="Media\MetaFileAccumulatorTests.cs" />
+    <Compile Include="Media\MetaFileCleanerTests.cs" />
     <Compile Include="Media\MetaFileTests.cs" />
     <Compile Include="Media\MetaFileWriterTests.cs" />
     <Compile Include="Media\PlaylistTests.cs" />
