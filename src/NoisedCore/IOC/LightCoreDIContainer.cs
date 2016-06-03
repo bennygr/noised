@@ -70,6 +70,7 @@ namespace Noised.Core.IOC
             builder.Register<IMetaFileAccumulator, MetaFileAccumulator>().ControlledBy<SingletonLifecycle>();
             builder.Register<IMetaFileIOHandler, MetaFileIOHandler>();
             builder.Register<IMetaFileWriter, MetaFileWriter>();
+            builder.Register<IMetaFileCleaner, MetaFileCleaner>();
 
             //Crypto
             builder.Register<IChecksum, MD5Checksum>();
