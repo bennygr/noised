@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Noised.Core.Media.NoisedMetaFile
 {
@@ -15,7 +16,7 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// <summary>
         /// Refreshs all MetaFiles from alle MetaFile sources asynchronous
         /// </summary>
-        void RefreshAsync();
+        Task RefreshAsync();
 
         /// <summary>
         /// A calback that fires when the asynchronous refresh is finished

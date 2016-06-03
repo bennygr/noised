@@ -191,23 +191,23 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// <summary>
         /// Refreshs all MetaFiles from alle MetaFile sources asynchronous
         /// </summary>
-        public void RefreshAsync()
+        public async Task RefreshAsync()
         {
-            Task.Run(
-                () =>
-                {
-                    // Get Collection of all Album/Artist combinations and all Artists
-                    DistinctMetaDataCollection metaData = GetDistinctMetaData();
+            await Task.Run(
+                 () =>
+                 {
+                     // Get Collection of all Album/Artist combinations and all Artists
+                     DistinctMetaDataCollection metaData = GetDistinctMetaData();
 
-                    // Cleanup
-                    lock (lockUnitOfWork)
-                        new MetaFileCleaner(dbFactory.GetUnitOfWork()).CleanUpMetaFiles();
+                     // Cleanup
+                     lock (lockUnitOfWork)
+                         metaFileCleaner.CleanUpMetaFiles();
 
-                    // Iterate over all registered IMetaFileScapers and execute them asynchronously
-                    Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => RefreshAsyncInternal(x, metaData));
-                    if (RefreshAsyncFinished != null)
-                        RefreshAsyncFinished();
-                });
+                     // Iterate over all registered IMetaFileScapers and execute them asynchronously
+                     Parallel.ForEach(pluginLoader.GetPlugins<IMetaFileScraper>(), x => RefreshAsyncInternal(x, metaData));
+                     if (RefreshAsyncFinished != null)
+                         RefreshAsyncFinished();
+                 });
         }
 
         /// <summary>
