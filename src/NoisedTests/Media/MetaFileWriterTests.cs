@@ -12,7 +12,7 @@ namespace NoisedTests.Media
     public class MetaFileWriterTests
     {
         [Test]
-        public void MetaFileWriter_Constructor_CanCreateInstance()
+        public void MetaFileWriter_Constructor_AllParametersAvailable_CanCreateInstance()
         {
             var cfgMock = new Mock<IConfig>();
             var ioMock = new Mock<IMetaFileIOHandler>();
@@ -20,6 +20,18 @@ namespace NoisedTests.Media
             var result = new MetaFileWriter(cfgMock.Object, ioMock.Object);
 
             Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void MetaFileWriter_Constructor_WithoutIConfig_ShouldThrowException()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void MetaFileWriter_Constructor_WithoutIOHandler_ShouldThrowException()
+        {
+            Assert.Inconclusive();
         }
 
         [Test]
