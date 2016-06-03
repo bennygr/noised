@@ -31,7 +31,7 @@ namespace Noised.Core.DB.Sqlite
         /// Creates a new entry for a MetaFile in the current IUnitOfWork implementation
         /// </summary>
         /// <param name="metaFile">MetaFile for which an entry should be created</param>
-        public void CreateMetaFile(MetaFile metaFile)
+        public void CreateMetaFile(IMetaFile metaFile)
         {
             if (metaFile == null)
                 throw new ArgumentNullException("metaFile");
@@ -93,7 +93,7 @@ namespace Noised.Core.DB.Sqlite
         /// Permanently deletes a MetaFile
         /// </summary>
         /// <param name="mf">MetaFile to delete</param>
-        public void DeleteMetaFile(MetaFile mf)
+        public void DeleteMetaFile(IMetaFile mf)
         {
             if (mf == null)
                 throw new ArgumentNullException("mf");
@@ -113,7 +113,7 @@ namespace Noised.Core.DB.Sqlite
         /// Gets all MetaFiles without the actual file (db entry only)
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<MetaFile> GetAllMetaFiles()
+        public IEnumerable<IMetaFile> GetAllMetaFiles()
         {
             using (var cmd = connection.CreateCommand())
             {

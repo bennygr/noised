@@ -12,7 +12,7 @@ namespace Noised.Core.DB
         /// Creates a new entry for a MetaFile in the current IUnitOfWork implementation
         /// </summary>
         /// <param name="metaFile">MEtaFile to create</param>
-        void CreateMetaFile(MetaFile metaFile);
+        void CreateMetaFile(IMetaFile metaFile);
 
         /// <summary>
         /// Gets all MetaFiles for the given artist and album
@@ -26,12 +26,12 @@ namespace Noised.Core.DB
         /// Permanently deletes a MetaFile
         /// </summary>
         /// <param name="mf">MetaFile to delete</param>
-        void DeleteMetaFile(MetaFile mf);
+        void DeleteMetaFile(IMetaFile mf);
 
         /// <summary>
         /// Gets all MetaFiles
         /// </summary>
         /// <returns></returns>
-        IEnumerable<MetaFile> GetAllMetaFiles();
+        IEnumerable<IMetaFile> GetAllMetaFiles();
     }
 }
