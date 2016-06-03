@@ -1,15 +1,22 @@
-﻿using System.IO;
+﻿using System;
 using Noised.Core.DB;
 
 namespace Noised.Core.Media.NoisedMetaFile
 {
-    internal class MetaFileCleaner : IMetaFileCleaner
+    public class MetaFileCleaner : IMetaFileCleaner
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IDbFactory dbFactory;
+        private readonly IMetaFileCleanerFileAccess fileAccess;
 
-        public MetaFileCleaner(IUnitOfWork unitOfWork)
+        public MetaFileCleaner(IDbFactory dbFactory, IMetaFileCleanerFileAccess fileAccess)
         {
-            this.unitOfWork = unitOfWork;
+            if (dbFactory == null)
+                throw new ArgumentNullException("dbFactory");
+            if (fileAccess == null)
+                throw new ArgumentNullException("fileAccess");
+
+            this.dbFactory = dbFactory;
+            this.fileAccess = fileAccess;
         }
 
         #region Implementation of IMetaFileCleaner
@@ -19,17 +26,17 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// </summary>
         public void CleanUpMetaFiles()
         {
-            using (var repo = unitOfWork)
+            using (var uow = dbFactory.GetUnitOfWork())
             {
-                var metaFileRepository = repo.MetaFileRepository;
+                var metaFileRepository = uow.MetaFileRepository;
 
                 foreach (var metaFile in metaFileRepository.GetAllMetaFiles())
                 {
-                    if (!File.Exists(metaFile.Uri.AbsolutePath))
+                    if (!fileAccess.FileExists(metaFile.Uri.AbsolutePath))
                         metaFileRepository.DeleteMetaFile(metaFile);
                 }
 
-                repo.SaveChanges();
+                uow.SaveChanges();
             }
         }
 

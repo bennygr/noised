@@ -91,6 +91,7 @@
     <Compile Include="Media\NoisedMetaFile\IMetaFile.cs" />
     <Compile Include="Media\NoisedMetaFile\IMetaFileAccumulator.cs" />
     <Compile Include="Media\NoisedMetaFile\IMetaFileCleaner.cs" />
+    <Compile Include="Media\NoisedMetaFile\IMetaFileCleanerFileAccess.cs" />
     <Compile Include="Media\NoisedMetaFile\IMetaFileIOHandler.cs" />
     <Compile Include="Media\NoisedMetaFile\IMetaFileWriter.cs" />
     <Compile Include="Media\IPlaylistManager.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Media\NoisedMetaFile\MetaFileAccumulator.cs" />
     <Compile Include="Media\NoisedMetaFile\MetaFileCategory.cs" />
     <Compile Include="Media\NoisedMetaFile\MetaFileCleaner.cs" />
+    <Compile Include="Media\NoisedMetaFile\MetaFileCleanerFileAccess.cs" />
     <Compile Include="Media\NoisedMetaFile\MetaFileIOHandler.cs" />
     <Compile Include="Media\NoisedMetaFile\MetaFileWriter.cs" />
     <Compile Include="Media\Playlist.cs" />

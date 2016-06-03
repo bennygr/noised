@@ -71,6 +71,7 @@ namespace Noised.Core.IOC
             builder.Register<IMetaFileIOHandler, MetaFileIOHandler>();
             builder.Register<IMetaFileWriter, MetaFileWriter>();
             builder.Register<IMetaFileCleaner, MetaFileCleaner>();
+            builder.Register<IMetaFileCleanerFileAccess, MetaFileCleanerFileAccess>();
 
             //Crypto
             builder.Register<IChecksum, MD5Checksum>();
