@@ -6,9 +6,9 @@ namespace Noised.Core.Media.NoisedMetaFile
     public class MetaFileCleaner : IMetaFileCleaner
     {
         private readonly IDbFactory dbFactory;
-        private readonly IMetaFileCleanerFileAccess fileAccess;
+        private readonly IMetaFileIOHandler fileAccess;
 
-        public MetaFileCleaner(IDbFactory dbFactory, IMetaFileCleanerFileAccess fileAccess)
+        public MetaFileCleaner(IDbFactory dbFactory, IMetaFileIOHandler fileAccess)
         {
             if (dbFactory == null)
                 throw new ArgumentNullException("dbFactory");
@@ -32,7 +32,7 @@ namespace Noised.Core.Media.NoisedMetaFile
 
                 foreach (var metaFile in metaFileRepository.GetAllMetaFiles())
                 {
-                    if (!fileAccess.FileExists(metaFile.Uri.AbsolutePath))
+                    if (!fileAccess.MetaFileExists(metaFile.Uri.AbsolutePath))
                         metaFileRepository.DeleteMetaFile(metaFile);
                 }
 
