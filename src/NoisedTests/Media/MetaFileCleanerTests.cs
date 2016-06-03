@@ -15,7 +15,7 @@ namespace NoisedTests.Media
         {
             try
             {
-                var fileAccess = new Mock<IMetaFileCleanerFileAccess>();
+                var fileAccess = new Mock<IMetaFileIOHandler>();
                 new MetaFileCleaner(null, fileAccess.Object);
                 Assert.Fail("Should have thrown ArgumentNullException");
             }
@@ -44,7 +44,7 @@ namespace NoisedTests.Media
         public void MetaFileCleaner_Constructor_AllParametersPresent_CanCreateInstance()
         {
             var uowMock = new Mock<IDbFactory>();
-            var fileAccess = new Mock<IMetaFileCleanerFileAccess>();
+            var fileAccess = new Mock<IMetaFileIOHandler>();
             new MetaFileCleaner(uowMock.Object, fileAccess.Object);
         }
 
@@ -59,7 +59,7 @@ namespace NoisedTests.Media
             var dbfacMock = new Mock<IDbFactory>();
             dbfacMock.Setup(x => x.GetUnitOfWork()).Returns(uowMock.Object);
 
-            var fileAccess = new Mock<IMetaFileCleanerFileAccess>();
+            var fileAccess = new Mock<IMetaFileIOHandler>();
 
             var cleaner = new MetaFileCleaner(dbfacMock.Object, fileAccess.Object);
             cleaner.CleanUpMetaFiles();
@@ -67,7 +67,7 @@ namespace NoisedTests.Media
             dbfacMock.Verify(x => x.GetUnitOfWork(), Times.Once);
             uowMock.Verify(x => x.SaveChanges(), Times.Once);
             metaFileRepo.Verify(x => x.GetAllMetaFiles(), Times.Once);
-            fileAccess.Verify(x => x.FileExists(It.IsAny<string>()), Times.Never);
+            fileAccess.Verify(x => x.MetaFileExists(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace NoisedTests.Media
             var dbfacMock = new Mock<IDbFactory>();
             dbfacMock.Setup(x => x.GetUnitOfWork()).Returns(uowMock.Object);
 
-            var fileAccess = new Mock<IMetaFileCleanerFileAccess>();
+            var fileAccess = new Mock<IMetaFileIOHandler>();
 
             var cleaner = new MetaFileCleaner(dbfacMock.Object, fileAccess.Object);
             cleaner.CleanUpMetaFiles();
@@ -110,7 +110,7 @@ namespace NoisedTests.Media
             dbfacMock.Verify(x => x.GetUnitOfWork(), Times.Once);
             uowMock.Verify(x => x.SaveChanges(), Times.Once);
             metaFileRepo.Verify(x => x.GetAllMetaFiles(), Times.Once);
-            fileAccess.Verify(x => x.FileExists(It.IsAny<string>()), Times.Exactly(11));
+            fileAccess.Verify(x => x.MetaFileExists(It.IsAny<string>()), Times.Exactly(11));
         }
     }
 }
