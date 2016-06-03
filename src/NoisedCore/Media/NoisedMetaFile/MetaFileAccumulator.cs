@@ -29,6 +29,7 @@ namespace Noised.Core.Media.NoisedMetaFile
         /// <param name="dbFactory">Database factory</param>
         /// <param name="metaFileWriter">MetaFileWriter</param>
         /// <param name="mediaSourceAccumulator">MediaSourceAccumulator</param>
+        /// <param name="metaFileCleaner">MetaFileCleaner</param>
         public MetaFileAccumulator(IPluginLoader pluginLoader, IDbFactory dbFactory, IMetaFileWriter metaFileWriter, IMediaSourceAccumulator mediaSourceAccumulator, IMetaFileCleaner metaFileCleaner)
         {
             if (pluginLoader == null)
@@ -39,7 +40,7 @@ namespace Noised.Core.Media.NoisedMetaFile
                 throw new ArgumentNullException("metaFileWriter");
             if (mediaSourceAccumulator == null)
                 throw new ArgumentNullException("mediaSourceAccumulator");
-            if(metaFileCleaner==null)
+            if (metaFileCleaner == null)
                 throw new ArgumentNullException("metaFileCleaner");
 
             this.pluginLoader = pluginLoader;
