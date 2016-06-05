@@ -8,11 +8,6 @@ namespace Noised.Core.UserManagement
     public interface IUserManager
     {
         /// <summary>
-        /// Sets the IDbFactory
-        /// </summary>
-        IDbFactory DbFactory { set; }
-
-        /// <summary>
         /// Authenticates an User
         /// </summary>
         /// <param name="username">Username</param>

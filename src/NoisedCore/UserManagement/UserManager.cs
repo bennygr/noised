@@ -8,7 +8,7 @@ namespace Noised.Core.UserManagement
     /// </summary>
     public class UserManager : IUserManager
     {
-        private IDbFactory dbFactory;
+        private readonly IDbFactory _dbFactory;
 
         /// <summary>
         /// Manages all the Users
@@ -16,30 +16,15 @@ namespace Noised.Core.UserManagement
         /// <param name="dbFactory"></param>
         public UserManager(IDbFactory dbFactory)
         {
-            this.dbFactory = dbFactory;
+            _dbFactory = dbFactory;
         }
 
         #region IUserManager
         
-        public IDbFactory DbFactory
-        {
-            private get
-            {
-                if (dbFactory == null)
-                    throw new UserManagerException("You need to set the DbFactory Property first!");
-        
-                return dbFactory;
-            }
-            set
-            {
-                dbFactory = value;
-            }
-        }
-        
         public bool Authenticate(string username, string password)
         {
             User user;
-            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
                 user = iuw.UserRepository.GetUser(username);
         
             if (user != null && PasswordStorage.VerifyPassword(password, user.PasswordHash))
@@ -51,7 +36,7 @@ namespace Noised.Core.UserManagement
         {
             string hashedPw = PasswordStorage.CreateHash(password);
         
-            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
             {
                 var user = new User(username) { PasswordHash = hashedPw };
                 iuw.UserRepository.CreateUser(user);
@@ -62,7 +47,7 @@ namespace Noised.Core.UserManagement
         
         public void DeleteUser(User user)
         {
-            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
             {
                 iuw.UserRepository.DeleteUser(user);
                 iuw.SaveChanges();
@@ -71,7 +56,7 @@ namespace Noised.Core.UserManagement
         
         public void UpdateUser(User user)
         {
-            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
             {
                 iuw.UserRepository.UpdateUser(user);
                 iuw.SaveChanges();
@@ -80,7 +65,7 @@ namespace Noised.Core.UserManagement
         
         public User GetUser(string username)
         {
-            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
                 return iuw.UserRepository.GetUser(username);
         }
         
