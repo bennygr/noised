@@ -46,5 +46,11 @@ namespace NoisedTests.Core.UserManagement
         {
             Assert.Inconclusive();
         }
+
+        [Test]
+        public void UserManager_Constructor_PasswordManagerNull_ShouldThrowArgumentNullException()
+        {
+            Assert.Inconclusive();
+        }
     }
 }

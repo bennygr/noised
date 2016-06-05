@@ -74,6 +74,7 @@ namespace Noised.Core.IOC
 
             //Crypto
             builder.Register<IChecksum, MD5Checksum>();
+            builder.Register<IPasswordManager, PasswordManager>();
 
             // PlaylistManager
             builder.Register<IPlaylistManager, PlaylistManager>().ControlledBy<SingletonLifecycle>();

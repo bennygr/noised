@@ -72,6 +72,8 @@
     <Compile Include="Commands\ErrorResponse.cs" />
     <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\ResponseMetaData.cs" />
+    <Compile Include="Crypto\IPasswordManager.cs" />
+    <Compile Include="Crypto\PasswordManager.cs" />
     <Compile Include="Crypto\PasswordStorage.cs" />
     <Compile Include="DB\IDbFactory.cs" />
     <Compile Include="DB\IMetaFileRepository.cs" />
