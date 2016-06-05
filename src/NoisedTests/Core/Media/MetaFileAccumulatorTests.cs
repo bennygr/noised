@@ -9,7 +9,7 @@ using Noised.Core.Plugins;
 using Noised.Core.Plugins.Media;
 using NUnit.Framework;
 
-namespace NoisedTests.Media
+namespace NoisedTests.Core.Media
 {
     [TestFixture]
     public class MetaFileAccumulatorTests

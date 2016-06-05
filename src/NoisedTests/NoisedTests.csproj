@@ -51,15 +51,15 @@
     <Compile Include="Commands\ShuffleCommandsTest.cs" />
     <Compile Include="Commands\VolumeCommandTests.cs" />
     <Compile Include="Core\UserManagement\UserManagerTest.cs" />
-    <Compile Include="Media\MetaFileAccumulatorTests.cs" />
-    <Compile Include="Media\MetaFileCleanerTests.cs" />
-    <Compile Include="Media\MetaFileTests.cs" />
-    <Compile Include="Media\MetaFileWriterTests.cs" />
-    <Compile Include="Media\PlaylistTests.cs" />
+    <Compile Include="Core\Media\MetaFileAccumulatorTests.cs" />
+    <Compile Include="Core\Media\MetaFileCleanerTests.cs" />
+    <Compile Include="Core\Media\MetaFileTests.cs" />
+    <Compile Include="Core\Media\MetaFileWriterTests.cs" />
+    <Compile Include="Core\Media\PlaylistTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Config\ConfigTests.cs" />
-    <Compile Include="Media\QueueTests.cs" />
-    <Compile Include="Media\PlaylistManagerTests.cs" />
+    <Compile Include="Core\Media\QueueTests.cs" />
+    <Compile Include="Core\Media\PlaylistManagerTests.cs" />
     <Compile Include="Commands\AbstractCommandTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
