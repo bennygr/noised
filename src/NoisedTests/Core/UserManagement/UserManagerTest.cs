@@ -52,5 +52,59 @@ namespace NoisedTests.Core.UserManagement
         {
             Assert.Inconclusive();
         }
+
+        [Test]
+        public void UserManager_CreateUser_ValidParametersProvided_CanCreateUser()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void UserManager_CreateUser_NoUsernameProvided_ThrowArgumentException()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void UserManager_CreateUser_NoPasswordProvided_ThrowArgumentException()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void UserManager_DeleteUser_ValidParametersProvided_CanDeleteUser()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void UserManager_DeleteUser_NoUserProvided_ThrowArgumentNullException()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void UserManager_UpdateUser_ValidParametersProvided_CanUpdateUser()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void UserManager_UpdateUser_NoUserProvided_ThrowArgumentNullException()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void UserManager_GetUser_ValidParametersProvided_CanGetUser()
+        {
+            Assert.Inconclusive();
+        }
+
+        [Test]
+        public void UserManager_GetUser_NoUsernameProvided_ThrowArgumentException()
+        {
+            Assert.Inconclusive();
+        }
     }
 }
