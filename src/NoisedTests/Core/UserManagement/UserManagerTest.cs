@@ -1,4 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System;
+using Moq;
+using Noised.Core.Crypto;
+using Noised.Core.DB;
+using Noised.Core.UserManagement;
+using NUnit.Framework;
 
 namespace NoisedTests.Core.UserManagement
 {
@@ -6,51 +11,176 @@ namespace NoisedTests.Core.UserManagement
     public class UserManagerTest
     {
         [Test]
-        public void UserManager_Authenticate_InValidUser_ReturnsFalse()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void UserManager_Authenticate_NoPassword_ThrowsArgumentNullException()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void UserManager_Authenticate_NoUsername_ShouldThrowArgumentNullExceptio()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void UserManager_Authenticate_NoUsername_ThrowsArgumentNullException()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void UserManager_Authenticate_ValidUser_ReturnsTrue()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
         public void UserManager_Constructor_AllParameters_CanCreateInstace()
         {
-            Assert.Inconclusive();
+            var dbFacMock = new Mock<IDbFactory>();
+            var passManMock = new Mock<IPasswordManager>();
+
+            new UserManager(dbFacMock.Object, passManMock.Object);
         }
 
         [Test]
         public void UserManager_Constructor_DBFactoryNull_ShouldThrowArgumentNullException()
         {
-            Assert.Inconclusive();
+            var passManMock = new Mock<IPasswordManager>();
+
+            try
+            {
+                new UserManager(null, passManMock.Object);
+
+                Assert.Fail("Should have thrown exception");
+            }
+            catch (ArgumentNullException e)
+            {
+                StringAssert.AreEqualIgnoringCase("dbFactory", e.ParamName);
+            }
         }
 
         [Test]
         public void UserManager_Constructor_PasswordManagerNull_ShouldThrowArgumentNullException()
         {
-            Assert.Inconclusive();
+            var dbFacMock = new Mock<IDbFactory>();
+
+            try
+            {
+                new UserManager(dbFacMock.Object, null);
+
+                Assert.Fail("Should have thrown exception");
+            }
+            catch (ArgumentNullException e)
+            {
+                StringAssert.AreEqualIgnoringCase("passwordManager", e.ParamName);
+            }
+        }
+
+        [Test]
+        public void UserManager_Authenticate_ValidUser_ReturnsTrue()
+        {
+            var userRepoMock = new Mock<IUserRepository>();
+            userRepoMock.Setup(x => x.GetUser(It.IsAny<string>())).Returns(new User("username") { PasswordHash = "hash" });
+
+            var uowMock = new Mock<IUnitOfWork>();
+            uowMock.Setup(x => x.UserRepository).Returns(userRepoMock.Object);
+
+            var dbFacMock = new Mock<IDbFactory>();
+            dbFacMock.Setup(x => x.GetUnitOfWork()).Returns(uowMock.Object);
+
+            var passManMock = new Mock<IPasswordManager>();
+            passManMock.Setup(x => x.VerifyPassword("password", "hash")).Returns(true);
+
+            var uman = new UserManager(dbFacMock.Object, passManMock.Object);
+            var result = uman.Authenticate("username", "password");
+
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void UserManager_Authenticate_InValidUser_ReturnsFalse()
+        {
+            var userRepoMock = new Mock<IUserRepository>();
+            userRepoMock.Setup(x => x.GetUser(It.IsAny<string>())).Returns(() => null);
+
+            var uowMock = new Mock<IUnitOfWork>();
+            uowMock.Setup(x => x.UserRepository).Returns(userRepoMock.Object);
+
+            var dbFacMock = new Mock<IDbFactory>();
+            dbFacMock.Setup(x => x.GetUnitOfWork()).Returns(uowMock.Object);
+
+            var passManMock = new Mock<IPasswordManager>();
+
+            var uman = new UserManager(dbFacMock.Object, passManMock.Object);
+            var result = uman.Authenticate("username", "password");
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void UserManager_Authenticate_InValidPassword_ReturnsFalse()
+        {
+            var userRepoMock = new Mock<IUserRepository>();
+            userRepoMock.Setup(x => x.GetUser(It.IsAny<string>())).Returns(new User("username") { PasswordHash = "hash" });
+
+            var uowMock = new Mock<IUnitOfWork>();
+            uowMock.Setup(x => x.UserRepository).Returns(userRepoMock.Object);
+
+            var dbFacMock = new Mock<IDbFactory>();
+            dbFacMock.Setup(x => x.GetUnitOfWork()).Returns(uowMock.Object);
+
+            var passManMock = new Mock<IPasswordManager>();
+            passManMock.Setup(x => x.VerifyPassword("password", "hash")).Returns(false);
+
+            var uman = new UserManager(dbFacMock.Object, passManMock.Object);
+            var result = uman.Authenticate("username", "password");
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void UserManager_Authenticate_NullPassword_ThrowsArgumentNullException()
+        {
+            try
+            {
+                var dbFacMock = new Mock<IDbFactory>();
+                var passManMock = new Mock<IPasswordManager>();
+
+                var userMan = new UserManager(dbFacMock.Object, passManMock.Object);
+                userMan.Authenticate("username", null);
+            }
+            catch (ArgumentException e)
+            {
+                StringAssert.AreEqualIgnoringCase("password", e.ParamName);
+            }
+        }
+
+        [Test]
+        public void UserManager_Authenticate_EmptyPassword_ThrowsArgumentNullException()
+        {
+            try
+            {
+                var dbFacMock = new Mock<IDbFactory>();
+                var passManMock = new Mock<IPasswordManager>();
+
+                var userMan = new UserManager(dbFacMock.Object, passManMock.Object);
+                userMan.Authenticate("username", String.Empty);
+            }
+            catch (ArgumentException e)
+            {
+                StringAssert.AreEqualIgnoringCase("password", e.ParamName);
+            }
+        }
+
+        [Test]
+        public void UserManager_Authenticate_NullUsername_ThrowsArgumentNullException()
+        {
+            try
+            {
+                var dbFacMock = new Mock<IDbFactory>();
+                var passManMock = new Mock<IPasswordManager>();
+
+                var userMan = new UserManager(dbFacMock.Object, passManMock.Object);
+                userMan.Authenticate(null, "password");
+            }
+            catch (ArgumentException e)
+            {
+                StringAssert.AreEqualIgnoringCase("username", e.ParamName);
+            }
+        }
+
+        [Test]
+        public void UserManager_Authenticate_EmptyUsername_ThrowsArgumentNullException()
+        {
+            try
+            {
+                var dbFacMock = new Mock<IDbFactory>();
+                var passManMock = new Mock<IPasswordManager>();
+
+                var userMan = new UserManager(dbFacMock.Object, passManMock.Object);
+                userMan.Authenticate(String.Empty, "password");
+            }
+            catch (ArgumentException e)
+            {
+                StringAssert.AreEqualIgnoringCase("username", e.ParamName);
+            }
         }
 
         [Test]
