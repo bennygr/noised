@@ -186,43 +186,183 @@ namespace NoisedTests.Core.UserManagement
         [Test]
         public void UserManager_CreateUser_ValidParametersProvided_CanCreateUser()
         {
-            Assert.Inconclusive();
+            var userRepoMock = new Mock<IUserRepository>();
+
+            var uowMock = new Mock<IUnitOfWork>();
+            uowMock.Setup(x => x.UserRepository).Returns(userRepoMock.Object);
+
+            var dbFacMock = new Mock<IDbFactory>();
+            dbFacMock.Setup(x => x.GetUnitOfWork()).Returns(uowMock.Object);
+
+            var passManMock = new Mock<IPasswordManager>();
+            passManMock.Setup(x => x.CreateHash(It.IsAny<string>())).Returns("SuperSecretPasswordHash");
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+            var user = uMan.CreateUser("JonDoe123", "SuperSecretPassword");
+
+            Assert.IsNotNull(user);
+            StringAssert.AreEqualIgnoringCase("JonDoe123", user.Name);
+            StringAssert.AreEqualIgnoringCase("SuperSecretPasswordHash", user.PasswordHash);
+            userRepoMock.Verify(x => x.CreateUser(user), Times.Once);
+            uowMock.Verify(x => x.SaveChanges(), Times.Once);
         }
 
         [Test]
-        public void UserManager_CreateUser_NoUsernameProvided_ThrowArgumentException()
+        public void UserManager_CreateUser_UsernameNull_ThrowArgumentException()
         {
-            Assert.Inconclusive();
+            var dbFacMock = new Mock<IDbFactory>();
+            var passManMock = new Mock<IPasswordManager>();
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+
+            try
+            {
+                uMan.CreateUser(null, "SuperSecretPassword");
+                Assert.Fail("Should have thrown ArgumentException.");
+            }
+            catch (ArgumentException e)
+            {
+                StringAssert.AreEqualIgnoringCase("username", e.ParamName);
+            }
         }
 
         [Test]
-        public void UserManager_CreateUser_NoPasswordProvided_ThrowArgumentException()
+        public void UserManager_CreateUser_UsernameEmpty_ThrowArgumentException()
         {
-            Assert.Inconclusive();
+            var dbFacMock = new Mock<IDbFactory>();
+            var passManMock = new Mock<IPasswordManager>();
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+
+            try
+            {
+                uMan.CreateUser(String.Empty, "SuperSecretPassword");
+                Assert.Fail("Should have thrown ArgumentException.");
+            }
+            catch (ArgumentException e)
+            {
+                StringAssert.AreEqualIgnoringCase("username", e.ParamName);
+            }
+        }
+
+        [Test]
+        public void UserManager_CreateUser_PasswordNull_ThrowArgumentException()
+        {
+            var dbFacMock = new Mock<IDbFactory>();
+            var passManMock = new Mock<IPasswordManager>();
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+
+            try
+            {
+                uMan.CreateUser("JonDoe123", null);
+                Assert.Fail("Should have thrown ArgumentException.");
+            }
+            catch (ArgumentException e)
+            {
+                StringAssert.AreEqualIgnoringCase("password", e.ParamName);
+            }
+        }
+
+        [Test]
+        public void UserManager_CreateUser_PasswordEmpty_ThrowArgumentException()
+        {
+            var dbFacMock = new Mock<IDbFactory>();
+            var passManMock = new Mock<IPasswordManager>();
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+
+            try
+            {
+                uMan.CreateUser("JonDoe123", String.Empty);
+                Assert.Fail("Should have thrown ArgumentException.");
+            }
+            catch (ArgumentException e)
+            {
+                StringAssert.AreEqualIgnoringCase("password", e.ParamName);
+            }
         }
 
         [Test]
         public void UserManager_DeleteUser_ValidParametersProvided_CanDeleteUser()
         {
-            Assert.Inconclusive();
+            var userRepoMock = new Mock<IUserRepository>();
+
+            var iuwMock = new Mock<IUnitOfWork>();
+            iuwMock.Setup(x => x.UserRepository).Returns(userRepoMock.Object);
+
+            var dbFacMock = new Mock<IDbFactory>();
+            dbFacMock.Setup(x => x.GetUnitOfWork()).Returns(iuwMock.Object);
+
+            var passManMock = new Mock<IPasswordManager>();
+            var user = new User("JonDoe123");
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+
+            uMan.DeleteUser(user);
+
+            userRepoMock.Verify(x => x.DeleteUser(user), Times.Once);
+            iuwMock.Verify(x => x.SaveChanges(), Times.Once);
         }
 
         [Test]
-        public void UserManager_DeleteUser_NoUserProvided_ThrowArgumentNullException()
+        public void UserManager_DeleteUser_UserNull_ThrowArgumentNullException()
         {
-            Assert.Inconclusive();
+            var dbFacMock = new Mock<IDbFactory>();
+            var passManMock = new Mock<IPasswordManager>();
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+
+            try
+            {
+                uMan.DeleteUser(null);
+                Assert.Fail("Should have thrown AgrumentNullException");
+            }
+            catch (ArgumentNullException e)
+            {
+                StringAssert.AreEqualIgnoringCase("user", e.ParamName);
+            }
         }
 
         [Test]
         public void UserManager_UpdateUser_ValidParametersProvided_CanUpdateUser()
         {
-            Assert.Inconclusive();
+            var userRepoMock = new Mock<IUserRepository>();
+
+            var iuwMock = new Mock<IUnitOfWork>();
+            iuwMock.Setup(x => x.UserRepository).Returns(userRepoMock.Object);
+
+            var dbFacMock = new Mock<IDbFactory>();
+            dbFacMock.Setup(x => x.GetUnitOfWork()).Returns(iuwMock.Object);
+
+            var passManMock = new Mock<IPasswordManager>();
+            var user = new User("JonDoe123");
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+
+            uMan.UpdateUser(user);
+
+            userRepoMock.Verify(x => x.UpdateUser(user), Times.Once);
+            iuwMock.Verify(x => x.SaveChanges(), Times.Once);
         }
 
         [Test]
-        public void UserManager_UpdateUser_NoUserProvided_ThrowArgumentNullException()
+        public void UserManager_UpdateUser_UserNull_ThrowArgumentNullException()
         {
-            Assert.Inconclusive();
+            var dbFacMock = new Mock<IDbFactory>();
+            var passManMock = new Mock<IPasswordManager>();
+
+            var uMan = new UserManager(dbFacMock.Object, passManMock.Object);
+
+            try
+            {
+                uMan.DeleteUser(null);
+                Assert.Fail("Should have thrown AgrumentNullException");
+            }
+            catch (ArgumentNullException e)
+            {
+                StringAssert.AreEqualIgnoringCase("user", e.ParamName);
+            }
         }
 
         [Test]
