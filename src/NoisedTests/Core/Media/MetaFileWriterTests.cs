@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Moq;
 using Noised.Core.Config;
 using Noised.Core.etc;
@@ -24,13 +25,33 @@ namespace NoisedTests.Core.Media
         [Test]
         public void MetaFileWriter_Constructor_WithoutIConfig_ShouldThrowException()
         {
-            Assert.Inconclusive();
+            var ioMock = new Mock<IMetaFileIOHandler>();
+
+            try
+            {
+                new MetaFileWriter(null, ioMock.Object);
+                Assert.Fail("Should have thrown AgrumentNullException");
+            }
+            catch (ArgumentNullException e)
+            {
+                StringAssert.AreEqualIgnoringCase("configuration", e.ParamName);
+            }
         }
 
         [Test]
         public void MetaFileWriter_Constructor_WithoutIOHandler_ShouldThrowException()
         {
-            Assert.Inconclusive();
+            var cfgMock = new Mock<IConfig>();
+
+            try
+            {
+                new MetaFileWriter(cfgMock.Object, null);
+                Assert.Fail("Should have thrown AgrumentNullException");
+            }
+            catch (ArgumentNullException e)
+            {
+                StringAssert.AreEqualIgnoringCase("iohandler", e.ParamName);
+            }
         }
 
         [Test]
@@ -64,7 +85,7 @@ namespace NoisedTests.Core.Media
             mfMock.Setup(x => x.Artist).Returns(artist);
             mfMock.Setup(x => x.Album).Returns(album);
             mfMock.Setup(x => x.OriginalFilename).Returns(filename);
-            var mockData = new byte[] {1, 2, 3};
+            var mockData = new byte[] { 1, 2, 3 };
             mfMock.Setup(x => x.Data).Returns(mockData);
 
             mfw.WriteMetaFileToDisk(mfMock.Object);
@@ -93,7 +114,7 @@ namespace NoisedTests.Core.Media
             mfMock.Setup(x => x.Artist).Returns("MockArtist");
             mfMock.Setup(x => x.Album).Returns("MockAlbum");
             mfMock.Setup(x => x.OriginalFilename).Returns("MockFilename.mck");
-            mfMock.Setup(x => x.Data).Returns(new byte[] {1, 2, 3});
+            mfMock.Setup(x => x.Data).Returns(new byte[] { 1, 2, 3 });
 
             mfw.WriteMetaFileToDisk(mfMock.Object);
 
