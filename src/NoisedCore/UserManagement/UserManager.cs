@@ -9,8 +9,8 @@ namespace Noised.Core.UserManagement
     /// </summary>
     public class UserManager : IUserManager
     {
-        private readonly IDbFactory _dbFactory;
-        private readonly IPasswordManager _passwordManager;
+        private readonly IDbFactory dbFactory;
+        private readonly IPasswordManager passwordManager;
 
         /// <summary>
         /// Manages all the Users
@@ -24,8 +24,8 @@ namespace Noised.Core.UserManagement
             if (passwordManager == null)
                 throw new ArgumentNullException("passwordManager");
 
-            _dbFactory = dbFactory;
-            _passwordManager = passwordManager;
+            this.dbFactory = dbFactory;
+            this.passwordManager = passwordManager;
         }
 
         #region IUserManager
@@ -38,10 +38,10 @@ namespace Noised.Core.UserManagement
                 throw new ArgumentException("password cannot be null or empty", "password");
 
             User user;
-            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
                 user = iuw.UserRepository.GetUser(username);
 
-            if (user != null && _passwordManager.VerifyPassword(password, user.PasswordHash))
+            if (user != null && passwordManager.VerifyPassword(password, user.PasswordHash))
                 return true;
             return false;
         }
@@ -53,22 +53,25 @@ namespace Noised.Core.UserManagement
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Value cannot be null or whitespace.", "password");
 
-            string hashedPw = _passwordManager.CreateHash(password);
+            string hashedPw = passwordManager.CreateHash(password);
 
-            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
+            var user = new User(username) { PasswordHash = hashedPw };
+
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
             {
-                var user = new User(username) { PasswordHash = hashedPw };
                 iuw.UserRepository.CreateUser(user);
                 iuw.SaveChanges();
-                return user;
             }
+
+            return user;
         }
 
         public void DeleteUser(User user)
         {
-            if (user == null) throw new ArgumentNullException("user");
+            if (user == null)
+                throw new ArgumentNullException("user", "");
 
-            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
             {
                 iuw.UserRepository.DeleteUser(user);
                 iuw.SaveChanges();
@@ -77,9 +80,10 @@ namespace Noised.Core.UserManagement
 
         public void UpdateUser(User user)
         {
-            if (user == null) throw new ArgumentNullException("user");
+            if (user == null)
+                throw new ArgumentNullException("user");
 
-            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
             {
                 iuw.UserRepository.UpdateUser(user);
                 iuw.SaveChanges();
@@ -91,7 +95,7 @@ namespace Noised.Core.UserManagement
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Value cannot be null or whitespace.", "username");
 
-            using (IUnitOfWork iuw = _dbFactory.GetUnitOfWork())
+            using (IUnitOfWork iuw = dbFactory.GetUnitOfWork())
                 return iuw.UserRepository.GetUser(username);
         }
 
